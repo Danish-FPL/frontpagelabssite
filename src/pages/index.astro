@@ -1,0 +1,894 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { featuredProjects } from '../data/projects';
+
+// Hero "what we do" index.
+const capabilities = [
+  { label: 'Websites', number: '01' },
+  { label: 'Marketing Channels', number: '02' },
+  { label: 'Ads', number: '03' },
+  { label: 'Strategy', number: '04' },
+];
+
+const heroStats = [
+  { value: '80+ clients', trailing: 'scaled.' },
+  { value: '23K+ conversions', trailing: 'generated.' },
+  { value: '306% average revenue increase', trailing: 'across clients.' },
+];
+
+// "Recent client wins" table — the CMS list rendered as rows.
+const clientWins = [
+  { win: 'Brand Launch; Blank Product Concept to Six-Figure Sales', client: 'New E-Commerce Brand', year: '2026' },
+  { win: 'New Websites for Award-Winning Real Estate Developers', client: 'Real Estate Company', year: '2026' },
+  { win: "Building and Managing Real Estate Group's Property Sites and Ads", client: 'Real Estate Company', year: '2026' },
+  { win: 'Brand Launch; Blank SAAS Concept to 2,200 Monthly Users', client: 'New Legal Research App', year: '2025' },
+  { win: 'Collecting 300 5-Star Google Reviews for Local Business', client: 'Massage Therapy Studio', year: '2025' },
+  { win: 'Driving SAAS Subscription Sales via Socials & Ads with 8:1 ROAS', client: 'Online Marketplace App', year: '2025' },
+  { win: 'New Website and Search Ads for Therapy Practice', client: 'Therapy Provider', year: '2025' },
+];
+
+// Services accordion (02).
+const services = [
+  {
+    title: 'Websites',
+    body: "A weak website, or no website at all, can drive away customers and mute business growth. We design websites that don't just look good—they perform. Every layout, line, and interaction is built to engage. Designed with precision and optimized for speed, our sites become the foundation for everything your brand does online.",
+    note: 'Websites starting at $900',
+    items: ['Service Websites', 'Portfolio Websites', 'E-Commerce Websites', 'Storefront Websites', 'Customer Portals'],
+  },
+  {
+    title: 'Channels',
+    body: 'We connect the dots. Social media, email, search engines, and beyond—all synced into one cohesive marketing system. Channels that operate in-sync communicate a clear, consistent message to your customers across all platforms. Every post, send, and update plays its part in a strategy engineered to expand your reach and deepen brand impact.',
+    items: ['Social Media Marketing', 'SMS Marketing', 'Email Marketing', 'Google Business Listings', 'Local Business Directories', 'Service Debut Campaigns'],
+  },
+  {
+    title: 'Ads',
+    body: "Your customers are searching for you online; but can they find you? Our targeted ad campaigns push your business to the top of search and land right in front of who you're trying to reach. From social to search, print to paid, our campaigns move in harmony—strategic, creative, and built to convert. Every channel works together to drive awareness and sales.",
+    items: ['Social Media Ad Campaigns', 'Google Search Ads', 'E-Commerce Ads', 'Paid Search Ads', 'Print Campaigns', 'Email & SMS Marketing'],
+  },
+  {
+    title: 'Strategy',
+    body: 'A digital strategy is your roadmap to growth online.',
+    questions: [
+      '(How is your site built, and what should it say?)',
+      '(Who are you reaching, and when?)',
+      '(What content should you post, and how often?)',
+      "(What's the right ad budget for launch and scale?)",
+    ],
+    bodyAfter: "Every decision—big or small—defines your brand's trajectory.",
+    items: ['Brand Design & Messaging', 'Audience Targeting & Segmentation', 'Content Mapping', 'Creative Asset Planning & Design', 'Ad Funnel Architecture', 'Ad Budget Planning', 'Media Planning', 'Campaign Analytics'],
+  },
+];
+
+// Testimonials (04).
+const testimonials = [
+  {
+    heading: ['Record Breaking', 'Growth.'],
+    quote: 'FrontPageLabs has built incredible websites, socials and ads for my companies that generated web traffic and sales. Our record-growth is tied directly to FrontPage Lab’s incredible work.',
+    name: 'Archie Preissman, Founder',
+    company: 'Irene Capital & Brands',
+  },
+  {
+    heading: ['Business Minded', 'Marketing.'],
+    quote: "FrontPageLabs has been great to work with. They took my rough ideas and crafted a brand far beyond my expectations. Working with FrontPage Labs was one of the best business decisions I've made.",
+    name: 'Mike LePree, Founder',
+    company: 'Twin Cities Real Estate',
+  },
+  {
+    heading: ['Real', 'Results.'],
+    quote: 'The combination of their websites, socials and ads led to impressive outcomes for us. We continue to reach new users month over month.',
+    name: 'Jeff Hedges, Founder',
+    company: 'Gavvy',
+  },
+  {
+    heading: ['Creative', 'Excellence.'],
+    quote: "With FrontPage Lab's creativity behind our content, engagement continues to blow past anything we've seen in the past.",
+    name: 'Uzma Bawany, Founder',
+    company: 'Thaakat Foundation',
+  },
+];
+---
+
+<Base title="FrontPageLabs - Digital Performance, Down to a Science.">
+  <!-- Hero ---------------------------------------------------------------- -->
+  <section class="hero">
+    <div class="hero-media">
+      <video autoplay muted loop playsinline poster="/assets/fpl-38-.png">
+        <source src="/assets/fpl-3-transcode.webm" type="video/webm" />
+        <source src="/assets/fpl-3-transcode.mp4" type="video/mp4" />
+      </video>
+      <div class="hero-overlay"></div>
+    </div>
+
+    <div class="hero-inner container-fluid">
+      <div class="hero-heading-wrapper">
+        <div class="overflow-hidden"><h1 class="heading-large hero-heading">Frontpage</h1></div>
+        <div class="overflow-hidden align-right">
+          <h1 class="heading-large hero-heading">labs</h1>
+        </div>
+      </div>
+
+      <div class="hero-bottom">
+        <div class="hero-capabilities">
+          <div class="hero-eyebrow">What we do</div>
+          <ul class="capability-list">
+            {capabilities.map(({ label, number }) => (
+              <li class="capability-item">
+                <span class="capability-label">{label}</span>
+                <span class="capability-number">{number}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="hero-stats">
+          {heroStats.map(({ value, trailing }) => (
+            <p class="hero-stat"><strong>{value}</strong> {trailing}</p>
+          ))}
+          <p class="hero-stat muted">
+            Here, it's <strong>Digital Performance, Down to a Science</strong>.
+          </p>
+        </div>
+
+        <div class="hero-cta">
+          <div class="hero-cta-text">Ready for the <span class="text-blue">FrontPage?</span></div>
+          <Button href="/contact" label="Get Started" variant="white" size="small" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- (01) Digital chemistry ---------------------------------------------- -->
+  <section class="section chemistry">
+    <div class="container">
+      <div class="chemistry-grid">
+        <SectionTitle number="(01)" label="Digital Chemistry" />
+
+        <div class="chemistry-content">
+          <div class="margin-bottom-medium">
+            <h2 class="heading-small">Form<br />or and<br />function.</h2>
+          </div>
+
+          <div class="chemistry-body">
+            <p class="paragraph-small no-text-indent">
+              From <strong>sleek websites</strong> to <strong>full-scale marketing ecosystems</strong>, we
+              blend art, outreach, and analytics to create digital experiences that <em>feel</em> as good
+              as they perform.
+            </p>
+            <p class="paragraph-small no-text-indent">
+              Every pixel, post and campaign is precision-built for audience engagement and consistent
+              conversion.
+            </p>
+            <p class="paragraph-small no-text-indent"><strong>Welcome to the FrontPage.</strong></p>
+
+            <div class="button-row">
+              <Button href="/services" label="Services" />
+            </div>
+          </div>
+        </div>
+
+        <div class="chemistry-image">
+          <img src="/assets/fpl-79-.png" alt="" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent client wins --------------------------------------------------- -->
+  <section class="section wins">
+    <div class="container">
+      <div class="wins-grid">
+        <h2 class="heading-small wins-heading">Recent<br />Client<br />Wins</h2>
+
+        <div class="wins-table">
+          {clientWins.map(({ win, client, year }) => (
+            <div class="wins-row">
+              <div class="wins-win">{win}</div>
+              <div class="wins-client">{client}</div>
+              <div class="wins-year">{year}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="wins-footer">
+        <p class="wins-footer-text">
+          View More Projects<br /><span class="text-secondary">&amp; Client Success Stories</span>
+        </p>
+        <Button href="/portfolio" label="View all projects" />
+      </div>
+    </div>
+  </section>
+
+  <!-- (02) Services -------------------------------------------------------- -->
+  <section class="section services">
+    <div class="container">
+      <div class="section-title-row">
+        <h2 class="section-title-text">Services</h2>
+        <div class="section-title-text">(02)</div>
+      </div>
+      <div class="divider margin-bottom-medium"></div>
+
+      <div class="services-list">
+        {services.map((service) => (
+          <article class="service-row">
+            <h3 class="heading-small service-title">{service.title}</h3>
+
+            <div class="service-body">
+              <p class="paragraph-small no-text-indent">{service.body}</p>
+
+              {service.questions && (
+                <div class="service-questions">
+                  {service.questions.map((q) => <p class="paragraph-small no-text-indent">{q}</p>)}
+                </div>
+              )}
+
+              {service.bodyAfter && (
+                <p class="paragraph-small no-text-indent">{service.bodyAfter}</p>
+              )}
+
+              {service.note && <p class="service-note">{service.note}</p>}
+            </div>
+
+            <ul class="service-items">
+              {service.items.map((item) => (
+                <li class="service-item">
+                  <img src="/assets/check-circle.svg" alt="" aria-hidden="true" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+
+      <div class="services-footer">
+        <Button href="/services" label="View Services" />
+      </div>
+    </div>
+  </section>
+
+  <!-- (03) Our approach ---------------------------------------------------- -->
+  <section class="section approach">
+    <div class="container">
+      <div class="section-title-row">
+        <h2 class="section-title-text">Our approach</h2>
+        <div class="section-title-text">(03)</div>
+      </div>
+      <div class="divider"></div>
+    </div>
+
+    <div class="overflow-hidden">
+      <div class="container-fluid">
+        <div class="approach-heading-wrapper">
+          <h3 class="heading-large">Analyze.</h3>
+          <div class="approach-number">001</div>
+        </div>
+
+        <div class="align-right">
+          <div class="approach-heading-wrapper">
+            <div class="approach-number left">002</div>
+            <h3 class="heading-large">Build.</h3>
+          </div>
+        </div>
+
+        <div class="approach-heading-wrapper center">
+          <h3 class="heading-large">Grow.</h3>
+          <div class="approach-number">003</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="approach-bottom">
+        <div class="approach-image">
+          <img src="/assets/fpl-16-.png" alt="" loading="lazy" />
+        </div>
+
+        <div class="approach-text">
+          <p class="paragraph-small no-text-indent">
+            Building your unique digital brand starts with analysis.
+          </p>
+          <p class="paragraph-small">
+            We dissect your industry's growth engines, expose untapped opportunity, then shape a unique
+            digital presence that fits perfectly into your market's next wave of opportunity.
+          </p>
+          <p class="approach-step"><span class="approach-step-number">004</span><strong>Strategy guides design</strong>.</p>
+          <p class="approach-step"><span class="approach-step-number">005</span><strong>Design drives performance</strong>.</p>
+          <p class="paragraph-small no-text-indent">
+            <strong>The Outcome:</strong><br />
+            Fine-tuned marketing elements that react in perfect chemistry to showcase your brand.
+          </p>
+
+          <div class="button-row">
+            <Button href="/contact" label="Get started" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- (04) Lab results ----------------------------------------------------- -->
+  <section class="section results">
+    {/* The same looping clip as the hero, dimmed so the cards stay readable. */}
+    <div class="results-media">
+      <video autoplay muted loop playsinline poster="/assets/fpl-38-.png">
+        <source src="/assets/fpl-3-transcode.webm" type="video/webm" />
+        <source src="/assets/fpl-3-transcode.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+    <div class="results-inner">
+      <div class="container">
+        <div class="section-title-row inverse">
+          <h2 class="section-title-text">Outcomes</h2>
+          <div class="section-title-text">(04)</div>
+        </div>
+
+        <h3 class="heading-small results-heading">Lab<br /><span class="text-blue">results</span></h3>
+
+        <div class="results-cards">
+          {testimonials.map(({ heading, quote, name, company }, i) => (
+            <figure class:list={['result-card', `pos-${i + 1}`]}>
+              <div class="result-card-head">
+                <img class="result-card-mark" src="/assets/fpl-14-.png" alt="" aria-hidden="true" />
+                <h4 class="result-card-title">
+                  {heading[0]}<br />{heading[1]}
+                </h4>
+              </div>
+              <blockquote class="result-card-quote">{quote}</blockquote>
+              <figcaption class="result-card-credit">
+                <span>{name}</span>
+                <span class="muted">{company}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- (05) Work that worked ------------------------------------------------ -->
+  <section class="section work">
+    <div class="container">
+      <div class="section-title-row">
+        <h2 class="section-title-text">Recent projects</h2>
+        <div class="section-title-text">(05)</div>
+      </div>
+      <div class="divider"></div>
+
+      <div class="work-heading-row">
+        <h3 class="heading-small work-heading">
+          <span class="text-blue">Work</span>that<br /><span class="text-blue">Work</span>ed
+        </h3>
+        <div class="work-heading-cta">
+          <Button href="/portfolio" label="View Portfolio" />
+        </div>
+      </div>
+
+      <div class="work-grid">
+        {featuredProjects.map((project) => <ProjectCard project={project} />)}
+      </div>
+
+      <div class="work-footer">
+        <p class="paragraph-small no-text-indent">
+          Your brand deserves the showcase. Reach out to start reaching your audience online.
+        </p>
+        <Button href="/contact" label="Get started" />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* --- Hero -------------------------------------------------------------- */
+
+  .hero {
+    position: relative;
+    min-height: 88vh;
+    display: flex;
+    align-items: flex-end;
+    padding-block: 4rem 2.5rem;
+    color: var(--color-white);
+    overflow: hidden;
+  }
+
+  .hero-media,
+  .hero-media video,
+  .hero-media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Darkened so the white display type stays legible over the footage. */
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(0 0 0 / 25%) 0%, rgb(0 0 0 / 55%) 100%);
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+
+  .hero-heading {
+    color: var(--color-white);
+  }
+
+  .hero-bottom {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr) auto;
+    gap: 2rem;
+    align-items: end;
+    margin-top: 3rem;
+  }
+
+  .hero-eyebrow,
+  .hero-cta-text {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .capability-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.35rem;
+    max-width: 16rem;
+  }
+
+  .capability-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid rgb(255 255 255 / 25%);
+    font-size: 0.8125rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .capability-number {
+    font-size: 0.625rem;
+    opacity: 0.7;
+  }
+
+  .hero-stats {
+    display: grid;
+    gap: 0.4rem;
+    max-width: 26rem;
+  }
+
+  .hero-stat {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.35;
+  }
+
+  .hero-stat.muted {
+    margin-top: 0.75rem;
+    color: rgb(255 255 255 / 75%);
+  }
+
+  .hero-cta {
+    justify-self: end;
+    text-align: right;
+  }
+
+  /* --- Shared section furniture ------------------------------------------ */
+
+  .section-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.75rem;
+  }
+
+  .divider {
+    height: 1px;
+    background-color: var(--color-border-muted);
+  }
+
+  .button-row {
+    margin-top: 1.5rem;
+  }
+
+  .text-secondary {
+    color: var(--color-secondary);
+  }
+
+  /* --- (01) Chemistry ----------------------------------------------------- */
+
+  .chemistry-grid {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) minmax(0, 0.8fr);
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  .chemistry-body {
+    display: grid;
+    gap: 1rem;
+    max-width: 30rem;
+  }
+
+  .chemistry-image img {
+    width: 100%;
+  }
+
+  /* --- Recent client wins -------------------------------------------------- */
+
+  .wins-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.45fr) minmax(0, 1fr);
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  .wins-heading {
+    margin: 0;
+  }
+
+  .wins-table {
+    border-top: 1px solid var(--color-border-muted);
+  }
+
+  .wins-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 0.8fr) auto;
+    gap: 1.5rem;
+    align-items: baseline;
+    padding-block: 0.85rem;
+    border-bottom: 1px solid var(--color-border-muted);
+    font-size: 0.8125rem;
+    line-height: 1.35;
+  }
+
+  .wins-client,
+  .wins-year {
+    color: var(--color-secondary);
+  }
+
+  .wins-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .wins-footer-text {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+
+  /* --- (02) Services ------------------------------------------------------- */
+
+  .services-list {
+    display: grid;
+  }
+
+  .service-row {
+    display: grid;
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1fr) minmax(0, 0.62fr);
+    gap: 2.5rem;
+    padding-block: 2.5rem;
+    border-bottom: 1px solid var(--color-border-muted);
+    align-items: start;
+  }
+
+  /* The global .heading-small (5.36vw) is wider than this column, so the
+     accordion headings get their own smaller step to avoid colliding with
+     the body copy beside them. */
+  .service-title {
+    margin: 0;
+    font-size: 3.4vw;
+  }
+
+  .service-body {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .service-questions {
+    display: grid;
+    gap: 0.3rem;
+    color: var(--color-secondary);
+  }
+
+  .service-note {
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+  }
+
+  .service-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .service-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+  }
+
+  .service-item img {
+    width: 12px;
+    height: 12px;
+    flex: none;
+  }
+
+  .services-footer {
+    margin-top: 2.5rem;
+  }
+
+  /* --- (03) Approach ------------------------------------------------------- */
+
+  .approach {
+    padding-top: 6rem;
+  }
+
+  .approach-heading-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .approach-heading-wrapper.center {
+    justify-content: center;
+  }
+
+  .approach-number {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding-top: 0.4rem;
+  }
+
+  .approach-bottom {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+    gap: 3rem;
+    align-items: end;
+    margin-top: 3rem;
+  }
+
+  .approach-image img {
+    width: 100%;
+  }
+
+  .approach-text {
+    display: grid;
+    gap: 1rem;
+    max-width: 30rem;
+    justify-self: end;
+  }
+
+  .approach-step {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin: 0;
+    font-size: 1.0625rem;
+    letter-spacing: -0.019em;
+  }
+
+  .approach-step-number {
+    font-size: 0.625rem;
+    color: var(--color-secondary);
+  }
+
+  /* --- (04) Lab results ----------------------------------------------------- */
+
+  .results {
+    position: relative;
+    color: var(--color-white);
+    padding-block: 5rem 7rem;
+    overflow: hidden;
+  }
+
+  .results-media {
+    position: absolute;
+    inset: 0;
+  }
+
+  .results-media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .results-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(0 0 0 / 15%) 0%, rgb(0 0 0 / 70%) 65%);
+  }
+
+  .results-inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-title-row.inverse {
+    border-bottom: 1px solid rgb(255 255 255 / 30%);
+    padding-bottom: 0.75rem;
+  }
+
+  .results-heading {
+    margin: 2rem 0 3rem;
+  }
+
+  /* Cards are staggered left/right the way the Webflow layout scatters them. */
+  .results-cards {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .result-card {
+    margin: 0;
+    padding: 1.25rem;
+    max-width: 22rem;
+    background-color: var(--color-white);
+    color: var(--color-primary);
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .result-card.pos-1 { justify-self: end; }
+  .result-card.pos-2 { justify-self: start; }
+  .result-card.pos-3 { justify-self: center; }
+  .result-card.pos-4 { justify-self: start; }
+
+  .result-card-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .result-card-mark {
+    width: 18px;
+    height: auto;
+    flex: none;
+    margin-top: 0.15rem;
+  }
+
+  .result-card-title {
+    margin: 0;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .result-card-quote {
+    margin: 0;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--color-secondary);
+  }
+
+  .result-card-credit {
+    display: grid;
+    font-size: 0.625rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .result-card-credit .muted {
+    color: var(--color-secondary);
+  }
+
+  /* --- (05) Work ------------------------------------------------------------ */
+
+  .work-heading-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+    margin-block: 2rem 2.5rem;
+  }
+
+  .work-heading {
+    margin: 0;
+  }
+
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .work-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .work-footer p {
+    max-width: 26rem;
+  }
+
+  /* --- Responsive ----------------------------------------------------------- */
+
+  @media (max-width: 991px) {
+    .hero-bottom {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .hero-cta {
+      grid-column: 1 / -1;
+      justify-self: start;
+      text-align: left;
+    }
+
+    .chemistry-grid {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .chemistry-image {
+      grid-column: 1 / -1;
+    }
+
+    .service-row {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .service-title {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .hero-bottom,
+    .chemistry-grid,
+    .wins-grid,
+    .service-row,
+    .approach-bottom,
+    .work-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .wins-row {
+      grid-template-columns: 1fr auto;
+    }
+
+    .wins-client {
+      grid-column: 1;
+    }
+
+    .approach-text,
+    .result-card {
+      justify-self: start;
+    }
+
+    .wins-footer,
+    .work-heading-row,
+    .work-footer {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

@@ -1,0 +1,305 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { featuredProjects } from '../data/projects';
+
+// The four capability blocks. `stat` is the small blue line above each heading.
+const capabilities = [
+  {
+    id: 'websites',
+    title: 'Websites',
+    image: '/assets/fpl-services-2.0-31-.png',
+    stat: "We've published 1,264 webpages.",
+    heading: 'Your Website Is Your Digital Handshake.',
+    lead: 'First impressions matter.',
+    body: "If your website is hard to use or nonexistent, you can't introduce yourself properly. And if your website is weak, you may give the wrong impression to visitors. We make sure your site clearly communicates your purpose, ability and persona.",
+    tags: ['Service Sites', 'Portfolio Sites', 'Storefront Sites', 'E-Commerce Sites', 'Booking Portals', 'Landing Pages', 'Payment Gateways'],
+    cta: 'Start Building A Website',
+  },
+  {
+    id: 'channels',
+    title: 'Channels',
+    image: '/assets/fpl-services-2.0-27-.png',
+    stat: "We've reached 3,826,643 people through channels.",
+    heading: 'Communicate With Your Audience.',
+    lead: 'Social Media, direct messaging and search engine listings bridge the gap between you and your customers.',
+    body: "Plant high quality, brand-rich touchpoints along your customer's path to stay top of mind.",
+    tags: ['Instagram', 'Facebook', 'X', 'LinkedIn', 'Google', 'Email', 'SMS', 'Search Engines', 'Service Directories'],
+    cta: 'Start Building Channels',
+  },
+  {
+    id: 'advertising',
+    title: 'Advertising',
+    image: '/assets/fpl-services-2.0-29-.png',
+    stat: "We've driven 23,490 conversions and 2,102 purchases through ads.",
+    heading: 'Build Systems That Attract.',
+    lead: 'There are likely thousands of people searching for your services right now.',
+    body: 'We make sure you land gracefully in front of the right audience, and appear first when people search for your services and product.',
+    tags: ['Social Media Ads', 'Google Ads', 'E-Commerce Ads', 'Search Ads', 'Content Creation', 'Print Campaigns', 'Video & Story Ads'],
+    cta: 'Start Building Ads',
+  },
+  {
+    id: 'strategy',
+    title: 'Strategy',
+    image: '/assets/fpl-services-2.0-30-.png',
+    stat: "We've prepared 71 market research, strategy and marketing blueprints.",
+    heading: 'Grow With A Plan.',
+    lead: 'Strategy comes standard with every service, package or a-la-carte, because intentional growth starts with a clear plan.',
+    body: 'Every site, post, and ad is mapped to reinforce brand cohesion so you can grow with confidence.',
+    tags: ['Launch Strategy', 'Scaling Strategy', 'Brand Design', 'Market Research', 'Content Mapping', 'Copy & Messaging', 'Ad Budgeting', 'Funnel Architecture'],
+    cta: 'Start Building Strategies',
+  },
+];
+---
+
+<Base title="Services | FrontPageLabs - Digital Performance, Down to a Science.">
+  <!-- Hero ---------------------------------------------------------------- -->
+  <section class="section-top">
+    <div class="container-fluid">
+      <div class="page-title-wrapper">
+        <div class="overflow-hidden"><h1 class="page-title">Services &amp;</h1></div>
+        <div class="overflow-hidden"><h1 class="page-title">capabilities</h1></div>
+      </div>
+
+      <div class="hero-meta">
+        <p class="hero-subtitle">
+          <strong>Websites</strong>, <strong>Marketing Channels</strong>, <strong>Ads</strong> and
+          <strong>Strategy</strong>.
+        </p>
+        <a class="scroll-down" href="#websites">
+          <span>Scroll Down</span>
+          <img src="/assets/arrow-down-right-small.svg" alt="" aria-hidden="true" />
+        </a>
+      </div>
+
+      <div class="section-title-row">
+        <div class="section-title-text">Expertise</div>
+        <div class="section-title-text">(01)</div>
+      </div>
+      <div class="divider"></div>
+    </div>
+  </section>
+
+  <!-- Capability blocks ---------------------------------------------------- -->
+  {capabilities.map((c) => (
+    <section class="section capability" id={c.id}>
+      <div class="container">
+        <div class="capability-grid">
+          <h2 class="heading-small capability-title">{c.title}</h2>
+
+          <div class="capability-content">
+            <p class="capability-stat text-blue">{c.stat}</p>
+            <h3 class="capability-heading">{c.heading}</h3>
+            <p class="paragraph-small no-text-indent"><strong>{c.lead}</strong></p>
+            <p class="paragraph-small no-text-indent">{c.body}</p>
+
+            <ul class="capability-tags">
+              {c.tags.map((tag) => <li class="capability-tag">{tag}</li>)}
+            </ul>
+
+            <div class="button-row">
+              <Button href="/contact" label={c.cta} />
+            </div>
+          </div>
+
+          <div class="capability-image">
+            <img src={c.image} alt="" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <!-- Recent projects ------------------------------------------------------ -->
+  <section class="section projects">
+    <div class="container">
+      <div class="section-title-row">
+        <div class="section-title-text">Recent Projects</div>
+      </div>
+      <div class="divider margin-bottom-medium"></div>
+
+      <div class="projects-grid">
+        {featuredProjects.map((project) => <ProjectCard project={project} />)}
+      </div>
+
+      <div class="projects-footer">
+        <p class="projects-footer-text">Ready to grow? Reach out to start growing online.</p>
+        <Button href="/portfolio" label="View Full Portfolio" />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .section-top {
+    padding-top: 3rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .hero-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+    margin-block: 1.5rem 4rem;
+  }
+
+  .hero-subtitle {
+    margin: 0;
+    font-size: 0.8125rem;
+    letter-spacing: 0.02em;
+  }
+
+  .scroll-down {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .scroll-down img {
+    width: 10px;
+    height: 10px;
+  }
+
+  .section-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.75rem;
+  }
+
+  .divider {
+    height: 1px;
+    background-color: var(--color-border-muted);
+  }
+
+  /* --- Capability blocks -------------------------------------------------- */
+
+  .capability {
+    padding-block: 3.5rem;
+  }
+
+  /* Oversized title sits on its own row so it can run full width; the copy
+     starts underneath, indented, with the artwork spanning both rows. */
+  .capability-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.42fr);
+    grid-template-areas:
+      'title image'
+      'content image';
+    column-gap: 2.5rem;
+    row-gap: 1.25rem;
+    align-items: start;
+  }
+
+  .capability-title {
+    grid-area: title;
+    margin: 0;
+  }
+
+  .capability-content {
+    grid-area: content;
+    display: grid;
+    gap: 0.9rem;
+    max-width: 34rem;
+    padding-left: 12%;
+  }
+
+  .capability-image {
+    grid-area: image;
+    align-self: center;
+  }
+
+  .capability-stat {
+    margin: 0;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .capability-heading {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+  }
+
+  .capability-tags {
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .capability-tag {
+    border: 1px solid var(--color-border-muted);
+    border-radius: 999px;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .capability-image img {
+    width: 100%;
+  }
+
+  .button-row {
+    margin-top: 0.75rem;
+  }
+
+  /* --- Recent projects ----------------------------------------------------- */
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .projects-footer {
+    display: grid;
+    justify-items: center;
+    gap: 1rem;
+    margin-top: 3rem;
+    text-align: center;
+  }
+
+  .projects-footer-text {
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    color: var(--color-secondary);
+  }
+
+  @media (max-width: 991px) {
+    .capability-content {
+      padding-left: 0;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .capability-grid {
+      grid-template-columns: 1fr;
+      grid-template-areas: 'title' 'image' 'content';
+    }
+
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+  }
+</style>

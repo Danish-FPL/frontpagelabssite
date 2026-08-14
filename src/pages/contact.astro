@@ -1,0 +1,452 @@
+---
+import Base from '../layouts/Base.astro';
+
+// The three contact routes shown as staggered cards over the fabric photo.
+const contactCards = [
+  {
+    icon: '/assets/fpl-19-.png',
+    title: ['General', 'Inquiries'],
+    body: 'Reach out for details and project quotes.',
+    email: 'hello@frontpagelabs.com',
+  },
+  {
+    icon: '/assets/fpl-39-.png',
+    title: ['Client', 'Support'],
+    body: 'For assistance with ongoing projects or services, our team is ready to support.',
+    email: 'help@frontpagelabs.com',
+    phone: '+1 224-757-2255',
+  },
+  {
+    icon: '/assets/hi-we-re-fpl-2-.png',
+    title: ['Project Requests'],
+    body: 'Reach out and tell us about your projects and goals.',
+    email: 'build@frontpagelabs.com',
+    phone: '+1 847-757-0201',
+  },
+];
+---
+
+<Base title="Contact | FrontPageLabs - Digital Performance, Down to a Science.">
+  <!-- Form ----------------------------------------------------------------- -->
+  <section class="section form-section">
+    <div class="container-fluid">
+      <div class="form-grid">
+        <div class="form-intro">
+          <div class="availability">
+            <span class="availability-dot" aria-hidden="true"></span>
+            <span>Available to take on new clients</span>
+          </div>
+
+          <p class="form-intro-text">
+            <strong>Tell us a bit about your business and marketing goals</strong>, and we'll get in
+            touch with you shortly.
+          </p>
+        </div>
+
+        <form class="contact-form" name="contact" method="POST" data-netlify="true">
+          <input type="hidden" name="form-name" value="contact" />
+
+          <div class="field">
+            <label for="name">Name:</label>
+            <input id="name" name="name" type="text" placeholder="Enter your name" required />
+          </div>
+
+          <div class="field">
+            <label for="email">Email:</label>
+            <input id="email" name="email" type="email" placeholder="Enter your email" required />
+          </div>
+
+          <div class="field">
+            <label for="business">Business Details:</label>
+            <textarea
+              id="business"
+              name="business"
+              rows="3"
+              placeholder="Please include some details about your business and marketing goals."
+              required></textarea>
+          </div>
+
+          <div class="field">
+            <label for="marketing">Marketing To Review (Optional):</label>
+            <textarea
+              id="marketing"
+              name="marketing"
+              rows="3"
+              placeholder="Share details on existing websites or advertising channels here."></textarea>
+          </div>
+
+          <p class="form-note">
+            <img src="/assets/form-info.svg" alt="" aria-hidden="true" />
+            <span>
+              All the fields are required. By sending the form you agree to the
+              <a href="/terms">Terms &amp; Conditions</a> and <a href="/privacy">Privacy Policy</a>.
+            </span>
+          </p>
+
+          <button class="submit-button" type="submit">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Looking forward -------------------------------------------------------- -->
+  <section class="section forward">
+    <div class="container-fluid">
+      <div class="forward-grid">
+        <div class="forward-content">
+          <h2 class="heading-small forward-heading">We look forward to working together.</h2>
+
+          <p class="paragraph-small">
+            Whether you're just getting started or want to kick off the next evolution of your business,
+            we're prepared to help you grow. Your brand deserves the spotlight;
+            <strong>Let's start building</strong>.
+          </p>
+
+          <div class="forward-links">
+            <a class="forward-link" href="mailto:build@frontpagelabs.com">build@frontpagelabs.com</a>
+            <a class="forward-link" href="tel:+12247572255">224-757-2255</a>
+          </div>
+        </div>
+
+        <div class="forward-image">
+          <img src="/assets/fpl-18-.png" alt="" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact cards ----------------------------------------------------------- -->
+  <section class="cards-section">
+    {/* Same looping background clip the hero uses, dimmed behind the cards. */}
+    <div class="cards-media">
+      <video autoplay muted loop playsinline poster="/assets/fpl-38-.png">
+        <source src="/assets/fpl-3-transcode.webm" type="video/webm" />
+        <source src="/assets/fpl-3-transcode.mp4" type="video/mp4" />
+      </video>
+      <div class="cards-overlay"></div>
+    </div>
+
+    <div class="container-fluid cards-inner">
+      <div class="cards-row">
+        {contactCards.map((card, i) => (
+          <article class:list={['contact-card', `pos-${i + 1}`]}>
+            <div class="contact-card-head">
+              <img class="contact-card-icon" src={card.icon} alt="" aria-hidden="true" />
+              <h3 class="contact-card-title">
+                {card.title.map((line, j) => (
+                  <>{j > 0 && <br />}{line}</>
+                ))}
+              </h3>
+            </div>
+
+            <div class="contact-card-divider"></div>
+
+            <p class="contact-card-body">{card.body}</p>
+
+            <div class="contact-card-details">
+              <a class="contact-card-detail" href={`mailto:${card.email}`}>
+                <img src="/assets/mail.svg" alt="" aria-hidden="true" />
+                <span>{card.email}</span>
+              </a>
+
+              {card.phone && (
+                <a class="contact-card-detail" href={`tel:${card.phone.replace(/[^\d+]/g, '')}`}>
+                  <img src="/assets/smartphone.svg" alt="" aria-hidden="true" />
+                  <span>{card.phone}</span>
+                </a>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* --- Form ---------------------------------------------------------------- */
+
+  .form-section {
+    padding-top: 2.5rem;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .availability {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+  }
+
+  .availability-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #23d100;
+  }
+
+  .form-intro-text {
+    margin: 0;
+    max-width: 22rem;
+    font-size: 0.9375rem;
+    line-height: 1.4;
+  }
+
+  .contact-form {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 38rem;
+  }
+
+  .field {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .field label {
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .field input,
+  .field textarea {
+    font: inherit;
+    font-size: 0.8125rem;
+    color: var(--color-primary);
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--color-border-muted);
+    padding: 0.5rem 0;
+    resize: vertical;
+    transition: border-color 0.2s ease;
+  }
+
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: var(--color-form-placeholder);
+  }
+
+  .field input:focus,
+  .field textarea:focus {
+    outline: none;
+    border-bottom-color: var(--color-primary);
+  }
+
+  .form-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    margin: 0;
+    font-size: 0.6875rem;
+    line-height: 1.4;
+    color: var(--color-secondary);
+  }
+
+  .form-note img {
+    width: 11px;
+    height: 11px;
+    margin-top: 0.15rem;
+    flex: none;
+  }
+
+  .form-note a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .submit-button {
+    justify-self: start;
+    border: 1px solid var(--color-primary);
+    border-radius: 999px;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  .submit-button:hover {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  /* --- Looking forward ------------------------------------------------------ */
+
+  .forward {
+    padding-top: 6rem;
+  }
+
+  .forward-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.4fr);
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .forward-heading {
+    margin: 0 0 1.5rem;
+    max-width: 12em;
+  }
+
+  .forward-content p {
+    max-width: 26rem;
+  }
+
+  .forward-links {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 2rem;
+  }
+
+  .forward-link {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .forward-link:hover {
+    color: var(--fpl-blue);
+  }
+
+  /* Source art is tall portrait; cap it so it reads as an inset panel rather
+     than dominating the row. */
+  .forward-image img {
+    width: 100%;
+    max-height: 24rem;
+    object-fit: cover;
+  }
+
+  /* --- Contact cards -------------------------------------------------------- */
+
+  .cards-section {
+    position: relative;
+    padding-block: 5rem;
+    overflow: hidden;
+  }
+
+  .cards-media {
+    position: absolute;
+    inset: 0;
+  }
+
+  .cards-media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cards-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgb(0 0 0 / 15%);
+  }
+
+  .cards-inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Cards step down and to the right, matching the Webflow stagger. */
+  .cards-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .contact-card {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-primary);
+    padding: 1.25rem;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .contact-card.pos-2 { margin-top: 4rem; }
+  .contact-card.pos-3 { margin-top: 8rem; }
+
+  .contact-card-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .contact-card-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    flex: none;
+  }
+
+  .contact-card-title {
+    margin: 0;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .contact-card-divider {
+    height: 1px;
+    background-color: var(--color-border-muted);
+  }
+
+  .contact-card-body {
+    margin: 0;
+    font-size: 0.75rem;
+    line-height: 1.45;
+  }
+
+  .contact-card-details {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .contact-card-detail {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.625rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .contact-card-detail img {
+    width: 11px;
+    height: 11px;
+  }
+
+  .contact-card-detail:hover {
+    color: var(--fpl-blue);
+  }
+
+  @media (max-width: 991px) {
+    .form-grid,
+    .forward-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .cards-row {
+      grid-template-columns: 1fr;
+    }
+
+    .contact-card.pos-2,
+    .contact-card.pos-3 {
+      margin-top: 0;
+    }
+  }
+</style>

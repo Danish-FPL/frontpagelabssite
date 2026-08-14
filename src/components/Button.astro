@@ -1,0 +1,114 @@
+---
+// Pill button with the hover text-flip and arrow used across the site.
+interface Props {
+  href: string;
+  label: string;
+  variant?: 'default' | 'white';
+  size?: 'default' | 'small';
+  icon?: string | false;
+  class?: string;
+}
+
+const {
+  href,
+  label,
+  variant = 'default',
+  size = 'default',
+  icon = '/assets/arrow-up-right.svg',
+  class: className = '',
+} = Astro.props;
+---
+
+<a class:list={['button', variant, size, className]} href={href}>
+  <span class="button-container">
+    <span class="button-text-wrapper">
+      <span class="button-text-front">{label}</span>
+      <span class="button-text-back">{label}</span>
+    </span>
+    {icon && <img class="button-icon" src={icon} alt="" aria-hidden="true" />}
+  </span>
+</a>
+
+<style>
+  .button {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--color-primary);
+    border-radius: 999px;
+    padding: 0.6rem 1.1rem;
+    background-color: transparent;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  }
+
+  .button-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  /* Two stacked copies of the label; the second slides in on hover. */
+  .button-text-wrapper {
+    display: grid;
+    overflow: hidden;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+
+  .button-text-front,
+  .button-text-back {
+    grid-area: 1 / 1;
+    transition: transform 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .button-text-back {
+    transform: translateY(100%);
+  }
+
+  .button:hover .button-text-front {
+    transform: translateY(-100%);
+  }
+
+  .button:hover .button-text-back {
+    transform: translateY(0);
+  }
+
+  .button-icon {
+    width: 10px;
+    height: 10px;
+    transition: transform 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .button:hover .button-icon {
+    transform: translate(2px, -2px);
+  }
+
+  /* Inverted treatment for the dark footer. */
+  .button.white {
+    border-color: var(--color-white);
+    color: var(--color-white);
+  }
+
+  .button.white:hover {
+    background-color: var(--color-white);
+    color: var(--color-primary);
+  }
+
+  .button.white .button-icon {
+    filter: invert(1);
+  }
+
+  .button.white:hover .button-icon {
+    filter: none;
+  }
+
+  .button.small {
+    padding: 0.45rem 0.9rem;
+  }
+
+  .button.small .button-text-wrapper {
+    font-size: 0.6875rem;
+  }
+</style>

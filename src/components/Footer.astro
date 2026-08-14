@@ -1,0 +1,222 @@
+---
+// Global footer: "Ready to build?" CTA, the FRONTPAGE / LABS marquee, and credits.
+import Button from './Button.astro';
+
+// Six copies per track, duplicated below, so the scroll loops seamlessly.
+const REPEAT = 6;
+---
+
+<footer class="footer">
+  <div class="footer-row-top">
+    <div class="container-fluid">
+      <div class="footer-top-inner">
+        <div class="footer-widget">
+          <div class="margin-bottom-extra-small footer-cta-text">
+            Ready to <span class="text-blue">build</span>?
+          </div>
+          <Button href="/contact" label="Get Started" variant="white" size="small" icon={false} />
+        </div>
+
+        <div class="footer-widget align-right">
+          <a class="back-top-link" href="#top">
+            <span class="back-top-icon">
+              <img src="/assets/arrow-up.svg" alt="" aria-hidden="true" />
+            </span>
+            <span class="back-top-text">Back to top</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-row-middle">
+    <div class="marquee">
+      <div class="marquee-track">
+        {Array.from({ length: REPEAT * 2 }).map(() => (
+          <div class="marquee-item"><span class="footer-heading">FrontPage</span></div>
+        ))}
+      </div>
+    </div>
+
+    <div class="marquee reverse">
+      <div class="marquee-track">
+        {Array.from({ length: REPEAT * 2 }).map(() => (
+          <div class="marquee-item"><span class="footer-heading">Labs</span></div>
+        ))}
+      </div>
+    </div>
+
+    <div class="footer-circle-wrapper">
+      <a class="footer-circle-link" href="/contact" aria-label="Get in touch">
+        <img class="footer-circle-image" src="/assets/hi-we-re-fpl-4-.png" alt="" />
+      </a>
+    </div>
+  </div>
+
+  <div class="footer-row-bottom">
+    <div class="container-fluid">
+      <div class="footer-credits-row">
+        <div class="footer-credits-item">
+          Get ready for the <strong class="text-blue">FrontPage</strong>.
+        </div>
+        <div class="footer-credits to-right">
+          <a class="link-inverse" href="/portfolio">Work</a>
+          <a class="link-inverse" href="/about">About</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding-top: 2.5rem;
+    overflow: hidden;
+  }
+
+  .footer-top-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .footer-cta-text {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .back-top-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .back-top-icon {
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--color-white);
+  }
+
+  .back-top-icon img {
+    width: 9px;
+    height: 9px;
+  }
+
+  .back-top-link:hover .back-top-icon {
+    background-color: var(--fpl-blue);
+  }
+
+  /* --- Marquee ---------------------------------------------------------- */
+
+  .footer-row-middle {
+    position: relative;
+    margin-top: 2rem;
+  }
+
+  .marquee {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .marquee-track {
+    display: inline-flex;
+    align-items: center;
+    gap: 3rem;
+    /* Track holds two identical halves; shifting by -50% loops seamlessly. */
+    animation: marquee-scroll 30s linear infinite;
+    will-change: transform;
+  }
+
+  .marquee.reverse .marquee-track {
+    animation-direction: reverse;
+  }
+
+  .marquee-item {
+    flex: none;
+  }
+
+  .footer-heading {
+    font-family: var(--font-secondary);
+    font-size: 14vw;
+    font-weight: 600;
+    line-height: 0.85;
+    letter-spacing: -0.028em;
+    text-transform: uppercase;
+  }
+
+  @keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; }
+  }
+
+  .footer-circle-wrapper {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+  }
+
+  .footer-circle-link {
+    pointer-events: auto;
+  }
+
+  .footer-circle-image {
+    width: clamp(80px, 12vw, 190px);
+    height: auto;
+  }
+
+  /* --- Credits ---------------------------------------------------------- */
+
+  .footer-row-bottom {
+    padding-block: 1.5rem 1.75rem;
+  }
+
+  .footer-credits-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .footer-credits.to-right {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  .link-inverse {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .link-inverse:hover {
+    color: var(--fpl-blue);
+  }
+
+  @media (max-width: 767px) {
+    .footer-credits-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

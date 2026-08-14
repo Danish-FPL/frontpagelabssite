@@ -1,0 +1,291 @@
+/* ==========================================================================
+   FrontPage Labs — design tokens + base styles
+   Values extracted verbatim from the live Webflow stylesheet
+   (frontpagelabs-main-site.webflow.shared.2cb9c99ad.css) so the rebuild
+   matches the current site exactly rather than approximating it.
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Overused-Grotesk';
+  src: url('/fonts/overusedgrotesk-medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Overused-Grotesk';
+  src: url('/fonts/overusedgrotesk-semibold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Brand palette — Webflow variable names kept so the mapping stays obvious */
+  --fpl-blue: #03f6ff;
+  --fpl-dark-blue: #01194b;
+  --fpl-wolf-grey: #7584a2;
+
+  --color-primary: #000;
+  --color-secondary: #737577;
+  --color-white: #fff;
+  --color-background-primary: #fff;
+  --color-background-muted: #f3f4f5;
+  --color-border-muted: #d4d6d8;
+  --color-form-placeholder: #a5a7a9;
+
+  --color-error: #751515;
+  --color-error-background: #ffc5c5;
+  --color-success: #114c09;
+  --color-success-background: #abe9a3;
+
+  /* Type */
+  --font-primary: 'Overused-Grotesk', Arial, sans-serif;
+  --font-secondary: 'Overused-Grotesk', Arial, sans-serif;
+
+  /* Layout */
+  --container-padding: 1.875rem;
+  --section-padding-top: 3rem;
+  --section-padding-bottom: 7.6rem;
+}
+
+/* --------------------------------------------------------------------------
+   Reset
+   -------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-background-primary);
+  color: var(--color-primary);
+  font-family: var(--font-primary);
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   Typography scale — viewport-relative, exactly as Webflow ships it.
+   The oversized display type is what gives the site its character, so these
+   vw values matter; they are not arbitrary.
+   -------------------------------------------------------------------------- */
+
+.page-title {
+  font-family: var(--font-secondary);
+  font-size: 12.5vw;
+  font-weight: 600;
+  line-height: 0.8;
+  letter-spacing: -0.022em;
+  text-transform: uppercase;
+  margin: -0.7vw 0 0;
+}
+
+.heading-large {
+  font-family: var(--font-secondary);
+  font-size: 14.25vw;
+  font-weight: 600;
+  line-height: 0.8;
+  letter-spacing: -0.028em;
+  text-transform: uppercase;
+  margin: -0.06em 0 0;
+}
+
+.heading-small {
+  font-family: var(--font-secondary);
+  font-size: 5.36vw;
+  font-weight: 600;
+  line-height: 0.8;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  margin: -0.1em 0 0;
+}
+
+.heading-small.about {
+  font-size: 4vw;
+}
+
+.section-title-text {
+  font-family: var(--font-primary);
+  font-size: 1.0625rem;
+  font-weight: 500;
+  line-height: 0.8;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.paragraph-extra-large {
+  font-family: var(--font-primary);
+  font-size: 2.75vw;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.027em;
+  text-align: center;
+  margin: 0;
+}
+
+/* About-page variant: smaller and left-aligned. */
+.paragraph-extra-large.wdd {
+  font-size: 2.3vw;
+  text-align: left;
+}
+
+.paragraph-large {
+  font-family: var(--font-primary);
+  font-size: 1.69vw;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.019em;
+  text-indent: 2.7867em;
+  margin-bottom: 0;
+}
+
+.paragraph-large.dana {
+  font-size: 1.4vw;
+  text-align: left;
+}
+
+.paragraph-small {
+  font-family: var(--font-primary);
+  font-size: 1.0625rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.019em;
+  text-indent: 2.7867em;
+  margin-bottom: 0;
+}
+
+.no-text-indent {
+  text-indent: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Layout primitives
+   -------------------------------------------------------------------------- */
+
+.container-fluid {
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0;
+  padding-inline: var(--container-padding);
+}
+
+.container {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: var(--container-padding);
+}
+
+.section {
+  padding-top: var(--section-padding-top);
+  padding-bottom: var(--section-padding-bottom);
+  display: block;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.align-center {
+  align-self: center;
+}
+
+.align-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.grid-12-columns {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.25rem;
+}
+
+.grid-12-columns-small {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1rem;
+}
+
+/* Spacing helpers mirrored from Webflow's utility set */
+.margin-bottom-extra-small { margin-bottom: 0.75rem; }
+.margin-bottom-small { margin-bottom: 1.25rem; }
+.margin-bottom-medium { margin-bottom: 2.5rem; }
+.margin-bottom-large { margin-bottom: 5rem; }
+.margin-top-auto { margin-top: auto; }
+
+/* Brand text accents */
+.text-blue { color: var(--fpl-blue); }
+.text-wolf-grey { color: var(--fpl-wolf-grey); }
+
+/* --------------------------------------------------------------------------
+   Responsive overrides — breakpoints taken from the Webflow media queries
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 991px) {
+  .heading-small { font-size: 7.6vw; }
+  .heading-large { font-size: 13vw; margin-top: -0.08em; }
+  .page-title { font-size: 12vw; }
+  .paragraph-extra-large { font-size: 3.2vw; }
+  .paragraph-extra-large.wdd { font-size: 2.9vw; }
+  .paragraph-large,
+  .paragraph-large.dana { font-size: 2.2vw; }
+}
+
+@media (max-width: 767px) {
+  .heading-small { font-size: 9vw; }
+  .heading-small.about { font-size: 10vw; }
+  .page-title { font-size: 12vw; }
+  .paragraph-extra-large,
+  .paragraph-extra-large.wdd { font-size: 4vw; }
+  .paragraph-large,
+  .paragraph-large.dana { font-size: 3vw; }
+  .grid-12-columns,
+  .grid-12-columns-small { grid-template-columns: repeat(6, 1fr); }
+}
+
+@media (max-width: 479px) {
+  .heading-small { font-size: 10vw; line-height: 1; }
+  .paragraph-extra-large,
+  .paragraph-extra-large.wdd { font-size: 5.2vw; }
+  .paragraph-large,
+  .paragraph-large.dana { font-size: 4.2vw; }
+  .paragraph-small { font-size: 1rem; }
+  .grid-12-columns,
+  .grid-12-columns-small { grid-template-columns: 1fr; }
+}

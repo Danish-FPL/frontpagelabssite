@@ -1,0 +1,322 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { projects } from '../data/projects';
+
+// Filter chips are derived from the tags actually present in the data, so the
+// list can never drift from the projects it filters.
+const filters = ['All', ...new Set(projects.flatMap((p) => p.tags))];
+---
+
+<Base title="Work | FrontPageLabs - Digital Performance, Down to a Science.">
+  <!-- Hero ---------------------------------------------------------------- -->
+  <section class="hero">
+    <div class="hero-media">
+      <img src="/assets/fpl-38-.png" alt="" />
+      <div class="hero-overlay"></div>
+    </div>
+
+    <div class="hero-inner container-fluid">
+      <div class="overflow-hidden"><h1 class="page-title hero-heading">Selected</h1></div>
+      <div class="overflow-hidden"><h1 class="page-title hero-heading">Work</h1></div>
+
+      <div class="hero-meta">
+        <span>Websites, Marketing, Ads</span>
+        <span>2021 &mdash; 2026</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Controls -------------------------------------------------------------- -->
+  <section class="section-controls">
+    <div class="container-fluid">
+      <div class="controls-row">
+        <div class="controls-label">Learn more about the projects we've built</div>
+
+        <div class="view-toggle" role="group" aria-label="Change layout">
+          <button class="view-button is-active" data-view="grid" aria-pressed="true">Grid</button>
+          <button class="view-button" data-view="list" aria-pressed="false">List</button>
+        </div>
+      </div>
+
+      <div class="filter-row">
+        {filters.map((filter, i) => (
+          <button
+            class:list={['filter-chip', { 'is-active': i === 0 }]}
+            data-filter={filter}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+          >
+            {filter}
+          </button>
+        ))}
+      </div>
+
+      <div class="divider"></div>
+    </div>
+  </section>
+
+  <!-- Project grid ---------------------------------------------------------- -->
+  <section class="section projects">
+    <div class="container-fluid">
+      <div class="projects-grid" id="projects-grid" data-view="grid">
+        {projects.map((project) => (
+          <div class="project-cell" data-tags={project.tags.join('|')}>
+            <ProjectCard project={project} />
+          </div>
+        ))}
+      </div>
+
+      <p class="empty-state" id="empty-state" hidden>No projects match that filter yet.</p>
+    </div>
+  </section>
+
+  <!-- Contact CTA ------------------------------------------------------------ -->
+  <section class="section contact-cta">
+    <div class="container-fluid">
+      <div class="cta-marquee">
+        <h2 class="heading-large">Contact us&nbsp;&nbsp;Contact us</h2>
+      </div>
+
+      <div class="cta-bottom">
+        <p class="paragraph-small no-text-indent">
+          Whether you're just getting started or want to kick off the next evolution of your business,
+          we're prepared to help you grow. Your brand deserves the spotlight;
+          <strong>Let's start building</strong>.
+        </p>
+        <Button href="/contact" label="Get Started" />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* --- Hero --------------------------------------------------------------- */
+
+  .hero {
+    position: relative;
+    min-height: 46vh;
+    display: flex;
+    align-items: flex-end;
+    padding-block: 5rem 2rem;
+    color: var(--color-white);
+    overflow: hidden;
+  }
+
+  .hero-media,
+  .hero-media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(0 0 0 / 20%) 0%, rgb(0 0 0 / 50%) 100%);
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+
+  .hero-heading {
+    color: var(--color-white);
+  }
+
+  .hero-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* --- Controls ------------------------------------------------------------ */
+
+  .section-controls {
+    padding-block: 1.5rem 0;
+  }
+
+  .controls-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .controls-label {
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+  }
+
+  .view-toggle {
+    display: inline-flex;
+    border: 1px solid var(--color-border-muted);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .view-button {
+    padding: 0.35rem 0.9rem;
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .view-button.is-active {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-block: 1.25rem 1rem;
+  }
+
+  .filter-chip {
+    border: 1px solid var(--color-border-muted);
+    border-radius: 999px;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .filter-chip:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .filter-chip.is-active {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  .divider {
+    height: 1px;
+    background-color: var(--color-border-muted);
+  }
+
+  /* --- Grid ---------------------------------------------------------------- */
+
+  .projects {
+    padding-top: 2rem;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  /* List view collapses to a single column of wide, short cards. */
+  .projects-grid[data-view='list'] {
+    grid-template-columns: 1fr;
+  }
+
+  .project-cell[hidden] {
+    display: none;
+  }
+
+  .empty-state {
+    margin-top: 3rem;
+    text-align: center;
+    font-size: 0.8125rem;
+    color: var(--color-secondary);
+  }
+
+  /* --- Contact CTA ---------------------------------------------------------- */
+
+  .contact-cta {
+    padding-top: 5rem;
+  }
+
+  .cta-marquee {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .cta-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .cta-bottom p {
+    max-width: 30rem;
+  }
+
+  @media (max-width: 767px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .controls-row,
+    .cta-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+
+<script>
+  const grid = document.querySelector<HTMLElement>('#projects-grid');
+  const emptyState = document.querySelector<HTMLElement>('#empty-state');
+  const cells = Array.from(document.querySelectorAll<HTMLElement>('.project-cell'));
+
+  // Tag filtering — "All" clears the filter, any other chip matches one tag.
+  document.querySelectorAll<HTMLButtonElement>('.filter-chip').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const filter = chip.dataset.filter ?? 'All';
+
+      document.querySelectorAll<HTMLButtonElement>('.filter-chip').forEach((other) => {
+        const active = other === chip;
+        other.classList.toggle('is-active', active);
+        other.setAttribute('aria-pressed', String(active));
+      });
+
+      let visible = 0;
+      cells.forEach((cell) => {
+        const tags = (cell.dataset.tags ?? '').split('|');
+        const show = filter === 'All' || tags.includes(filter);
+        cell.hidden = !show;
+        if (show) visible += 1;
+      });
+
+      if (emptyState) emptyState.hidden = visible > 0;
+    });
+  });
+
+  // Grid / list layout toggle.
+  document.querySelectorAll<HTMLButtonElement>('.view-button').forEach((button) => {
+    button.addEventListener('click', () => {
+      document.querySelectorAll<HTMLButtonElement>('.view-button').forEach((other) => {
+        const active = other === button;
+        other.classList.toggle('is-active', active);
+        other.setAttribute('aria-pressed', String(active));
+      });
+
+      if (grid) grid.dataset.view = button.dataset.view ?? 'grid';
+    });
+  });
+</script>

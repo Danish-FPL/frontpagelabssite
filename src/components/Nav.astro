@@ -1,0 +1,272 @@
+---
+// Site header. Mirrors the Webflow `.navigation` block: logo, location badge,
+// menu with a hover text-flip, and the Oath link.
+const { pathname } = Astro.url;
+const isCurrent = (href: string) =>
+  href === '/' ? pathname === '/' : pathname.startsWith(href);
+
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/services', label: 'Services' },
+  { href: '/portfolio', label: 'Work' },
+  { href: '/contact', label: 'Contact' },
+];
+---
+
+<div class="navigation">
+  <div class="container-fluid">
+    <div class="navigation-inner">
+      <a class="logo" href="/" aria-label="FrontPage Labs — home">
+        <img src="/assets/frontpage-labs-logo-1-.png" alt="FrontPage Labs" width="160" />
+      </a>
+
+      <div class="location">
+        <img class="location-icon" src="/assets/pin.png" alt="Our location:" />
+        <div class="text-block">Chicago, USA</div>
+      </div>
+
+      <nav class="navigation-menu" id="nav-menu">
+        {links.map(({ href, label }) => (
+          <a class:list={['navigation-link', { current: isCurrent(href) }]} href={href}>
+            <div class="navigation-link-inner">
+              <div class="navigation-link-text">{label}</div>
+              <div class="navigation-link-text-hover">{label}</div>
+            </div>
+          </a>
+        ))}
+
+        <a class="navigation-link oath" href="/about#oath">
+          <div class="navigation-icon-link-inner">
+            <img class="navigation-icon-image" src="/assets/untitled-design.png" alt="The Oath" />
+            <div class="navigation-icon-text">The Oath; Supporting Chicago's Homeless</div>
+          </div>
+        </a>
+      </nav>
+
+      <button class="menu-button" aria-label="Menu" aria-expanded="false" aria-controls="nav-menu">
+        <span class="menu-icon">
+          <span class="menu-icon-top"></span>
+          <span class="menu-icon-middle"></span>
+          <span class="menu-icon-bottom"></span>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <div class="navigation-divider">
+    <div class="container-fluid"><div class="divider"></div></div>
+  </div>
+</div>
+
+<style>
+  .navigation {
+    position: relative;
+    z-index: 100;
+    background-color: var(--color-background-primary);
+  }
+
+  .navigation-inner {
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-start;
+    align-items: center;
+    max-width: 100%;
+  }
+
+  .logo {
+    flex: none;
+    display: flex;
+    align-items: center;
+  }
+
+  .logo img {
+    width: 160px;
+    height: auto;
+  }
+
+  .location {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-left: 1.5rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+  }
+
+  .location-icon {
+    width: 10px;
+    height: auto;
+  }
+
+  .navigation-menu {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+  }
+
+  .navigation-link {
+    flex: none;
+    display: flex;
+    align-items: center;
+    margin-left: 0.9375rem;
+    padding: 1rem 0.625rem;
+    font-size: 1.0625rem;
+    font-weight: 500;
+    line-height: 1.25em;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    overflow: hidden;
+  }
+
+  /* Active page gets the small dot marker Webflow paints via background-image. */
+  .navigation-link.current {
+    background-image: url('/assets/dot.svg');
+    background-position: 100%;
+    background-repeat: no-repeat;
+    background-size: 4px 4px;
+  }
+
+  /* Hover flip: the duplicate label slides up to replace the original. */
+  .navigation-link-inner {
+    position: relative;
+    display: grid;
+    overflow: hidden;
+  }
+
+  .navigation-link-text,
+  .navigation-link-text-hover {
+    grid-area: 1 / 1;
+    transition: transform 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .navigation-link-text-hover {
+    transform: translateY(100%);
+  }
+
+  .navigation-link:hover .navigation-link-text {
+    transform: translateY(-100%);
+  }
+
+  .navigation-link:hover .navigation-link-text-hover {
+    transform: translateY(0);
+  }
+
+  .navigation-link.oath {
+    margin-left: 0.5rem;
+    padding-right: 0;
+  }
+
+  .navigation-icon-link-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .navigation-icon-image {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  /* Oath caption is a tooltip on desktop — hidden until the avatar is hovered. */
+  .navigation-icon-text {
+    position: absolute;
+    top: 120%;
+    right: 0;
+    width: 12rem;
+    padding: 0.5rem 0.65rem;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    font-size: 0.6875rem;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    text-transform: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .navigation-link.oath:hover .navigation-icon-text {
+    opacity: 1;
+  }
+
+  .menu-button {
+    display: none;
+    margin-left: auto;
+    padding: 0.5rem;
+  }
+
+  .menu-icon {
+    display: grid;
+    gap: 4px;
+    width: 22px;
+  }
+
+  .menu-icon span {
+    display: block;
+    height: 2px;
+    background-color: var(--color-primary);
+  }
+
+  .navigation-divider .divider {
+    height: 1px;
+    background-color: var(--color-border-muted);
+  }
+
+  @media (max-width: 991px) {
+    .navigation-menu {
+      position: absolute;
+      inset: 100% 0 auto;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 1rem var(--container-padding) 2rem;
+      background-color: var(--color-background-primary);
+      border-bottom: 1px solid var(--color-border-muted);
+      display: none;
+    }
+
+    .navigation-menu.open {
+      display: flex;
+    }
+
+    .navigation-link {
+      margin-left: 0;
+      padding-inline: 0;
+      font-size: 1.5rem;
+    }
+
+    .navigation-icon-text {
+      position: static;
+      width: auto;
+      margin-left: 0.6rem;
+      padding: 0;
+      background: none;
+      color: var(--color-secondary);
+      opacity: 1;
+    }
+
+    .menu-button {
+      display: block;
+    }
+
+    .location {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>('.menu-button');
+  const menu = document.querySelector<HTMLElement>('#nav-menu');
+
+  button?.addEventListener('click', () => {
+    const open = menu?.classList.toggle('open') ?? false;
+    button.setAttribute('aria-expanded', String(open));
+  });
+</script>
