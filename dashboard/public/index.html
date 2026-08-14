@@ -1,0 +1,1016 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Growth Command · FrontPage Labs</title>
+<style>
+  /* ==========================================================================
+     Growth Command — internal dashboard.
+     Structure mirrors the CAF Event Command board (header → stat deck → tabs →
+     panels → detail drawer); the palette and type are FrontPage Labs'.
+     ========================================================================== */
+
+  :root{
+    --ink:#0a0a0a; --mut:#737577; --faint:#a5a7a9; --line:#d4d6d8;
+    --panel:#f3f4f5; --card:#fff; --bg:#fafafa;
+    --blue:#03f6ff; --deep:#01194b; --wolf:#7584a2;
+    --ok:#114c09; --ok-bg:#abe9a3;
+    --bad:#751515; --bad-bg:#ffc5c5;
+    --warn:#7a4a05; --warn-bg:#ffe0b0;
+    --mono:ui-monospace,'SFMono-Regular',Menlo,'Roboto Mono',monospace;
+    --shadow:0 1px 2px rgba(0,0,0,.04), 0 10px 28px -14px rgba(0,0,0,.22);
+    --shadow-lg:0 2px 6px rgba(0,0,0,.07), 0 26px 54px -22px rgba(0,0,0,.4);
+    --spring:cubic-bezier(.2,.9,.3,1.2);
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:500 16px/1.5 'Overused-Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  }
+  button{font:inherit; color:inherit; background:none; border:0; cursor:pointer}
+  input,select,textarea{font:inherit}
+
+  /* --- Header ------------------------------------------------------------ */
+
+  header{position:sticky; top:0; z-index:60; background:var(--ink); color:var(--card)}
+  .hbar{
+    display:flex; align-items:center; gap:.85rem;
+    padding:.7rem 1.1rem; max-width:100rem; margin:0 auto;
+  }
+  .brand{
+    font-size:1.05rem; font-weight:600; letter-spacing:-.02em;
+    text-transform:uppercase; white-space:nowrap;
+  }
+  .brand i{font-style:normal; color:var(--wolf)}
+  .htitle{
+    display:flex; flex-direction:column; line-height:1.05;
+    padding-left:.85rem; margin-left:.1rem; border-left:1px solid #2b2b2b;
+  }
+  .htitle b{font-size:.8125rem; font-weight:600; letter-spacing:.02em}
+  .htitle small{font-size:.5625rem; letter-spacing:.16em; text-transform:uppercase; color:var(--faint)}
+
+  .badge{
+    display:inline-flex; align-items:center; gap:.35rem;
+    padding:.22rem .55rem; border-radius:999px; background:#1c1c1c;
+    font-size:.5625rem; letter-spacing:.12em; text-transform:uppercase;
+  }
+  .badge .dot{width:6px; height:6px; border-radius:50%; background:#2ecc71}
+  .badge.off .dot{background:#e8a33d}
+
+  .hmeta{display:flex; align-items:center; gap:.55rem; margin-left:auto; font-size:.625rem}
+  .upd{color:var(--faint); letter-spacing:.08em; text-transform:uppercase}
+  .upd b{color:var(--card); font-weight:500}
+  .iconbtn{
+    padding:.3rem .55rem; border-radius:999px; border:1px solid #2b2b2b;
+    font-size:.5625rem; letter-spacing:.1em; text-transform:uppercase;
+    transition:background-color .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .iconbtn:hover{background:var(--card); color:var(--ink); border-color:var(--card)}
+  .whoami{display:flex; align-items:center; gap:.35rem}
+  .av{
+    display:grid; place-items:center; width:20px; height:20px; border-radius:50%;
+    background:var(--blue); color:var(--ink); font-size:.5625rem; font-weight:600;
+  }
+
+  /* --- Layout ------------------------------------------------------------ */
+
+  .wrap{max-width:100rem; margin:0 auto; padding:1.1rem 1.1rem 5rem}
+
+  .deck{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));
+    gap:.7rem; margin-bottom:1.1rem;
+  }
+  .tile{
+    background:var(--card); border:1px solid var(--line); border-radius:6px;
+    padding:.85rem .9rem; box-shadow:var(--shadow);
+  }
+  .tile.alert{border-color:#f0b8b8}
+  .tile .k{
+    font-size:.5625rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--mut); margin-bottom:.4rem;
+  }
+  .tile .v{font-size:1.75rem; font-weight:600; line-height:1; letter-spacing:-.03em}
+  .tile .v small{font-size:.875rem; font-weight:500; color:var(--faint); letter-spacing:0}
+  .tile .s{margin-top:.35rem; font-size:.625rem; color:var(--mut)}
+  .tile .s.up{color:var(--ok)}
+  .tile .s.down{color:var(--bad)}
+  .tile.alert .v{color:var(--bad)}
+
+  .spark{display:flex; align-items:flex-end; gap:3px; height:22px; margin-top:.5rem}
+  .spark i{flex:1; background:var(--line); border-radius:1px; min-height:2px}
+  .spark i.hot{background:var(--blue)}
+
+  /* --- Tabs -------------------------------------------------------------- */
+
+  .tabs{
+    display:flex; gap:.25rem; overflow-x:auto; scrollbar-width:none;
+    background:var(--card); border:1px solid var(--line); border-radius:999px;
+    padding:.28rem; margin-bottom:1.1rem; box-shadow:var(--shadow);
+  }
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{
+    display:inline-flex; align-items:center; gap:.4rem; white-space:nowrap;
+    padding:.5rem .9rem; border-radius:999px;
+    font-size:.6875rem; letter-spacing:.08em; text-transform:uppercase; color:var(--mut);
+    transition:background-color .2s ease, color .2s ease;
+  }
+  .tab:hover{color:var(--ink)}
+  .tab[aria-selected="true"]{background:var(--ink); color:var(--card)}
+  .tab .n{
+    padding:.05rem .35rem; border-radius:999px; background:var(--panel);
+    color:var(--mut); font-size:.5625rem; font-weight:600;
+  }
+  .tab[aria-selected="true"] .n{background:#2b2b2b; color:var(--card)}
+
+  .panel{display:none}
+  .panel.on{display:block; animation:fade .18s ease}
+  @keyframes fade{from{opacity:0; transform:translateY(3px)} to{opacity:1; transform:none}}
+
+  /* --- Tools row --------------------------------------------------------- */
+
+  .tools{display:flex; gap:.5rem; margin-bottom:.85rem; flex-wrap:wrap}
+  .search{
+    display:flex; align-items:center; gap:.5rem; flex:1; min-width:13rem;
+    background:var(--card); border:1px solid var(--line); border-radius:999px;
+    padding:.45rem .85rem;
+  }
+  .search svg{width:14px; height:14px; stroke:var(--faint); fill:none; flex:none}
+  .search input{width:100%; border:0; background:none; font-size:16px; outline:none}
+  .search input::placeholder{color:var(--faint)}
+
+  .menuwrap{position:relative}
+  .mbtn{
+    display:inline-flex; align-items:center; gap:.4rem;
+    background:var(--card); border:1px solid var(--line); border-radius:999px;
+    padding:.5rem .9rem; font-size:.6875rem; letter-spacing:.08em; text-transform:uppercase;
+  }
+  .mbtn:hover{border-color:var(--ink)}
+  .mbtn .cur{color:var(--mut); text-transform:none; letter-spacing:0}
+  .menu{
+    display:none; position:absolute; z-index:40; top:calc(100% + .35rem); left:0;
+    min-width:13rem; background:var(--card); border:1px solid var(--line);
+    border-radius:6px; padding:.3rem; box-shadow:var(--shadow-lg);
+  }
+  .menu.on{display:block}
+  .mi{
+    display:flex; justify-content:space-between; align-items:center; gap:.75rem;
+    width:100%; text-align:left; padding:.5rem .6rem; border-radius:4px;
+    font-size:.75rem;
+  }
+  .mi:hover{background:var(--panel)}
+  .mi[aria-pressed="true"]{background:var(--ink); color:var(--card)}
+  .mi .n{font-size:.625rem; color:var(--faint)}
+  .mi[aria-pressed="true"] .n{color:var(--wolf)}
+
+  /* --- Rows -------------------------------------------------------------- */
+
+  .rows{display:grid; gap:.4rem}
+  .row{
+    display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) auto;
+    gap:.85rem; align-items:center;
+    background:var(--card); border:1px solid var(--line); border-radius:6px;
+    padding:.75rem .9rem; text-align:left; width:100%;
+    transition:border-color .16s ease, transform .16s var(--spring), box-shadow .16s ease;
+  }
+  .row:hover{border-color:var(--ink); transform:translateY(-1px); box-shadow:var(--shadow)}
+  .row .nm{font-size:.875rem; font-weight:600; letter-spacing:-.01em}
+  .row .sb{margin-top:.15rem; font-size:.6875rem; color:var(--mut)}
+  .row .mid{font-size:.6875rem; color:var(--mut)}
+  .row .rt{display:flex; align-items:center; gap:.4rem; justify-self:end}
+  .amt{font-family:var(--mono); font-size:.8125rem; font-weight:600; white-space:nowrap}
+
+  .chip{
+    display:inline-flex; align-items:center; gap:.25rem;
+    padding:.2rem .5rem; border-radius:999px; border:1px solid var(--line);
+    font-size:.5625rem; letter-spacing:.08em; text-transform:uppercase; color:var(--mut);
+    white-space:nowrap;
+  }
+  .chip.ok{background:var(--ok-bg); border-color:transparent; color:var(--ok)}
+  .chip.bad{background:var(--bad-bg); border-color:transparent; color:var(--bad)}
+  .chip.warn{background:var(--warn-bg); border-color:transparent; color:var(--warn)}
+  .chip.ink{background:var(--ink); border-color:transparent; color:var(--card)}
+  .chip.cyan{background:var(--blue); border-color:transparent; color:var(--ink)}
+
+  .empty{
+    padding:2.5rem 1rem; text-align:center; color:var(--faint); font-size:.8125rem;
+    background:var(--card); border:1px dashed var(--line); border-radius:6px;
+  }
+  .grouphd{
+    margin:1.2rem 0 .5rem; font-size:.5625rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--mut);
+  }
+  .grouphd:first-child{margin-top:0}
+
+  /* --- Outreach ---------------------------------------------------------- */
+
+  .chtabs{display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:.85rem}
+  .chtab{
+    padding:.5rem .9rem; border-radius:6px; background:var(--card);
+    border:1px solid var(--line); font-size:.6875rem; letter-spacing:.06em;
+    text-transform:uppercase;
+  }
+  .chtab:hover{border-color:var(--ink)}
+  .chtab[aria-pressed="true"]{background:var(--ink); border-color:var(--ink); color:var(--card)}
+
+  .chbox{
+    background:var(--card); border:1px solid var(--line); border-radius:6px;
+    padding:.9rem; margin-bottom:1.1rem;
+  }
+  .blk + .blk{margin-top:1rem; padding-top:1rem; border-top:1px solid var(--line)}
+  .blkhd{display:flex; justify-content:space-between; align-items:center; gap:.75rem; margin-bottom:.45rem}
+  .blkhd b{font-size:.6875rem; letter-spacing:.1em; text-transform:uppercase}
+  .copy{
+    padding:.3rem .7rem; border-radius:999px; border:1px solid var(--line);
+    font-size:.5625rem; letter-spacing:.1em; text-transform:uppercase;
+    transition:background-color .2s ease, color .2s ease;
+  }
+  .copy:hover{background:var(--ink); border-color:var(--ink); color:var(--card)}
+  .copy.done{background:var(--blue); border-color:var(--blue); color:var(--ink)}
+  .ta{
+    width:100%; min-height:7rem; resize:vertical;
+    border:1px solid var(--line); border-radius:4px; padding:.65rem .75rem;
+    font-family:var(--mono); font-size:.75rem; line-height:1.55;
+    background:var(--panel); color:var(--ink);
+  }
+  .ta:focus{outline:none; border-color:var(--ink); background:var(--card)}
+  .hint{margin:.4rem 0 0; font-size:.625rem; color:var(--faint)}
+  .hint code{font-family:var(--mono); color:var(--mut)}
+
+  /* --- Campaign table ----------------------------------------------------- */
+
+  .tablewrap{overflow-x:auto; background:var(--card); border:1px solid var(--line); border-radius:6px}
+  table{width:100%; border-collapse:collapse; min-width:44rem}
+  th,td{padding:.65rem .8rem; text-align:left; border-bottom:1px solid var(--line); white-space:nowrap}
+  th{
+    font-size:.5625rem; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--mut); font-weight:500;
+  }
+  td{font-size:.8125rem}
+  td.num{font-family:var(--mono); text-align:right}
+  th.num{text-align:right}
+  tbody tr:last-child td{border-bottom:0}
+  tbody tr:hover{background:var(--panel)}
+  tfoot td{font-weight:600; border-top:1px solid var(--ink); background:var(--panel)}
+
+  /* --- Activity ----------------------------------------------------------- */
+
+  .feed{display:grid; gap:.4rem}
+  .ev{
+    display:flex; align-items:flex-start; gap:.7rem;
+    background:var(--card); border:1px solid var(--line); border-radius:6px; padding:.7rem .9rem;
+  }
+  .ev .ic{
+    display:grid; place-items:center; flex:none;
+    width:24px; height:24px; border-radius:50%; background:var(--panel); font-size:.75rem;
+  }
+  .ev .tx{font-size:.8125rem}
+  .ev .tm{margin-top:.1rem; font-size:.625rem; color:var(--faint)}
+
+  /* --- Drawer -------------------------------------------------------------- */
+
+  .scrim{
+    position:fixed; inset:0; z-index:80; background:rgba(0,0,0,.45);
+    opacity:0; pointer-events:none; transition:opacity .22s ease;
+  }
+  .scrim.on{opacity:1; pointer-events:auto}
+  .drawer{
+    position:fixed; z-index:90; top:0; right:0; bottom:0; width:min(27rem,100%);
+    background:var(--card); box-shadow:var(--shadow-lg);
+    transform:translateX(100%); transition:transform .26s var(--spring);
+    display:flex; flex-direction:column;
+  }
+  .drawer.on{transform:none}
+  .dhd{
+    display:flex; justify-content:space-between; align-items:flex-start; gap:1rem;
+    padding:1.1rem; border-bottom:1px solid var(--line);
+  }
+  .dhd h2{margin:0; font-size:1.1rem; font-weight:600; letter-spacing:-.02em}
+  .dhd .sb{margin-top:.2rem; font-size:.6875rem; color:var(--mut)}
+  .x{font-size:1.1rem; line-height:1; color:var(--mut); padding:.2rem .4rem}
+  .x:hover{color:var(--ink)}
+  .dbd{padding:1.1rem; overflow-y:auto; flex:1}
+  .kv{display:grid; grid-template-columns:auto 1fr; gap:.45rem .9rem; font-size:.75rem}
+  .kv dt{color:var(--faint); letter-spacing:.06em; text-transform:uppercase; font-size:.5625rem; padding-top:.15rem}
+  .kv dd{margin:0}
+  .dsec{margin-top:1.3rem; padding-top:1.1rem; border-top:1px solid var(--line)}
+  .dsec h3{
+    margin:0 0 .6rem; font-size:.5625rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--mut); font-weight:500;
+  }
+  .note{
+    background:var(--panel); border-radius:4px; padding:.7rem .8rem;
+    font-size:.75rem; line-height:1.5;
+  }
+  .dact{display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.6rem}
+  .abtn{
+    padding:.5rem .85rem; border-radius:999px; border:1px solid var(--line);
+    font-size:.5625rem; letter-spacing:.1em; text-transform:uppercase;
+    transition:background-color .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .abtn:hover{background:var(--ink); border-color:var(--ink); color:var(--card)}
+
+  .toast{
+    position:fixed; z-index:100; left:50%; bottom:1.5rem; transform:translate(-50%,140%);
+    background:var(--ink); color:var(--card); border-radius:999px;
+    padding:.6rem 1.1rem; font-size:.6875rem; letter-spacing:.06em;
+    transition:transform .26s var(--spring);
+  }
+  .toast.on{transform:translate(-50%,0)}
+
+  @media (max-width:760px){
+    .row{grid-template-columns:1fr; gap:.5rem}
+    .row .rt{justify-self:start}
+    .htitle{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms !important; transition-duration:.01ms !important}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hbar">
+    <div class="brand">Frontpage<i>Labs</i></div>
+    <div class="htitle"><b>Growth Command</b><small>Internal</small></div>
+    <div class="badge" id="liveBadge"><span class="dot"></span><span id="liveLabel">Live</span></div>
+    <div class="hmeta">
+      <span class="upd">updated <b id="updated">—</b></span>
+      <button class="iconbtn" id="refreshBtn" title="Refresh now">↻</button>
+      <span class="whoami"><span class="av" id="avatar">·</span></span>
+      <button class="iconbtn" id="logoutBtn">Sign out</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="deck" id="deck"></div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true"  data-tab="pipeline">Pipeline <span class="n" id="n-pipeline">0</span></button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="outreach">Outreach <span class="n" id="n-outreach">0</span></button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="clients">Clients <span class="n" id="n-clients">0</span></button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="campaigns">Campaigns <span class="n" id="n-campaigns">0</span></button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="attention">Attention <span class="n" id="n-attention">0</span></button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="activity">Activity <span class="n" id="n-activity">0</span></button>
+  </div>
+
+  <!-- Pipeline ------------------------------------------------------------ -->
+  <section class="panel on" id="panel-pipeline" role="tabpanel">
+    <div class="tools">
+      <div class="search">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="text" placeholder="Search company, contact, or industry…" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="menuwrap" id="stageWrap">
+        <button class="mbtn" id="stageBtn" aria-haspopup="true" aria-expanded="false">Stage<span class="cur" id="stageCur">· All</span><span>▾</span></button>
+        <div class="menu" id="stageMenu" role="menu"></div>
+      </div>
+    </div>
+    <div class="rows" id="pipelineRows"></div>
+  </section>
+
+  <!-- Outreach ------------------------------------------------------------ -->
+  <section class="panel" id="panel-outreach" role="tabpanel">
+    <div class="chtabs" id="chTabs"></div>
+    <div class="chbox" id="chBox"></div>
+
+    <div class="grouphd" id="followHd">Follow-up queue</div>
+    <div class="rows" id="outreachRows"></div>
+  </section>
+
+  <!-- Clients -------------------------------------------------------------- -->
+  <section class="panel" id="panel-clients" role="tabpanel">
+    <div class="rows" id="clientRows"></div>
+  </section>
+
+  <!-- Campaigns ------------------------------------------------------------ -->
+  <section class="panel" id="panel-campaigns" role="tabpanel">
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Client</th><th>Channel</th><th>Status</th>
+            <th class="num">Spend</th><th class="num">Leads</th>
+            <th class="num">CPL</th><th class="num">Conv.</th><th class="num">ROAS</th>
+          </tr>
+        </thead>
+        <tbody id="campaignBody"></tbody>
+        <tfoot id="campaignFoot"></tfoot>
+      </table>
+    </div>
+  </section>
+
+  <!-- Attention ------------------------------------------------------------ -->
+  <section class="panel" id="panel-attention" role="tabpanel">
+    <div id="attentionBody"></div>
+  </section>
+
+  <!-- Activity -------------------------------------------------------------- -->
+  <section class="panel" id="panel-activity" role="tabpanel">
+    <div class="feed" id="activityFeed"></div>
+  </section>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="dhd">
+    <div><h2 id="dTitle">—</h2><div class="sb" id="dSub"></div></div>
+    <button class="x" id="dClose" aria-label="Close">✕</button>
+  </div>
+  <div class="dbd" id="dBody"></div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ==========================================================================
+   State
+   ========================================================================== */
+
+const STAGES = ['New', 'Contacted', 'Call Booked', 'Proposal', 'Won', 'Lost'];
+const OPEN_STAGES = ['New', 'Contacted', 'Call Booked', 'Proposal'];
+
+let DATA = null;
+let stageFilter = 'All';
+let query = '';
+let activeChannel = 0;
+
+const $ = (sel) => document.querySelector(sel);
+const el = (id) => document.getElementById(id);
+
+/* --- Formatting ---------------------------------------------------------- */
+
+const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
+const moneyShort = (n) =>
+  n >= 1000 ? '$' + (n / 1000).toFixed(n >= 10000 ? 0 : 1).replace(/\.0$/, '') + 'k' : '$' + Math.round(n);
+
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) =>
+  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+const DAY = 86400000;
+const todayISO = () => new Date().toISOString().slice(0, 10);
+
+function daysFrom(dateStr) {
+  if (!dateStr) return null;
+  return Math.round((new Date(dateStr + 'T00:00:00') - new Date(todayISO() + 'T00:00:00')) / DAY);
+}
+
+function relDay(dateStr) {
+  const d = daysFrom(dateStr);
+  if (d === null) return '—';
+  if (d === 0) return 'today';
+  if (d === 1) return 'tomorrow';
+  if (d === -1) return 'yesterday';
+  return d < 0 ? `${-d} days ago` : `in ${d} days`;
+}
+
+function relTime(iso) {
+  const mins = Math.round((Date.now() - new Date(iso)) / 60000);
+  if (mins < 60) return `${Math.max(mins, 0)}m ago`;
+  const hrs = Math.round(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  return `${Math.round(hrs / 24)}d ago`;
+}
+
+/* --- Derived ------------------------------------------------------------- */
+
+const isOpen = (p) => OPEN_STAGES.includes(p.stage);
+const isOverdue = (p) => isOpen(p) && daysFrom(p.nextStepDue) < 0;
+const isStale = (p) => isOpen(p) && daysFrom(p.lastTouch) <= -7;
+
+const stageClass = (stage) =>
+  stage === 'Won' ? 'ok' : stage === 'Lost' ? 'bad' : stage === 'Proposal' ? 'cyan' : '';
+
+const healthClass = (h) => (h === 'Good' ? 'ok' : h === 'At Risk' ? 'bad' : 'warn');
+
+function toast(msg) {
+  const t = el('toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => t.classList.remove('on'), 2000);
+}
+
+/* ==========================================================================
+   Stat deck
+   ========================================================================== */
+
+function renderDeck() {
+  const { prospects, clients } = DATA;
+  const open = prospects.filter(isOpen);
+  const pipelineValue = open.reduce((s, p) => s + p.value, 0);
+  const proposals = prospects.filter((p) => p.stage === 'Proposal');
+  const mrr = clients.reduce((s, c) => s + c.mrr, 0);
+  // Must match the Attention tab's total exactly, or the two disagree on screen.
+  const needsAttention = attentionItems().total;
+
+  const won = prospects.filter((p) => p.stage === 'Won').length;
+  const closed = won + prospects.filter((p) => p.stage === 'Lost').length;
+  const winRate = closed ? Math.round((won / closed) * 100) : 0;
+
+  // Placeholder trend until a real time series exists.
+  const spark = [2, 3, 2, 5, 4, 6, 5, 8];
+  const peak = Math.max(...spark);
+
+  el('deck').innerHTML = `
+    <div class="tile">
+      <div class="k">Open pipeline</div>
+      <div class="v">${moneyShort(pipelineValue)}</div>
+      <div class="s">${open.length} active ${open.length === 1 ? 'deal' : 'deals'}</div>
+      <div class="spark">${spark
+        .map((v, i) => `<i class="${i === spark.length - 1 ? 'hot' : ''}" style="height:${(v / peak) * 100}%"></i>`)
+        .join('')}</div>
+    </div>
+    <div class="tile">
+      <div class="k">Monthly recurring</div>
+      <div class="v">${moneyShort(mrr)}</div>
+      <div class="s">${clients.length} active ${clients.length === 1 ? 'client' : 'clients'}</div>
+    </div>
+    <div class="tile">
+      <div class="k">Proposals out</div>
+      <div class="v">${proposals.length}<small> / ${moneyShort(proposals.reduce((s, p) => s + p.value, 0))}</small></div>
+      <div class="s">awaiting a decision</div>
+    </div>
+    <div class="tile">
+      <div class="k">Win rate</div>
+      <div class="v">${winRate}<small>%</small></div>
+      <div class="s">${won} won of ${closed} closed</div>
+    </div>
+    <div class="tile${needsAttention ? ' alert' : ''}">
+      <div class="k">Needs attention</div>
+      <div class="v">${needsAttention}</div>
+      <div class="s">${needsAttention ? 'overdue, quiet, or at-risk' : 'everything current'}</div>
+    </div>`;
+}
+
+/* ==========================================================================
+   Pipeline
+   ========================================================================== */
+
+function stageCounts() {
+  const counts = { All: DATA.prospects.length };
+  for (const s of STAGES) counts[s] = DATA.prospects.filter((p) => p.stage === s).length;
+  return counts;
+}
+
+function renderStageMenu() {
+  const counts = stageCounts();
+  el('stageMenu').innerHTML = ['All', ...STAGES]
+    .map(
+      (s) => `<button class="mi" role="menuitemradio" data-stage="${s}" aria-pressed="${s === stageFilter}">
+        <span>${s === 'All' ? 'All stages' : esc(s)}</span><span class="n">${counts[s] || 0}</span>
+      </button>`,
+    )
+    .join('');
+}
+
+function filteredProspects() {
+  const q = query.trim().toLowerCase();
+  return DATA.prospects.filter((p) => {
+    if (stageFilter !== 'All' && p.stage !== stageFilter) return false;
+    if (!q) return true;
+    return [p.name, p.contact, p.industry, p.service, p.source].join(' ').toLowerCase().includes(q);
+  });
+}
+
+function prospectRow(p) {
+  const flags = [];
+  if (isOverdue(p)) flags.push('<span class="chip bad">Overdue</span>');
+  else if (isStale(p)) flags.push('<span class="chip warn">Quiet</span>');
+
+  return `<button class="row" data-prospect="${p.id}">
+    <div>
+      <div class="nm">${esc(p.name)}</div>
+      <div class="sb">${esc(p.contact)} · ${esc(p.service)}</div>
+    </div>
+    <div class="mid">${esc(p.nextStep)}<br><span style="color:var(--faint)">due ${relDay(p.nextStepDue)}</span></div>
+    <div class="rt">
+      ${flags.join('')}
+      <span class="chip ${stageClass(p.stage)}">${esc(p.stage)}</span>
+      <span class="amt">${moneyShort(p.value)}</span>
+    </div>
+  </button>`;
+}
+
+function renderPipeline() {
+  const list = filteredProspects();
+  el('n-pipeline').textContent = DATA.prospects.filter(isOpen).length;
+  el('pipelineRows').innerHTML = list.length
+    ? list.map(prospectRow).join('')
+    : '<div class="empty">Nothing matches that filter.</div>';
+}
+
+/* ==========================================================================
+   Outreach
+   ========================================================================== */
+
+function renderChannels() {
+  const { templates } = DATA;
+  el('chTabs').innerHTML = templates
+    .map(
+      (t, i) =>
+        `<button class="chtab" data-ch="${i}" aria-pressed="${i === activeChannel}">${esc(t.channel)}</button>`,
+    )
+    .join('');
+
+  const active = templates[activeChannel];
+  el('chBox').innerHTML = active.blocks
+    .map(
+      (b, i) => `<div class="blk">
+        <div class="blkhd">
+          <b>${esc(b.label)}</b>
+          <button class="copy" data-copy="ch-${activeChannel}-${i}">Copy</button>
+        </div>
+        <textarea class="ta" id="ch-${activeChannel}-${i}" rows="${Math.min(
+          16,
+          Math.max(4, b.body.split('\n').length + 1),
+        )}">${esc(b.body)}</textarea>
+      </div>`,
+    )
+    .join('') +
+    `<p class="hint">Placeholders like <code>{{firstName}}</code>, <code>{{company}}</code> and <code>{{industry}}</code> are swapped in by hand for now. Edits here are scratch only — they reset on reload.</p>`;
+}
+
+function renderFollowQueue() {
+  // Everything open, soonest-due first — overdue naturally floats to the top.
+  const queue = DATA.prospects
+    .filter(isOpen)
+    .sort((a, b) => new Date(a.nextStepDue) - new Date(b.nextStepDue));
+
+  el('n-outreach').textContent = queue.filter((p) => isOverdue(p) || isStale(p)).length;
+  el('followHd').textContent = `Follow-up queue · ${queue.length} open`;
+  el('outreachRows').innerHTML = queue.length
+    ? queue.map(prospectRow).join('')
+    : '<div class="empty">Queue is clear.</div>';
+}
+
+/* ==========================================================================
+   Clients
+   ========================================================================== */
+
+function renderClients() {
+  const { clients } = DATA;
+  el('n-clients').textContent = clients.length;
+  el('clientRows').innerHTML = clients
+    .map(
+      (c) => `<button class="row" data-client="${c.id}">
+        <div>
+          <div class="nm">${esc(c.name)}</div>
+          <div class="sb">${c.services.map(esc).join(' · ')}</div>
+        </div>
+        <div class="mid">${esc(c.nextDeliverable)}<br><span style="color:var(--faint)">due ${relDay(
+          c.nextDeliverableDue,
+        )}</span></div>
+        <div class="rt">
+          <span class="chip ${healthClass(c.health)}">${esc(c.health)}</span>
+          <span class="amt">${money(c.mrr)}<span style="color:var(--faint);font-weight:500">/mo</span></span>
+        </div>
+      </button>`,
+    )
+    .join('');
+}
+
+/* ==========================================================================
+   Campaigns
+   ========================================================================== */
+
+function renderCampaigns() {
+  const { campaigns } = DATA;
+  el('n-campaigns').textContent = campaigns.filter((c) => c.status === 'Live').length;
+
+  el('campaignBody').innerHTML = campaigns
+    .map(
+      (c) => `<tr>
+        <td>${esc(c.client)}</td>
+        <td>${esc(c.channel)}</td>
+        <td><span class="chip ${c.status === 'Live' ? 'ok' : 'warn'}">${esc(c.status)}</span></td>
+        <td class="num">${money(c.spend)}</td>
+        <td class="num">${c.leads}</td>
+        <td class="num">${c.leads ? money(c.spend / c.leads) : '—'}</td>
+        <td class="num">${c.conversions}</td>
+        <td class="num">${c.spend ? (c.revenue / c.spend).toFixed(1) + '×' : '—'}</td>
+      </tr>`,
+    )
+    .join('');
+
+  const tot = campaigns.reduce(
+    (a, c) => ({
+      spend: a.spend + c.spend,
+      leads: a.leads + c.leads,
+      conversions: a.conversions + c.conversions,
+      revenue: a.revenue + c.revenue,
+    }),
+    { spend: 0, leads: 0, conversions: 0, revenue: 0 },
+  );
+
+  el('campaignFoot').innerHTML = `<tr>
+    <td colspan="3">All campaigns</td>
+    <td class="num">${money(tot.spend)}</td>
+    <td class="num">${tot.leads}</td>
+    <td class="num">${tot.leads ? money(tot.spend / tot.leads) : '—'}</td>
+    <td class="num">${tot.conversions}</td>
+    <td class="num">${tot.spend ? (tot.revenue / tot.spend).toFixed(1) + '×' : '—'}</td>
+  </tr>`;
+}
+
+/* ==========================================================================
+   Attention
+   ========================================================================== */
+
+// Single source of truth for "needs attention" — the stat tile and the tab
+// badge both read this, so they can never drift apart.
+function attentionItems() {
+  const overdue = DATA.prospects.filter(isOverdue);
+  const quiet = DATA.prospects.filter((p) => !isOverdue(p) && isStale(p));
+  const atRisk = DATA.clients.filter((c) => c.health !== 'Good');
+  return { overdue, quiet, atRisk, total: overdue.length + quiet.length + atRisk.length };
+}
+
+function renderAttention() {
+  const { overdue, quiet, atRisk, total } = attentionItems();
+
+  el('n-attention').textContent = total;
+
+  if (!total) {
+    el('attentionBody').innerHTML = '<div class="empty">Nothing needs chasing. Everything is current.</div>';
+    return;
+  }
+
+  const section = (title, items, render) =>
+    items.length
+      ? `<div class="grouphd">${title} · ${items.length}</div><div class="rows">${items.map(render).join('')}</div>`
+      : '';
+
+  el('attentionBody').innerHTML =
+    section('Overdue follow-ups', overdue, prospectRow) +
+    section('Gone quiet — no touch in 7+ days', quiet, prospectRow) +
+    section(
+      'Client accounts to watch',
+      atRisk,
+      (c) => `<button class="row" data-client="${c.id}">
+        <div><div class="nm">${esc(c.name)}</div><div class="sb">${esc(c.notes)}</div></div>
+        <div class="mid">${esc(c.nextDeliverable)}</div>
+        <div class="rt"><span class="chip ${healthClass(c.health)}">${esc(c.health)}</span></div>
+      </button>`,
+    );
+}
+
+/* ==========================================================================
+   Activity
+   ========================================================================== */
+
+const EVENT_ICON = {
+  lead: '✦', outreach: '→', stage: '↗', proposal: '◆', won: '★', lost: '·',
+};
+
+function renderActivity() {
+  const { activity } = DATA;
+  const today = activity.filter((a) => new Date(a.at).toDateString() === new Date().toDateString());
+  el('n-activity').textContent = today.length || activity.length;
+
+  el('activityFeed').innerHTML = activity
+    .map(
+      (a) => `<div class="ev">
+        <div class="ic">${EVENT_ICON[a.kind] || '·'}</div>
+        <div><div class="tx">${esc(a.text)}</div><div class="tm">${relTime(a.at)}</div></div>
+      </div>`,
+    )
+    .join('');
+}
+
+/* ==========================================================================
+   Drawer
+   ========================================================================== */
+
+function openDrawer(title, sub, body) {
+  el('dTitle').textContent = title;
+  el('dSub').textContent = sub;
+  el('dBody').innerHTML = body;
+  el('drawer').classList.add('on');
+  el('drawer').setAttribute('aria-hidden', 'false');
+  el('scrim').classList.add('on');
+}
+
+function closeDrawer() {
+  el('drawer').classList.remove('on');
+  el('drawer').setAttribute('aria-hidden', 'true');
+  el('scrim').classList.remove('on');
+}
+
+function showProspect(id) {
+  const p = DATA.prospects.find((x) => x.id === id);
+  if (!p) return;
+
+  openDrawer(
+    p.name,
+    `${p.contact} · ${p.industry}`,
+    `<dl class="kv">
+      <dt>Stage</dt><dd><span class="chip ${stageClass(p.stage)}">${esc(p.stage)}</span></dd>
+      <dt>Value</dt><dd>${money(p.value)}</dd>
+      <dt>Service</dt><dd>${esc(p.service)}</dd>
+      <dt>Source</dt><dd>${esc(p.source)}</dd>
+      <dt>Owner</dt><dd>${esc(p.owner)}</dd>
+      <dt>Touches</dt><dd>${p.touches}</dd>
+      <dt>Last touch</dt><dd>${esc(p.lastTouch)} (${relDay(p.lastTouch)})</dd>
+      <dt>Next step</dt><dd>${esc(p.nextStep)} — due ${relDay(p.nextStepDue)}</dd>
+    </dl>
+
+    <div class="dsec">
+      <h3>Contact</h3>
+      <dl class="kv">
+        <dt>Email</dt><dd><a href="mailto:${esc(p.email)}">${esc(p.email)}</a></dd>
+        <dt>Phone</dt><dd><a href="tel:${esc(p.phone.replace(/[^\d+]/g, ''))}">${esc(p.phone)}</a></dd>
+      </dl>
+      <div class="dact">
+        <a class="abtn" href="mailto:${esc(p.email)}">Email</a>
+        <a class="abtn" href="tel:${esc(p.phone.replace(/[^\d+]/g, ''))}">Call</a>
+        <button class="abtn" data-copy-text="${esc(p.email)}">Copy address</button>
+      </div>
+    </div>
+
+    <div class="dsec">
+      <h3>Notes</h3>
+      <div class="note">${esc(p.notes)}</div>
+    </div>
+
+    <div class="dsec">
+      <h3>Wireframe only</h3>
+      <div class="note">Stage changes, logged touches and notes are read-only until a CRM is connected behind <code>/api/data</code>.</div>
+    </div>`,
+  );
+}
+
+function showClient(id) {
+  const c = DATA.clients.find((x) => x.id === id);
+  if (!c) return;
+
+  const work = DATA.campaigns.filter((x) => x.client === c.name);
+  const spend = work.reduce((s, x) => s + x.spend, 0);
+  const revenue = work.reduce((s, x) => s + x.revenue, 0);
+
+  openDrawer(
+    c.name,
+    `${c.contact} · client since ${c.since}`,
+    `<dl class="kv">
+      <dt>Health</dt><dd><span class="chip ${healthClass(c.health)}">${esc(c.health)}</span></dd>
+      <dt>Retainer</dt><dd>${money(c.mrr)} / month</dd>
+      <dt>Services</dt><dd>${c.services.map(esc).join(', ')}</dd>
+      <dt>Next up</dt><dd>${esc(c.nextDeliverable)} — due ${relDay(c.nextDeliverableDue)}</dd>
+    </dl>
+
+    <div class="dsec">
+      <h3>Campaigns</h3>
+      ${
+        work.length
+          ? `<dl class="kv">
+              <dt>Running</dt><dd>${work.length} (${work.filter((w) => w.status === 'Live').length} live)</dd>
+              <dt>Spend</dt><dd>${money(spend)}</dd>
+              <dt>Return</dt><dd>${spend ? (revenue / spend).toFixed(1) + '× ROAS' : '—'}</dd>
+            </dl>`
+          : '<div class="note">No campaigns running for this client.</div>'
+      }
+    </div>
+
+    <div class="dsec">
+      <h3>Contact</h3>
+      <dl class="kv"><dt>Email</dt><dd><a href="mailto:${esc(c.email)}">${esc(c.email)}</a></dd></dl>
+      <div class="dact"><a class="abtn" href="mailto:${esc(c.email)}">Email</a></div>
+    </div>
+
+    <div class="dsec">
+      <h3>Notes</h3>
+      <div class="note">${esc(c.notes)}</div>
+    </div>`,
+  );
+}
+
+/* ==========================================================================
+   Wiring
+   ========================================================================== */
+
+function renderAll() {
+  renderDeck();
+  renderStageMenu();
+  renderPipeline();
+  renderChannels();
+  renderFollowQueue();
+  renderClients();
+  renderCampaigns();
+  renderAttention();
+  renderActivity();
+
+  el('updated').textContent = new Date().toLocaleTimeString('en-US', {
+    hour: 'numeric', minute: '2-digit',
+  });
+}
+
+async function load() {
+  try {
+    const res = await fetch('/api/data');
+    if (res.status === 401) { location.href = '/login'; return; }
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Load failed');
+
+    DATA = data;
+    el('avatar').textContent = (data.staff || '?').trim().charAt(0).toUpperCase();
+    el('liveBadge').classList.remove('off');
+    el('liveLabel').textContent = 'Live';
+    renderAll();
+  } catch (err) {
+    el('liveBadge').classList.add('off');
+    el('liveLabel').textContent = 'Offline';
+    console.error(err);
+  }
+}
+
+/* --- Events -------------------------------------------------------------- */
+
+document.querySelectorAll('.tab').forEach((tab) => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach((t) => t.setAttribute('aria-selected', String(t === tab)));
+    document.querySelectorAll('.panel').forEach((p) => p.classList.remove('on'));
+    el('panel-' + tab.dataset.tab).classList.add('on');
+  });
+});
+
+el('q').addEventListener('input', (e) => { query = e.target.value; renderPipeline(); });
+
+el('stageBtn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  const menu = el('stageMenu');
+  const open = menu.classList.toggle('on');
+  el('stageBtn').setAttribute('aria-expanded', String(open));
+});
+
+el('stageMenu').addEventListener('click', (e) => {
+  const item = e.target.closest('.mi');
+  if (!item) return;
+  stageFilter = item.dataset.stage;
+  el('stageCur').textContent = '· ' + stageFilter;
+  el('stageMenu').classList.remove('on');
+  el('stageBtn').setAttribute('aria-expanded', 'false');
+  renderStageMenu();
+  renderPipeline();
+});
+
+document.addEventListener('click', () => {
+  el('stageMenu').classList.remove('on');
+  el('stageBtn').setAttribute('aria-expanded', 'false');
+});
+
+el('chTabs').addEventListener('click', (e) => {
+  const tab = e.target.closest('.chtab');
+  if (!tab) return;
+  activeChannel = Number(tab.dataset.ch);
+  renderChannels();
+});
+
+// Copy buttons: either a textarea's contents or a literal string.
+document.addEventListener('click', async (e) => {
+  const btn = e.target.closest('[data-copy], [data-copy-text]');
+  if (!btn) return;
+
+  const text = btn.dataset.copyText ?? el(btn.dataset.copy)?.value ?? '';
+  try {
+    await navigator.clipboard.writeText(text);
+    if (btn.classList.contains('copy')) {
+      btn.classList.add('done');
+      btn.textContent = 'Copied';
+      setTimeout(() => { btn.classList.remove('done'); btn.textContent = 'Copy'; }, 1400);
+    } else {
+      toast('Copied to clipboard');
+    }
+  } catch {
+    toast('Copy failed — select and copy manually');
+  }
+});
+
+document.addEventListener('click', (e) => {
+  const row = e.target.closest('[data-prospect], [data-client]');
+  if (!row) return;
+  if (row.dataset.prospect) showProspect(row.dataset.prospect);
+  else showClient(row.dataset.client);
+});
+
+el('dClose').addEventListener('click', closeDrawer);
+el('scrim').addEventListener('click', closeDrawer);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
+
+el('refreshBtn').addEventListener('click', () => { load(); toast('Refreshed'); });
+
+el('logoutBtn').addEventListener('click', async () => {
+  await fetch('/api/logout', { method: 'POST' });
+  location.href = '/login';
+});
+
+load();
+setInterval(load, 60000);
+</script>
+</body>
+</html>

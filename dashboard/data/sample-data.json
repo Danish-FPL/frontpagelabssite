@@ -1,0 +1,355 @@
+{
+  "_comment": "Placeholder data so the wireframe renders end-to-end. Replace the loader in server.mjs with a real CRM read when one exists — the shapes here are the contract the UI expects.",
+  "generatedAt": "2026-08-14T16:00:00-05:00",
+  "prospects": [
+    {
+      "id": "p-001",
+      "name": "Northline Dental Group",
+      "contact": "Dr. Amara Osei",
+      "email": "amara@northlinedental.com",
+      "phone": "312-555-0142",
+      "industry": "Healthcare",
+      "service": "Website + Ads",
+      "value": 14500,
+      "stage": "Proposal",
+      "source": "Referral",
+      "owner": "Danish",
+      "lastTouch": "2026-08-12",
+      "nextStep": "Follow up on proposal",
+      "nextStepDue": "2026-08-14",
+      "touches": 4,
+      "notes": "Wants a full rebuild plus Google Ads. Budget confirmed, waiting on partner sign-off."
+    },
+    {
+      "id": "p-002",
+      "name": "Verona Residences",
+      "contact": "Kyle Brandt",
+      "email": "kbrandt@veronaliving.com",
+      "phone": "847-555-0119",
+      "industry": "Real Estate",
+      "service": "Website + Strategy",
+      "value": 22000,
+      "stage": "Call Booked",
+      "source": "Cold Email",
+      "owner": "Danish",
+      "lastTouch": "2026-08-13",
+      "nextStep": "Discovery call",
+      "nextStepDue": "2026-08-15",
+      "touches": 3,
+      "notes": "Second property coming online in Q4. Wants one system across both."
+    },
+    {
+      "id": "p-003",
+      "name": "Halsted Physical Therapy",
+      "contact": "Renee Okafor",
+      "email": "renee@halstedpt.com",
+      "phone": "773-555-0188",
+      "industry": "Healthcare",
+      "service": "SEO + Reviews",
+      "value": 7800,
+      "stage": "Contacted",
+      "source": "LinkedIn",
+      "owner": "Danish",
+      "lastTouch": "2026-08-04",
+      "nextStep": "Second touch",
+      "nextStepDue": "2026-08-11",
+      "touches": 1,
+      "notes": "Opened the first email twice, no reply."
+    },
+    {
+      "id": "p-004",
+      "name": "Copper & Oak Interiors",
+      "contact": "Marcus Feld",
+      "email": "marcus@copperoak.co",
+      "phone": "312-555-0177",
+      "industry": "Home Services",
+      "service": "Branding + Website",
+      "value": 11200,
+      "stage": "New",
+      "source": "Instagram",
+      "owner": "Danish",
+      "lastTouch": "2026-08-14",
+      "nextStep": "Send intro DM",
+      "nextStepDue": "2026-08-15",
+      "touches": 0,
+      "notes": "Inbound from an Instagram story reply."
+    },
+    {
+      "id": "p-005",
+      "name": "Sightline Legal",
+      "contact": "Priya Raman",
+      "email": "praman@sightlinelegal.com",
+      "phone": "312-555-0163",
+      "industry": "Legal",
+      "service": "Website + Search Ads",
+      "value": 18400,
+      "stage": "Proposal",
+      "source": "Referral",
+      "owner": "Danish",
+      "lastTouch": "2026-08-08",
+      "nextStep": "Proposal expires — nudge",
+      "nextStepDue": "2026-08-13",
+      "touches": 6,
+      "notes": "Proposal sent 8/6. Went quiet after a strong second call."
+    },
+    {
+      "id": "p-006",
+      "name": "Fulton Fitness Collective",
+      "contact": "Devon Marsh",
+      "email": "devon@fultonfit.com",
+      "phone": "312-555-0155",
+      "industry": "Fitness",
+      "service": "Social + Ads",
+      "value": 9600,
+      "stage": "Contacted",
+      "source": "Cold Email",
+      "owner": "Danish",
+      "lastTouch": "2026-08-13",
+      "nextStep": "Wait on reply",
+      "nextStepDue": "2026-08-18",
+      "touches": 2,
+      "notes": "Replied asking for pricing. Sent tiers, awaiting response."
+    },
+    {
+      "id": "p-007",
+      "name": "Arbor Property Partners",
+      "contact": "Lena Sandoval",
+      "email": "lena@arborpp.com",
+      "phone": "630-555-0134",
+      "industry": "Real Estate",
+      "service": "Full Retainer",
+      "value": 36000,
+      "stage": "Won",
+      "source": "Referral",
+      "owner": "Danish",
+      "lastTouch": "2026-08-11",
+      "nextStep": "Kickoff scheduled",
+      "nextStepDue": "2026-08-18",
+      "touches": 8,
+      "notes": "Signed 12-month retainer. Kickoff 8/18."
+    },
+    {
+      "id": "p-008",
+      "name": "Blue Harbor Financial",
+      "contact": "Tom Ridley",
+      "email": "tridley@blueharborfin.com",
+      "phone": "312-555-0126",
+      "industry": "Finance",
+      "service": "Website",
+      "value": 12000,
+      "stage": "Lost",
+      "source": "Cold Email",
+      "owner": "Danish",
+      "lastTouch": "2026-07-29",
+      "nextStep": "Revisit Q1",
+      "nextStepDue": "2027-01-15",
+      "touches": 5,
+      "notes": "Went with an in-house hire. Worth revisiting in Q1."
+    }
+  ],
+  "clients": [
+    {
+      "id": "c-001",
+      "name": "AK Custom Real Estate",
+      "contact": "Adam Kessler",
+      "email": "adam@akcustomhomes.com",
+      "services": ["Website", "Ads", "SEO"],
+      "mrr": 3200,
+      "since": "2025-03-01",
+      "health": "Good",
+      "nextDeliverable": "August ad report",
+      "nextDeliverableDue": "2026-08-18",
+      "notes": "Steady lead flow. Renewal conversation due in October."
+    },
+    {
+      "id": "c-002",
+      "name": "Seth Taylor Fitness",
+      "contact": "Seth Taylor",
+      "email": "seth@sethtaylorfitness.com",
+      "services": ["Website", "Branding", "Marketing"],
+      "mrr": 2400,
+      "since": "2025-09-15",
+      "health": "Good",
+      "nextDeliverable": "Landing page revision",
+      "nextDeliverableDue": "2026-08-16",
+      "notes": "Coaching funnel converting well; wants a second landing page."
+    },
+    {
+      "id": "c-003",
+      "name": "Mosaic Therapy Miami",
+      "contact": "Elena Cruz",
+      "email": "elena@mosaictherapy.com",
+      "services": ["Website", "Social Media", "Ads"],
+      "mrr": 1800,
+      "since": "2025-11-02",
+      "health": "At Risk",
+      "nextDeliverable": "Q3 strategy review",
+      "nextDeliverableDue": "2026-08-15",
+      "notes": "Two missed check-ins. Ad spend paused since 8/1 — needs a call."
+    },
+    {
+      "id": "c-004",
+      "name": "Constant Good",
+      "contact": "Uzma Bawany",
+      "email": "uzma@constantgood.org",
+      "services": ["Website", "Social Media", "Content"],
+      "mrr": 1500,
+      "since": "2026-01-20",
+      "health": "Good",
+      "nextDeliverable": "September content calendar",
+      "nextDeliverableDue": "2026-08-25",
+      "notes": "Campaign season starts in September."
+    },
+    {
+      "id": "c-005",
+      "name": "KhanGroup Real Estate",
+      "contact": "Sana Khan",
+      "email": "sana@khangroup.com",
+      "services": ["Website"],
+      "mrr": 900,
+      "since": "2026-04-10",
+      "health": "Watch",
+      "nextDeliverable": "Hosting renewal",
+      "nextDeliverableDue": "2026-09-01",
+      "notes": "Maintenance-only. Upsell opportunity for ads."
+    }
+  ],
+  "campaigns": [
+    {
+      "id": "cam-001",
+      "client": "AK Custom Real Estate",
+      "channel": "Google Ads",
+      "status": "Live",
+      "spend": 4200,
+      "leads": 63,
+      "conversions": 11,
+      "revenue": 41000
+    },
+    {
+      "id": "cam-002",
+      "client": "AK Custom Real Estate",
+      "channel": "Meta Ads",
+      "status": "Live",
+      "spend": 1800,
+      "leads": 41,
+      "conversions": 5,
+      "revenue": 16500
+    },
+    {
+      "id": "cam-003",
+      "client": "Seth Taylor Fitness",
+      "channel": "Meta Ads",
+      "status": "Live",
+      "spend": 2600,
+      "leads": 88,
+      "conversions": 24,
+      "revenue": 19200
+    },
+    {
+      "id": "cam-004",
+      "client": "Mosaic Therapy Miami",
+      "channel": "Google Ads",
+      "status": "Paused",
+      "spend": 950,
+      "leads": 12,
+      "conversions": 2,
+      "revenue": 3400
+    },
+    {
+      "id": "cam-005",
+      "client": "Constant Good",
+      "channel": "Instagram",
+      "status": "Live",
+      "spend": 600,
+      "leads": 29,
+      "conversions": 7,
+      "revenue": 5100
+    },
+    {
+      "id": "cam-006",
+      "client": "Seth Taylor Fitness",
+      "channel": "Email",
+      "status": "Live",
+      "spend": 150,
+      "leads": 34,
+      "conversions": 9,
+      "revenue": 7200
+    }
+  ],
+  "activity": [
+    { "at": "2026-08-14T14:32:00-05:00", "kind": "lead", "text": "Copper & Oak Interiors came in from Instagram" },
+    { "at": "2026-08-14T11:05:00-05:00", "kind": "outreach", "text": "Sent cold email to Fulton Fitness Collective" },
+    { "at": "2026-08-13T16:48:00-05:00", "kind": "stage", "text": "Verona Residences moved to Call Booked" },
+    { "at": "2026-08-13T09:12:00-05:00", "kind": "outreach", "text": "LinkedIn DM sent to Halsted Physical Therapy" },
+    { "at": "2026-08-12T15:20:00-05:00", "kind": "proposal", "text": "Proposal sent to Northline Dental Group ($14,500)" },
+    { "at": "2026-08-11T10:02:00-05:00", "kind": "won", "text": "Arbor Property Partners signed a 12-month retainer" },
+    { "at": "2026-08-08T13:40:00-05:00", "kind": "proposal", "text": "Proposal sent to Sightline Legal ($18,400)" },
+    { "at": "2026-07-29T17:15:00-05:00", "kind": "lost", "text": "Blue Harbor Financial went in-house" }
+  ],
+  "templates": [
+    {
+      "id": "t-email",
+      "channel": "Cold Email",
+      "blocks": [
+        {
+          "label": "First touch",
+          "body": "Subject: {{company}}'s site vs. the three ranking above it\n\nHi {{firstName}},\n\nI pulled up {{company}} while looking at {{industry}} companies in {{city}}. Three competitors are outranking you on the searches your buyers actually use, and two of them have weaker offers than you do.\n\nThat gap is usually a site-structure problem, not a budget problem.\n\nI put together a short breakdown of what they're doing differently. Want me to send it over?\n\nDanish\nFrontPage Labs\nfrontpagelabs.com"
+        },
+        {
+          "label": "Follow-up (day 4)",
+          "body": "Subject: Re: {{company}}'s site vs. the three ranking above it\n\nHi {{firstName}},\n\nFloating this back up in case it got buried.\n\nThe short version: {{company}} is invisible on the searches that matter most, and the fix is mostly structural. Happy to walk you through it in ten minutes, no pitch.\n\nWorth a look?\n\nDanish"
+        },
+        {
+          "label": "Breakup (day 12)",
+          "body": "Subject: Closing the loop\n\nHi {{firstName}},\n\nI'll stop here so I'm not cluttering your inbox.\n\nIf growing {{company}} online moves up the list later this year, the breakdown I mentioned is yours whenever you want it. Just reply and I'll send it.\n\nEither way, good luck this quarter.\n\nDanish"
+        }
+      ]
+    },
+    {
+      "id": "t-linkedin",
+      "channel": "LinkedIn DM",
+      "blocks": [
+        {
+          "label": "Connection note",
+          "body": "Hi {{firstName}} — I work with {{industry}} companies in {{city}} on websites and paid acquisition. Been following what {{company}} is building. Would like to connect."
+        },
+        {
+          "label": "First message",
+          "body": "Thanks for connecting, {{firstName}}.\n\nQuick reason I reached out: I looked at how {{company}} shows up for the searches your buyers run, and there's a clear gap between your offer and how the site presents it.\n\nI can send a two-minute breakdown of what I'd change. Want it?"
+        }
+      ]
+    },
+    {
+      "id": "t-instagram",
+      "channel": "Instagram DM",
+      "blocks": [
+        {
+          "label": "Cold DM",
+          "body": "Hey {{firstName}} — your work at {{company}} looks great, but the site isn't doing it justice. We build sites and ad systems for {{industry}} brands. Want me to send a quick teardown of what I'd change?"
+        },
+        {
+          "label": "Story-reply follow-up",
+          "body": "Appreciate the reply! Here's what I'd look at first for {{company}}:\n\n1. The homepage doesn't say what you do in the first screen\n2. No clear next step for someone ready to buy\n3. Nothing capturing the people who aren't ready yet\n\nHappy to go deeper on a quick call if useful."
+        }
+      ]
+    },
+    {
+      "id": "t-call",
+      "channel": "Call Script",
+      "blocks": [
+        {
+          "label": "Cold call opener",
+          "body": "Hi, is this {{firstName}}?\n\nThis is Danish with FrontPage Labs here in Chicago. I'll be quick — this is a cold call, you can tell me to go away.\n\n(pause)\n\nWe build websites and run ads for {{industry}} companies. I was looking at {{company}} and noticed you're getting outranked by a few competitors on the searches your customers actually use.\n\nIs growing online something you're actively working on right now, or is it on the back burner?"
+        },
+        {
+          "label": "Discovery questions",
+          "body": "1. How are people finding you today?\n2. What's working best right now, and what's disappointing you?\n3. If we doubled your inbound next quarter, could you handle it?\n4. Who else weighs in on a decision like this?\n5. What would have to be true for this to be an easy yes?"
+        },
+        {
+          "label": "Objection — \"too expensive\"",
+          "body": "That's fair, and I'd rather you not spend it than spend it in the wrong place.\n\nCan I ask — is it expensive against your budget, or expensive against what you expect to get back? Those are different problems and the second one is mine to solve.\n\nIf one new {{industry}} client is worth {{clientValue}} to you, the math usually works out well before the year is up. Want me to run those numbers on a call?"
+        }
+      ]
+    }
+  ]
+}

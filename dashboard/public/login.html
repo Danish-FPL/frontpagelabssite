@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Sign in · Growth Command</title>
+<style>
+  :root{
+    --ink:#0a0a0a; --mut:#737577; --faint:#a5a7a9; --line:#d4d6d8;
+    --panel:#f3f4f5; --card:#fff; --blue:#03f6ff; --deep:#01194b; --wolf:#7584a2;
+    --bad:#751515; --bad-bg:#ffc5c5;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; display:grid; place-items:center; padding:1.5rem;
+    background:var(--ink); color:var(--card);
+    font:500 16px/1.5 'Overused-Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .card{width:100%; max-width:23rem}
+  .mark{
+    font-size:2.6rem; font-weight:600; line-height:.85; letter-spacing:-.03em;
+    text-transform:uppercase; margin:0 0 .35rem;
+  }
+  .mark span{color:var(--wolf)}
+  .sub{
+    font-size:.6875rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--faint); margin:0 0 2.25rem;
+  }
+  label{display:block; font-size:.6875rem; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); margin-bottom:.4rem}
+  .field{margin-bottom:1.1rem}
+  input{
+    width:100%; font:inherit; font-size:16px; color:var(--card);
+    background:none; border:0; border-bottom:1px solid #2a2a2a;
+    padding:.55rem 0; transition:border-color .2s ease;
+  }
+  input:focus{outline:none; border-bottom-color:var(--blue)}
+  input::placeholder{color:#4a4a4a}
+  button{
+    width:100%; font:inherit; font-size:.6875rem; font-weight:500;
+    letter-spacing:.1em; text-transform:uppercase; cursor:pointer;
+    color:var(--ink); background:var(--card); border:0; border-radius:999px;
+    padding:.8rem 1rem; margin-top:.6rem;
+    transition:background-color .2s ease, color .2s ease;
+  }
+  button:hover{background:var(--blue)}
+  button:disabled{opacity:.5; cursor:default}
+  .err{
+    display:none; margin-top:1rem; padding:.6rem .75rem; border-radius:4px;
+    background:var(--bad-bg); color:var(--bad); font-size:.75rem;
+  }
+  .err.on{display:block}
+  .foot{margin-top:2.5rem; font-size:.625rem; letter-spacing:.08em; text-transform:uppercase; color:#3a3a3a}
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1 class="mark">Growth<br><span>Command</span></h1>
+    <p class="sub">FrontPage Labs · Internal</p>
+
+    <form id="f" autocomplete="off">
+      <div class="field">
+        <label for="staff">Your name</label>
+        <input id="staff" name="staff" list="staffList" placeholder="Who's signing in?" required>
+        <datalist id="staffList"></datalist>
+      </div>
+
+      <div class="field">
+        <label for="pin">Team PIN</label>
+        <input id="pin" name="pin" type="password" inputmode="numeric" placeholder="••••" required>
+      </div>
+
+      <button type="submit" id="go">Sign in</button>
+      <div class="err" id="err"></div>
+    </form>
+
+    <p class="foot">Local network only</p>
+  </div>
+
+<script>
+  const f = document.getElementById('f');
+  const err = document.getElementById('err');
+  const go = document.getElementById('go');
+
+  // Offer the configured staff names so the "who did this" stamp stays consistent.
+  fetch('/api/staff')
+    .then((r) => r.json())
+    .then(({ staff = [] }) => {
+      document.getElementById('staffList').innerHTML =
+        staff.map((s) => `<option value="${s}">`).join('');
+      if (staff.length === 1) document.getElementById('staff').value = staff[0];
+    })
+    .catch(() => {});
+
+  f.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    err.classList.remove('on');
+    go.disabled = true;
+    go.textContent = 'Checking…';
+
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          pin: document.getElementById('pin').value,
+          staff: document.getElementById('staff').value,
+        }),
+      });
+      const data = await res.json();
+      if (data.ok) { location.href = '/'; return; }
+      err.textContent = data.error || 'Sign in failed.';
+      err.classList.add('on');
+    } catch {
+      err.textContent = 'Could not reach the server.';
+      err.classList.add('on');
+    }
+
+    go.disabled = false;
+    go.textContent = 'Sign in';
+  });
+</script>
+</body>
+</html>
