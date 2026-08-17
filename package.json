@@ -10,7 +10,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "dashboard": "node dashboard/server.mjs"
+    "dashboard": "node dashboard/server.mjs",
+    "hero-lab": "node hero-lab/serve.mjs"
   },
   "dependencies": {
     "astro": "^7.2.2"

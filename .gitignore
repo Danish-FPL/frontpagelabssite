@@ -1,5 +1,7 @@
 # build output
 dist/
+# hero lab screenshots (data/variants.json IS tracked — it builds the pages)
+hero-lab/exports/
 # generated types
 .astro/
 

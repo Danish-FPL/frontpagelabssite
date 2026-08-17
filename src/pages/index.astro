@@ -3,21 +3,13 @@ import Base from '../layouts/Base.astro';
 import Button from '../components/Button.astro';
 import SectionTitle from '../components/SectionTitle.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import LandingHero from '../components/LandingHero.astro';
 import { featuredProjects } from '../data/projects';
+import { testimonials } from '../data/testimonials';
+import { homeHero } from '../data/hero';
 
-// Hero "what we do" index.
-const capabilities = [
-  { label: 'Websites', number: '01' },
-  { label: 'Marketing Channels', number: '02' },
-  { label: 'Ads', number: '03' },
-  { label: 'Strategy', number: '04' },
-];
-
-const heroStats = [
-  { value: '80+ clients', trailing: 'scaled.' },
-  { value: '23K+ conversions', trailing: 'generated.' },
-  { value: '306% average revenue increase', trailing: 'across clients.' },
-];
+// The hero lives in src/data/hero.ts because the Hero Lab treats it as the
+// locked baseline every landing-page variant inherits from.
 
 // "Recent client wins" table — the CMS list rendered as rows.
 const clientWins = [
@@ -62,83 +54,11 @@ const services = [
   },
 ];
 
-// Testimonials (04).
-const testimonials = [
-  {
-    heading: ['Record Breaking', 'Growth.'],
-    quote: 'FrontPageLabs has built incredible websites, socials and ads for my companies that generated web traffic and sales. Our record-growth is tied directly to FrontPage Lab’s incredible work.',
-    name: 'Archie Preissman, Founder',
-    company: 'Irene Capital & Brands',
-  },
-  {
-    heading: ['Business Minded', 'Marketing.'],
-    quote: "FrontPageLabs has been great to work with. They took my rough ideas and crafted a brand far beyond my expectations. Working with FrontPage Labs was one of the best business decisions I've made.",
-    name: 'Mike LePree, Founder',
-    company: 'Twin Cities Real Estate',
-  },
-  {
-    heading: ['Real', 'Results.'],
-    quote: 'The combination of their websites, socials and ads led to impressive outcomes for us. We continue to reach new users month over month.',
-    name: 'Jeff Hedges, Founder',
-    company: 'Gavvy',
-  },
-  {
-    heading: ['Creative', 'Excellence.'],
-    quote: "With FrontPage Lab's creativity behind our content, engagement continues to blow past anything we've seen in the past.",
-    name: 'Uzma Bawany, Founder',
-    company: 'Thaakat Foundation',
-  },
-];
 ---
 
 <Base title="FrontPageLabs - Digital Performance, Down to a Science.">
   <!-- Hero ---------------------------------------------------------------- -->
-  <section class="hero">
-    <div class="hero-media">
-      <video autoplay muted loop playsinline poster="/assets/fpl-38-.png">
-        <source src="/assets/fpl-3-transcode.webm" type="video/webm" />
-        <source src="/assets/fpl-3-transcode.mp4" type="video/mp4" />
-      </video>
-      <div class="hero-overlay"></div>
-    </div>
-
-    <div class="hero-inner container-fluid">
-      <div class="hero-heading-wrapper">
-        <div class="overflow-hidden"><h1 class="heading-large hero-heading">Frontpage</h1></div>
-        <div class="overflow-hidden align-right">
-          <h1 class="heading-large hero-heading">labs</h1>
-        </div>
-      </div>
-
-      <div class="hero-bottom">
-        <div class="hero-capabilities">
-          <div class="hero-eyebrow">What we do</div>
-          <ul class="capability-list">
-            {capabilities.map(({ label, number }) => (
-              <li class="capability-item">
-                <span class="capability-label">{label}</span>
-                <span class="capability-number">{number}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div class="hero-stats">
-          {heroStats.map(({ value, trailing }) => (
-            <p class="hero-stat"><strong>{value}</strong> {trailing}</p>
-          ))}
-          <p class="hero-stat muted">
-            Here, it's <strong>Digital Performance, Down to a Science</strong>.
-          </p>
-        </div>
-
-        <div class="hero-cta">
-          <div class="hero-cta-text">Ready for the <span class="text-blue">FrontPage?</span></div>
-          <Button href="/contact" label="Get Started" variant="white" size="small" />
-        </div>
-      </div>
-    </div>
-  </section>
+  <LandingHero {...homeHero} />
 
   <!-- (01) Digital chemistry ---------------------------------------------- -->
   <section class="section chemistry">
@@ -383,109 +303,8 @@ const testimonials = [
 </Base>
 
 <style>
-  /* --- Hero -------------------------------------------------------------- */
-
-  .hero {
-    position: relative;
-    min-height: 88vh;
-    display: flex;
-    align-items: flex-end;
-    padding-block: 4rem 2.5rem;
-    color: var(--color-white);
-    overflow: hidden;
-  }
-
-  .hero-media,
-  .hero-media video,
-  .hero-media img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  /* Darkened so the white display type stays legible over the footage. */
-  .hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgb(0 0 0 / 25%) 0%, rgb(0 0 0 / 55%) 100%);
-  }
-
-  .hero-inner {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-  }
-
-  .hero-heading {
-    color: var(--color-white);
-  }
-
-  .hero-bottom {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr) auto;
-    gap: 2rem;
-    align-items: end;
-    margin-top: 3rem;
-  }
-
-  .hero-eyebrow,
-  .hero-cta-text {
-    font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 0.75rem;
-  }
-
-  .capability-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 0.35rem;
-    max-width: 16rem;
-  }
-
-  .capability-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 1rem;
-    padding-bottom: 0.35rem;
-    border-bottom: 1px solid rgb(255 255 255 / 25%);
-    font-size: 0.8125rem;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-  }
-
-  .capability-number {
-    font-size: 0.625rem;
-    opacity: 0.7;
-  }
-
-  .hero-stats {
-    display: grid;
-    gap: 0.4rem;
-    max-width: 26rem;
-  }
-
-  .hero-stat {
-    margin: 0;
-    font-size: 0.9375rem;
-    line-height: 1.35;
-  }
-
-  .hero-stat.muted {
-    margin-top: 0.75rem;
-    color: rgb(255 255 255 / 75%);
-  }
-
-  .hero-cta {
-    justify-self: end;
-    text-align: right;
-  }
+  /* The hero's styles live in src/components/LandingHero.astro — it is shared
+     with the /lp/* landing pages. */
 
   /* --- Shared section furniture ------------------------------------------ */
 
@@ -834,16 +653,6 @@ const testimonials = [
   /* --- Responsive ----------------------------------------------------------- */
 
   @media (max-width: 991px) {
-    .hero-bottom {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .hero-cta {
-      grid-column: 1 / -1;
-      justify-self: start;
-      text-align: left;
-    }
-
     .chemistry-grid {
       grid-template-columns: auto minmax(0, 1fr);
     }
@@ -862,7 +671,6 @@ const testimonials = [
   }
 
   @media (max-width: 767px) {
-    .hero-bottom,
     .chemistry-grid,
     .wins-grid,
     .service-row,

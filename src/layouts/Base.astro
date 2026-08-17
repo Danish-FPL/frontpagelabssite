@@ -6,11 +6,14 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  /** Ad landing pages opt out of search indexing. */
+  noindex?: boolean;
 }
 
 const {
   title,
   description = 'FrontPage Labs — Digital Performance, Down to a Science.',
+  noindex = false,
 } = Astro.props;
 ---
 
@@ -21,6 +24,7 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
     <link rel="icon" href="/assets/frontpage-labs-logo.png" />
     <link rel="preload" href="/fonts/overusedgrotesk-semibold.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/overusedgrotesk-medium.woff2" as="font" type="font/woff2" crossorigin />

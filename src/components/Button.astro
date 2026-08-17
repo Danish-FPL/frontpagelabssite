@@ -3,7 +3,8 @@
 interface Props {
   href: string;
   label: string;
-  variant?: 'default' | 'white';
+  /** `white` = outlined for dark grounds, `solid` = filled white pill. */
+  variant?: 'default' | 'white' | 'solid';
   size?: 'default' | 'small';
   icon?: string | false;
   class?: string;
@@ -104,8 +105,35 @@ const {
     filter: none;
   }
 
+  /* Filled white pill — the hero CTA on the live site. It pairs with
+     /assets/arrow-up-right-blue.svg; the icon colour has to come from the
+     file because an <img> resolves the SVG's currentColor in its own
+     document, where it lands on black. */
+  .button.solid {
+    background-color: var(--color-white);
+    border-color: var(--color-white);
+    color: var(--color-primary);
+  }
+
+  .button.solid:hover {
+    background-color: var(--fpl-blue);
+    border-color: var(--fpl-blue);
+  }
+
+  .button.solid:hover .button-icon {
+    filter: brightness(0);
+  }
+
   .button.small {
     padding: 0.45rem 0.9rem;
+  }
+
+  .button.solid.small {
+    padding: 0.7rem 1.3rem;
+  }
+
+  .button.solid.small .button-text-wrapper {
+    font-size: 0.75rem;
   }
 
   .button.small .button-text-wrapper {

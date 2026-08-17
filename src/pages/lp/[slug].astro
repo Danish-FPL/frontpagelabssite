@@ -1,0 +1,335 @@
+---
+// Every landing page at /lp/<slug>.
+//
+// One template, many pages: the content comes from `hero-lab/data/variants.json`
+// via src/data/landing.ts, which is the file the Hero Lab writes. Adding a page
+// means adding a variant in the lab — no route to create here.
+//
+// The `data-fpl-*` attributes are the Hero Lab's contract (see
+// src/components/LandingHero.astro); keep them when the markup changes.
+import Base from '../../layouts/Base.astro';
+import Button from '../../components/Button.astro';
+import LandingHero from '../../components/LandingHero.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { landingPages, type LandingPage } from '../../data/landing';
+import { testimonials } from '../../data/testimonials';
+import { richToHtml, richToPlain } from '../../data/rich';
+
+export function getStaticPaths() {
+  return landingPages.map((page) => ({ params: { slug: page.slug }, props: { page } }));
+}
+
+interface Props {
+  page: LandingPage;
+}
+
+const { page } = Astro.props;
+const heroProps = { ...page };
+// Newlines in the offer heading are line breaks — the injector does the same
+// so a preview edit wraps exactly like the built page.
+const offerHeadingHtml = richToHtml(page.offerHeading).replace(/\n/g, '<br>');
+const proof = testimonials.slice(0, 2);
+---
+
+<Base title={richToPlain(page.title)} description={page.metaDescription} noindex={!page.indexable}>
+  <LandingHero {...heroProps} />
+
+  <!-- The offer ------------------------------------------------------------ -->
+  <section class="section offer" data-fpl-offer>
+    <div class="container">
+      <div class="section-title-row">
+        <h2 class="section-title-text" data-fpl="offerEyebrow">{page.offerEyebrow}</h2>
+        <div class="section-title-text">(01)</div>
+      </div>
+      <div class="divider margin-bottom-medium"></div>
+
+      <div class="offer-grid">
+        <h3 class="heading-small offer-heading" data-fpl="offerHeading" set:html={offerHeadingHtml} />
+
+        <div class="offer-body">
+          <p class="paragraph-small no-text-indent" data-fpl="offerBody" set:html={richToHtml(page.offerBody)} />
+
+          <div class="offer-price-block" data-fpl-price-block hidden={!page.price}>
+            <div class="offer-price" data-fpl="price">{page.price}</div>
+            <div class="offer-price-note" data-fpl="priceNote">{page.priceNote}</div>
+          </div>
+
+          <div class="button-row">
+            <Button href={page.ctaHref} label={page.ctaLabel} />
+          </div>
+        </div>
+
+        <ul class="offer-includes" data-fpl-includes>
+          {
+            page.includes.map((item) => (
+              <li class="offer-include">
+                <img src="/assets/check-circle.svg" alt="" aria-hidden="true" />
+                <span>{item}</span>
+              </li>
+            ))
+          }
+          {/* Clone source for the lab — see LandingHero.astro for why. */}
+          <li class="offer-include" data-fpl-template hidden>
+            <img src="/assets/check-circle.svg" alt="" aria-hidden="true" />
+            <span></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Showcase -------------------------------------------------------------- -->
+  {
+    page.showcaseProjects.length > 0 && (
+      <section class="section showcase">
+        <div class="container">
+          <div class="section-title-row">
+            <h2 class="section-title-text" data-fpl="showcaseEyebrow">
+              {page.showcaseEyebrow}
+            </h2>
+            <div class="section-title-text">(02)</div>
+          </div>
+          <div class="divider margin-bottom-medium" />
+
+          <div class="showcase-grid">
+            {page.showcaseProjects.map((project) => (
+              <ProjectCard project={project} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Proof ----------------------------------------------------------------- -->
+  <section class="section proof">
+    <div class="container">
+      <div class="section-title-row">
+        <h2 class="section-title-text">Outcomes</h2>
+        <div class="section-title-text">({page.showcaseProjects.length > 0 ? '03' : '02'})</div>
+      </div>
+      <div class="divider margin-bottom-medium"></div>
+
+      <div class="proof-grid">
+        {
+          proof.map(({ heading, quote, name, company }) => (
+            <figure class="proof-card">
+              <h3 class="proof-card-title">
+                {heading[0]}
+                <br />
+                {heading[1]}
+              </h3>
+              <blockquote class="proof-card-quote">{quote}</blockquote>
+              <figcaption class="proof-card-credit">
+                <span>{name}</span>
+                <span class="muted">{company}</span>
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Close ----------------------------------------------------------------- -->
+  <section class="section close">
+    <div class="container">
+      <div class="close-inner">
+        <p class="close-text" data-fpl="finalCtaText" set:html={richToHtml(page.finalCtaText)} />
+        <div data-fpl-final-cta>
+          <Button href={page.ctaHref} label={page.ctaLabel} />
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .divider {
+    height: 1px;
+    background-color: var(--color-border-muted);
+  }
+
+  .section-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.75rem;
+  }
+
+  .button-row {
+    margin-top: 1.5rem;
+  }
+
+  /* --- The offer ---------------------------------------------------------- */
+
+  .offer-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr) minmax(0, 0.7fr);
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  .offer-heading {
+    margin: 0;
+    font-size: 3.4vw;
+  }
+
+  .offer-body {
+    display: grid;
+    gap: 1rem;
+    max-width: 30rem;
+  }
+
+  .offer-price-block {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border-muted);
+  }
+
+  .offer-price-block[hidden] {
+    display: none;
+  }
+
+  .offer-price {
+    font-size: 2.6rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .offer-price-note {
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+  }
+
+  .offer-includes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .offer-include {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+  }
+
+  .offer-include[hidden] {
+    display: none;
+  }
+
+  .offer-include img {
+    width: 12px;
+    height: 12px;
+    flex: none;
+  }
+
+  /* --- Showcase ------------------------------------------------------------ */
+
+  .showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  /* --- Proof --------------------------------------------------------------- */
+
+  .proof-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .proof-card {
+    margin: 0;
+    padding: 1.5rem;
+    background-color: var(--color-background-muted);
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .proof-card-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    text-transform: uppercase;
+  }
+
+  .proof-card-quote {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--color-secondary);
+  }
+
+  .proof-card-credit {
+    display: grid;
+    font-size: 0.625rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .proof-card-credit .muted {
+    color: var(--color-secondary);
+  }
+
+  /* --- Close --------------------------------------------------------------- */
+
+  .close-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--color-border-muted);
+  }
+
+  .close-text {
+    margin: 0;
+    max-width: 34rem;
+    font-family: var(--font-secondary);
+    font-size: 3.4vw;
+    font-weight: 600;
+    line-height: 0.9;
+    letter-spacing: -0.025em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 991px) {
+    .offer-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .offer-heading {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .offer-grid,
+    .showcase-grid,
+    .proof-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .offer-heading,
+    .close-text {
+      font-size: 9vw;
+    }
+
+    .close-inner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

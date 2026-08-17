@@ -1,0 +1,38 @@
+# Netlify build config.
+#
+# Only the Astro build output ships. `dashboard/` and `hero-lab/` sit outside
+# src/ and public/, so Astro never copies them into dist/ and Netlify never
+# sees them — they are local Node servers and are not deployable as-is.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22.12.0"
+
+# Temporary domain only. frontpagelabs.com is still served by Webflow, and two
+# indexable copies of the same site is a duplicate-content problem — this keeps
+# the *.netlify.app preview out of search results. DELETE THIS BLOCK when the
+# real domain is pointed here.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+# Fingerprinted build assets are safe to cache hard.
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Media keeps its filename across deploys, so a week bounds the staleness.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

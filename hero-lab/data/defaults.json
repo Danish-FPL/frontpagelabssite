@@ -1,0 +1,19 @@
+{
+  "_comment": "Fallbacks for fields the home page has no equivalent for — a landing page's offer block and its meta tags. Hero fields are NOT here: their baseline is captured from the live home page. Read by src/data/landing.ts at build time and by the Hero Lab at runtime, so the preview and the built page agree.",
+  "offer": {
+    "offerEyebrow": "The offer",
+    "offerHeading": "What's\nincluded",
+    "offerBody": "Everything below is built by the same team that runs the campaigns, so the page and the ads that feed it are designed together.",
+    "price": "",
+    "priceNote": "",
+    "includes": [],
+    "showcaseEyebrow": "Recent work",
+    "showcase": [],
+    "finalCtaText": "Ready for the ~FrontPage?~"
+  },
+  "meta": {
+    "title": "FrontPage Labs",
+    "metaDescription": "FrontPage Labs — Digital Performance, Down to a Science.",
+    "indexable": false
+  }
+}

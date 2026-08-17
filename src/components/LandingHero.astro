@@ -1,0 +1,456 @@
+---
+// The hero used by the home page AND every `/lp/*` landing page.
+//
+// The `data-fpl-*` attributes below are a contract with `hero-lab/injector.js`
+// — that file reads the hero out of this DOM to capture the baseline and
+// writes edits back into it for the live preview. Renaming or dropping one of
+// them silently breaks the lab, so keep them when the markup changes.
+import Button from './Button.astro';
+import { richToHtml } from '../data/rich';
+import type { HeroFields } from '../data/hero';
+
+type Props = HeroFields;
+
+const {
+  headlineTop,
+  headlineBottom,
+  headlineAlign,
+  eyebrow,
+  listItems,
+  statLines,
+  kicker,
+  ctaText,
+  ctaLabel,
+  ctaHref,
+  mediaMode,
+  mediaPoster,
+  hlSize,
+  hlLineHeight,
+  hlTracking,
+  statSize,
+  overlayTop,
+  overlayBottom,
+  minHeight,
+} = Astro.props;
+
+// Style overrides ride one generated <style> so an unset field means "use the
+// stylesheet" — the same shape the injector writes at runtime (same selector,
+// same !important), so preview and page can't disagree.
+const headingRules = [
+  hlSize != null && `font-size:${hlSize}vw !important`,
+  hlLineHeight != null && `line-height:${hlLineHeight} !important`,
+  hlTracking != null && `letter-spacing:${hlTracking}em !important`,
+].filter(Boolean);
+
+const overlayCss =
+  overlayTop != null || overlayBottom != null
+    ? `[data-fpl-hero] .hero-overlay{background:linear-gradient(180deg,rgb(0 0 0 / ${overlayTop ?? 0}%) 0%,rgb(0 0 0 / ${overlayBottom ?? 35}%) 100%) !important}`
+    : '';
+
+const overrideCss = [
+  headingRules.length ? `[data-fpl-hero] .hero-heading{${headingRules.join(';')}}` : '',
+  statSize != null ? `[data-fpl-hero] .hero-stat{font-size:${statSize}px !important}` : '',
+  minHeight != null ? `[data-fpl-hero]{min-height:${minHeight}vh !important}` : '',
+  overlayCss,
+]
+  .filter(Boolean)
+  .join('\n');
+---
+
+<section class="hero" data-fpl-hero data-fpl-align={headlineAlign}>
+  <div class="hero-media" data-fpl-media>
+    {
+      mediaMode === 'image' ? (
+        <img src={mediaPoster} alt="" data-fpl-media-image />
+      ) : (
+        <video autoplay muted loop playsinline poster={mediaPoster} data-fpl-media-video>
+          <source src="/assets/fpl-3-transcode.webm" type="video/webm" />
+          <source src="/assets/fpl-3-transcode.mp4" type="video/mp4" />
+        </video>
+      )
+    }
+    <div class="hero-overlay"></div>
+  </div>
+
+  <div class="hero-inner container-fluid">
+    {/* Each line is a two-faced panel that rotates down into place on load,
+        line 2 trailing line 1. The back face is the copy you end up reading;
+        the front flips up and away behind `backface-visibility`. Both faces
+        carry the same words, so the lab mirrors its edits into the back one
+        (see `data-fpl-mirror` in hero-lab/injector.js). */}
+    <div class="hero-heading-wrapper">
+      <div class="heading-word" data-hero-word="1">
+        <div class="flip">
+          <div class="flip-front">
+            <h1 class="heading-large hero-heading" data-fpl="headlineTop" set:html={richToHtml(headlineTop)} />
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="heading-large hero-heading" data-fpl-mirror="headlineTop" set:html={richToHtml(headlineTop)} />
+          </div>
+        </div>
+      </div>
+
+      <div
+        class:list={['heading-word', { 'align-right': headlineAlign === 'split' }]}
+        data-hero-word="2"
+        data-fpl-headline-2
+      >
+        <div class="flip delay">
+          <div class="flip-front">
+            <h1 class="heading-large hero-heading" data-fpl="headlineBottom" set:html={richToHtml(headlineBottom)} />
+          </div>
+          <div class="flip-back" aria-hidden="true">
+            <div class="heading-large hero-heading" data-fpl-mirror="headlineBottom" set:html={richToHtml(headlineBottom)} />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-bottom">
+      <div class="hero-capabilities">
+        <div class="hero-eyebrow">
+          <span data-fpl="eyebrow">{eyebrow}</span>
+          <img src="/assets/long-arrow-right-down.svg" alt="" aria-hidden="true" />
+        </div>
+        <ul class="capability-list" data-fpl-list>
+          {
+            listItems.map(({ label, number }) => (
+              <li class="capability-item">
+                <span class="capability-label">{label}</span>
+                <span class="capability-number">{number}</span>
+              </li>
+            ))
+          }
+          {/* Hidden clone source. Astro scopes styles with a per-component
+              attribute, so the lab grows the list by cloning a real node
+              rather than building one — a hand-built <li> would render
+              unstyled. Kept even when the list is full: it costs nothing and
+              means an emptied list can still be refilled in the preview. */}
+          <li class="capability-item" data-fpl-template hidden>
+            <span class="capability-label"></span>
+            <span class="capability-number"></span>
+          </li>
+        </ul>
+      </div>
+
+      {/* Proof lines, the CTA line and the button all stack against the right
+          edge, the way the live site sets them. */}
+      <div class="hero-right">
+        <div class="hero-stats" data-fpl-stats>
+          {statLines.map((line) => <p class="hero-stat" data-fpl-stat set:html={richToHtml(line)} />)}
+          <p class="hero-stat" data-fpl-template hidden></p>
+          <p class="hero-stat muted" data-fpl="kicker" set:html={richToHtml(kicker)} />
+        </div>
+
+        <div class="hero-cta-text" data-fpl="ctaText" set:html={richToHtml(ctaText)} />
+        <div class="hero-cta" data-fpl-cta>
+          <Button
+            href={ctaHref}
+            label={ctaLabel}
+            variant="solid"
+            size="small"
+            icon="/assets/arrow-up-right-blue.svg"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{overrideCss && <style is:inline set:html={overrideCss} />}
+
+<script>
+  // Scroll-linked split: line 1 slides left, line 2 slides right, reaching
+  // ±18% of their own width after one viewport of scrolling — the same ratio
+  // and cap the live site uses. Scrolling back up merges them again.
+  const words = document.querySelectorAll<HTMLElement>('[data-hero-word]');
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (words.length && !still.matches) {
+    const MAX_PERCENT = 18;
+    let queued = false;
+
+    const paint = () => {
+      queued = false;
+      const progress = Math.min(1, window.scrollY / window.innerHeight);
+      const shift = progress * MAX_PERCENT;
+      for (const word of words) {
+        const direction = word.dataset.heroWord === '1' ? -1 : 1;
+        word.style.transform = `translate3d(${direction * shift}%, 0, 0)`;
+      }
+    };
+
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(paint);
+      },
+      { passive: true },
+    );
+
+    paint(); // a reload partway down the page starts split, not stacked
+  }
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 88vh;
+    display: flex;
+    align-items: flex-end;
+    padding-block: 4rem 2.5rem;
+    color: var(--color-white);
+    overflow: hidden;
+    /* Scopes the headline's difference blend to the hero, so it can only ever
+       blend with the photo — never with the white page below it. */
+    isolation: isolate;
+  }
+
+  .hero-media,
+  .hero-media video,
+  .hero-media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* The photo is 3:2 and the hero is far wider, so a third of its height gets
+     cropped. Biasing the crop above centre keeps the top edge of the laptop
+     screen in frame and the glowing keyboard at the bottom — the composition
+     the live site shows. */
+  .hero-media img {
+    object-position: center 30%;
+  }
+
+  /* The photo is already near-black at the edges, so this is only a floor
+     under the bottom row's text — not the heavy scrim a video needed. */
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(0 0 0 / 0%) 0%, rgb(0 0 0 / 35%) 100%);
+  }
+
+  /* No z-index on purpose. `position: relative` is enough to paint this over
+     the media (DOM order decides), and staying out of a new stacking context
+     is what lets the headline's difference blend see the photo behind it. */
+  .hero-inner {
+    position: relative;
+    width: 100%;
+  }
+
+  .hero-heading {
+    color: var(--color-white);
+  }
+
+  /* One line of display type: the unit that slides on scroll, and the unit
+     that blends.
+     The blend has to live HERE, not on the <h1>. `transform` makes an element
+     an isolated group, so a blend applied inside this element would only ever
+     see this element's own (empty) backdrop. Applied to the transformed
+     element itself, the whole line composites first and then differences
+     against the photo — white over black stays white, white over the laptop
+     screen inverts to cyan and green. */
+  .heading-word {
+    mix-blend-mode: difference;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+  }
+
+  /* Clips the rotating faces vertically. It sits INSIDE .heading-word so it
+     travels with the line — the horizontal slide is clipped by the hero's
+     own overflow at the viewport edge, the way the live site does it. */
+  .flip {
+    position: relative;
+    perspective: 1000px;
+    perspective-origin: 50% center;
+    overflow: hidden;
+    /* Both faces carry the same words, so the rotation alone would look like
+       the line was always there. The fade is what makes it arrive. */
+    animation: flip-fade 900ms cubic-bezier(0.65, 0, 0.2, 1) 250ms both;
+  }
+
+  .flip-front,
+  .flip-back {
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+  }
+
+  .flip-front {
+    transform-origin: 50% 100%;
+    animation: flip-out 900ms cubic-bezier(0.65, 0, 0.2, 1) 250ms both;
+  }
+
+  .flip-back {
+    position: absolute;
+    inset: 0;
+    transform-origin: 50% 0;
+    animation: flip-in 900ms cubic-bezier(0.65, 0, 0.2, 1) 250ms both;
+  }
+
+  /* Line 2 trails line 1 — 350ms on the live site. */
+  .flip.delay,
+  .flip.delay .flip-front,
+  .flip.delay .flip-back {
+    animation-delay: 600ms;
+  }
+
+  @keyframes flip-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes flip-out {
+    from {
+      transform: translate3d(0, 0, 0) rotateX(0deg);
+    }
+    to {
+      transform: translate3d(0, -100%, 0) rotateX(90deg);
+    }
+  }
+
+  @keyframes flip-in {
+    from {
+      transform: translate3d(0, 100%, 0) rotateX(-90deg);
+    }
+    to {
+      transform: translate3d(0, 0, 0) rotateX(0deg);
+    }
+  }
+
+  .hero-bottom {
+    display: grid;
+    grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+    gap: 2rem;
+    align-items: end;
+    margin-top: 3rem;
+  }
+
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-eyebrow img {
+    width: 18px;
+    height: 18px;
+  }
+
+  .capability-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    max-width: 16rem;
+    border-top: 1px solid rgb(255 255 255 / 22%);
+  }
+
+  .capability-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding-block: 0.85rem;
+    border-bottom: 1px solid rgb(255 255 255 / 22%);
+    font-size: 0.875rem;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+  }
+
+  .capability-number {
+    font-size: 0.75rem;
+    color: var(--fpl-blue);
+  }
+
+  /* `display` on the rules above would otherwise beat the UA [hidden] rule
+     and reveal the clone sources. */
+  .capability-item[hidden],
+  .hero-stat[hidden] {
+    display: none;
+  }
+
+  .hero-right {
+    display: grid;
+    justify-items: end;
+    text-align: right;
+  }
+
+  .hero-stats {
+    display: grid;
+    gap: 0.15rem;
+    max-width: 34rem;
+  }
+
+  .hero-stat {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  .hero-stat.muted {
+    margin-top: 1rem;
+    color: rgb(255 255 255 / 80%);
+  }
+
+  .hero-cta-text {
+    margin-top: 1.25rem;
+    margin-bottom: 0.85rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  /* No flip, no slide — the finished layout, straight away. */
+  @media (prefers-reduced-motion: reduce) {
+    .flip,
+    .flip-front,
+    .flip-back {
+      animation: none;
+      opacity: 1;
+    }
+
+    .flip-front {
+      transform: translate3d(0, -100%, 0) rotateX(90deg);
+    }
+
+    .flip-back {
+      transform: none;
+    }
+  }
+
+  @media (max-width: 991px) {
+    .hero-bottom {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 767px) {
+    /* The crop puts the bright part of the screen right behind the index
+       rows at phone widths, so the scrim has to work harder here. */
+    .hero-overlay {
+      background: linear-gradient(180deg, rgb(0 0 0 / 20%) 0%, rgb(0 0 0 / 62%) 100%);
+    }
+
+    .hero-bottom {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+
+    .hero-right {
+      justify-items: start;
+      text-align: left;
+    }
+  }
+</style>

@@ -1,0 +1,264 @@
+{
+  "variants": [
+    {
+      "id": "a",
+      "name": "A — Home page (live)",
+      "slug": "",
+      "slugAuto": true,
+      "locked": true,
+      "description": "The live home page hero. Locked — it is the baseline every landing page inherits from. Edit it in src/data/hero.ts, not here.",
+      "headlineTop": null,
+      "headlineBottom": null,
+      "headlineAlign": null,
+      "eyebrow": null,
+      "listItems": null,
+      "statLines": null,
+      "kicker": null,
+      "ctaText": null,
+      "ctaLabel": null,
+      "ctaHref": null,
+      "mediaMode": null,
+      "mediaPoster": null,
+      "hlSize": null,
+      "hlLineHeight": null,
+      "hlTracking": null,
+      "statSize": null,
+      "overlayTop": null,
+      "overlayBottom": null,
+      "minHeight": null,
+      "offerEyebrow": null,
+      "offerHeading": null,
+      "offerBody": null,
+      "price": null,
+      "priceNote": null,
+      "includes": null,
+      "showcaseEyebrow": null,
+      "showcase": null,
+      "finalCtaText": null,
+      "title": null,
+      "metaDescription": null,
+      "indexable": null
+    },
+    {
+      "id": "b",
+      "name": "Four websites",
+      "slug": "four-websites",
+      "slugAuto": true,
+      "locked": false,
+      "description": "Websites offer page. PRICE NOT SET — open the lab and fill in the price + price note.",
+      "headlineTop": "Four",
+      "headlineBottom": "websites",
+      "headlineAlign": "split",
+      "eyebrow": "What you get",
+      "listItems": [
+        {
+          "label": "Strategy & copy",
+          "number": "01"
+        },
+        {
+          "label": "Design",
+          "number": "02"
+        },
+        {
+          "label": "Build & launch",
+          "number": "03"
+        },
+        {
+          "label": "Ads-ready pages",
+          "number": "04"
+        }
+      ],
+      "statLines": [
+        "**Four sites**, built as one system.",
+        "**80+ clients** scaled.",
+        "**306% average revenue increase** across clients."
+      ],
+      "kicker": "Designed to perform, not just to look good.",
+      "ctaText": "Ready for the ~FrontPage?~",
+      "ctaLabel": "Start my sites",
+      "ctaHref": "/contact",
+      "mediaMode": null,
+      "mediaPoster": null,
+      "hlSize": null,
+      "hlLineHeight": null,
+      "hlTracking": null,
+      "statSize": null,
+      "overlayTop": null,
+      "overlayBottom": null,
+      "minHeight": null,
+      "offerEyebrow": "The offer",
+      "offerHeading": "Four sites.\nOne system.",
+      "offerBody": "Four websites designed and built together, so your brand reads the same everywhere a customer lands. Every layout, line and interaction is built to convert, and every page is ready for ads on day one.",
+      "price": "",
+      "priceNote": "",
+      "includes": [
+        "Four custom-designed websites",
+        "Copywriting for every page",
+        "Mobile-first responsive build",
+        "Speed and on-page SEO pass",
+        "Contact and lead-capture forms",
+        "Analytics and conversion tracking",
+        "Launch, hosting setup and handover"
+      ],
+      "showcaseEyebrow": "Sites we built",
+      "showcase": [
+        "AK Custom Real Estate",
+        "Verona Residences",
+        "DeSalvoFlorian Architects",
+        "KhanGroup Real Estate"
+      ],
+      "finalCtaText": "Four sites. ~One sprint.~",
+      "title": "Four Websites — FrontPage Labs",
+      "metaDescription": "Four custom websites designed, written and built as one system by FrontPage Labs.",
+      "indexable": false
+    },
+    {
+      "id": "c",
+      "name": "Four ads",
+      "slug": "four-ads",
+      "slugAuto": true,
+      "locked": false,
+      "description": "Ads offer page. PRICE NOT SET — open the lab and fill in the price + price note.",
+      "headlineTop": "Four",
+      "headlineBottom": "ads",
+      "headlineAlign": "split",
+      "eyebrow": "What you get",
+      "listItems": [
+        {
+          "label": "Concepts",
+          "number": "01"
+        },
+        {
+          "label": "Copy",
+          "number": "02"
+        },
+        {
+          "label": "Design",
+          "number": "03"
+        },
+        {
+          "label": "Launch & report",
+          "number": "04"
+        }
+      ],
+      "statLines": [
+        "**Four ads**, four angles, one campaign.",
+        "**23K+ conversions** generated.",
+        "**8:1 ROAS** on our best-performing account."
+      ],
+      "kicker": "Creative built to be tested, not admired.",
+      "ctaText": "Ready for the ~FrontPage?~",
+      "ctaLabel": "Start my ads",
+      "ctaHref": "/contact",
+      "mediaMode": null,
+      "mediaPoster": null,
+      "hlSize": null,
+      "hlLineHeight": null,
+      "hlTracking": null,
+      "statSize": null,
+      "overlayTop": null,
+      "overlayBottom": null,
+      "minHeight": null,
+      "offerEyebrow": "The offer",
+      "offerHeading": "Four ads.\nFour angles.",
+      "offerBody": "Four ad creatives built to run against each other, so you find the message that works instead of guessing at it. Written, designed and set up to launch on the platform your customers are actually on.",
+      "price": "",
+      "priceNote": "",
+      "includes": [
+        "Four ad creatives, four angles",
+        "Headline and body copy for each",
+        "Static and story sizes",
+        "Audience and targeting setup",
+        "Campaign build in your ad account",
+        "Conversion tracking check",
+        "Performance readout after launch"
+      ],
+      "showcaseEyebrow": "Campaigns we run",
+      "showcase": [
+        "Jagger Apartments",
+        "Roy Apartments",
+        "Louella Apartments",
+        "Mosaic Therapy Miami"
+      ],
+      "finalCtaText": "Four ads. ~One test.~",
+      "title": "Four Ads — FrontPage Labs",
+      "metaDescription": "Four ad creatives written, designed and launched by FrontPage Labs.",
+      "indexable": false
+    },
+    {
+      "id": "d",
+      "name": "Page + ad — $500",
+      "slug": "landing-page-and-ad",
+      "slugAuto": false,
+      "locked": false,
+      "description": "The special offer: one landing page plus ad design for a flat $500. The only page with a confirmed price.",
+      "headlineTop": "Page + ad",
+      "headlineBottom": "$500",
+      "headlineAlign": "split",
+      "eyebrow": "The special",
+      "listItems": [
+        {
+          "label": "Landing page",
+          "number": "01"
+        },
+        {
+          "label": "Ad design",
+          "number": "02"
+        },
+        {
+          "label": "Copy",
+          "number": "03"
+        },
+        {
+          "label": "Launch",
+          "number": "04"
+        }
+      ],
+      "statLines": [
+        "**One landing page**, built to convert.",
+        "**One ad** designed to feed it.",
+        "**$500** flat. No retainer."
+      ],
+      "kicker": "The fastest way to find out whether the offer works.",
+      "ctaText": "Ready for the ~FrontPage?~",
+      "ctaLabel": "Claim the $500 offer",
+      "ctaHref": "/contact",
+      "mediaMode": null,
+      "mediaPoster": null,
+      "hlSize": null,
+      "hlLineHeight": null,
+      "hlTracking": null,
+      "statSize": null,
+      "overlayTop": null,
+      "overlayBottom": null,
+      "minHeight": null,
+      "offerEyebrow": "The special offer",
+      "offerHeading": "One page.\nOne ad.",
+      "offerBody": "A landing page and the ad that drives traffic to it, designed together for one flat fee. You get a page built to convert and creative made to feed it, without signing up for a retainer to find out if it works.",
+      "price": "$500",
+      "priceNote": "Flat — landing page + ad design",
+      "includes": [
+        "One conversion-focused landing page",
+        "Copywriting for the full page",
+        "One matching ad design",
+        "Ad headline and body copy",
+        "Mobile-first responsive build",
+        "Lead form wired to your inbox",
+        "Conversion tracking setup",
+        "Launched and handed over"
+      ],
+      "showcaseEyebrow": "Recent work",
+      "showcase": [
+        "AK Custom Real Estate",
+        "Jagger Apartments",
+        "Mosaic Therapy Miami",
+        "Seth Taylor Fitness"
+      ],
+      "finalCtaText": "One page. One ad. ~$500.~",
+      "title": "Landing Page + Ad Design — $500 — FrontPage Labs",
+      "metaDescription": "One conversion-focused landing page plus a matching ad design, flat $500, from FrontPage Labs.",
+      "indexable": false
+    }
+  ],
+  "activeId": "a"
+}
