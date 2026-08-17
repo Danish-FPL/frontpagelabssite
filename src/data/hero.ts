@@ -14,6 +14,8 @@
 export interface HeroListItem {
   label: string;
   number: string;
+  /** Optional — with one the row becomes a link, without one it's plain text. */
+  href?: string;
 }
 
 export interface HeroFields {
@@ -54,10 +56,10 @@ export const homeHero: HeroFields = {
   headlineAlign: 'split',
   eyebrow: 'What we do',
   listItems: [
-    { label: 'Websites', number: '01' },
-    { label: 'Marketing Channels', number: '02' },
-    { label: 'Ads', number: '03' },
-    { label: 'Strategy', number: '04' },
+    { label: 'Websites', number: '01', href: '/services#websites' },
+    { label: 'Marketing Channels', number: '02', href: '/services#channels' },
+    { label: 'Ads', number: '03', href: '/services#ads' },
+    { label: 'Strategy', number: '04', href: '/services#strategy' },
   ],
   statLines: [
     '**80+ clients** scaled.',
@@ -75,9 +77,11 @@ export const homeHero: HeroFields = {
   mediaMode: 'image',
   mediaPoster: '/assets/pexels-ceesz-284432587-13073603.jpg',
 
-  hlSize: null,
+  // Measured off the live site: its .hero-title runs 15.7vw with -0.0225em
+  // tracking, a step above the shared .heading-large scale (14.25vw).
+  hlSize: 15.7,
   hlLineHeight: null,
-  hlTracking: null,
+  hlTracking: -0.0225,
   statSize: null,
   overlayTop: null,
   overlayBottom: null,

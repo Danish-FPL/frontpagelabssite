@@ -135,6 +135,9 @@
   select option{color:#111}
   .row{display:flex;align-items:center;gap:6px;margin:0 0 6px}
   .row .num{width:62px;flex:none}
+  .row.sub{margin:-2px 0 10px;padding-left:2px}
+  .row.sub .href{font-size:12px;padding:5px 8px;color:var(--dim)}
+  .row.sub .href:focus{color:#fff}
   .row .del{width:26px;height:26px;flex:none;border-radius:7px;border:1px solid var(--line);
     background:transparent;color:var(--dim);font-size:12px;cursor:pointer;line-height:1}
   .row .del:hover{background:rgba(255,90,90,.2);color:#ffc9c9}
@@ -511,6 +514,12 @@ function listRows(key, label, cols, opts) {
       h += '<input type="text" data-list="' + key + '" data-i="' + i + '" value="' + esc(row) + '"' + dis + '>';
     }
     h += '<button class="del" data-del="' + key + '" data-i="' + i + '"' + dis + '>✕</button></div>';
+    // The hero index rows can link somewhere; the link gets its own line so
+    // the label doesn't get squeezed into a third of the panel.
+    if (cols === 'pair') {
+      h += '<div class="row sub"><input type="text" class="href" data-list="' + key + '" data-i="' + i +
+        '" data-sub="href" value="' + esc(row.href || '') + '" placeholder="/services#websites — optional link"' + dis + '></div>';
+    }
   });
   h += '<button class="tbtn addrow" data-add="' + key + '"' + dis + '>＋ Add</button>' +
     (opts.hint ? '<p class="hint">' + opts.hint + '</p>' : '') + '</div>';
@@ -657,7 +666,7 @@ function wirePanel() {
     const key = b.dataset.add;
     arm();
     const rows = clone(mergedActive()[key] || []);
-    rows.push(key === 'listItems' ? { label: 'New row', number: String(rows.length + 1).padStart(2, '0') }
+    rows.push(key === 'listItems' ? { label: 'New row', number: String(rows.length + 1).padStart(2, '0'), href: '' }
       : key === 'showcase' ? (meta.projects[0] || '') : 'New line');
     setField(key, rows); commit(); applyToFrame(); renderPanel();
   }));

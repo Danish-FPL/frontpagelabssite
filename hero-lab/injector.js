@@ -149,10 +149,14 @@
 
   function captureList(doc) {
     return [].slice.call(doc.querySelectorAll('[data-fpl-list] li:not([data-fpl-template])')).map(function (li) {
-      return {
+      var row = li.querySelector('.capability-row');
+      var item = {
         label: norm(li.querySelector('.capability-label') ? li.querySelector('.capability-label').textContent : li.textContent),
         number: norm(li.querySelector('.capability-number') ? li.querySelector('.capability-number').textContent : ''),
       };
+      var href = row && row.getAttribute('href');
+      if (href) item.href = href;
+      return item;
     });
   }
 
@@ -260,8 +264,14 @@
     rebuildList(doc, q(doc, '[data-fpl-list]'), items.length, function (li, i) {
       var label = li.querySelector('.capability-label');
       var number = li.querySelector('.capability-number');
+      var row = li.querySelector('.capability-row');
       if (label) label.textContent = items[i].label || '';
       if (number) number.textContent = items[i].number || '';
+      // No href = a plain row; the anchor styles key off its presence.
+      if (row) {
+        if (norm(items[i].href)) row.setAttribute('href', items[i].href);
+        else row.removeAttribute('href');
+      }
     });
   }
 

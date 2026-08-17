@@ -56,9 +56,11 @@ const services = [
 
 ---
 
-<Base title="FrontPageLabs - Digital Performance, Down to a Science.">
+<Base title="FrontPageLabs - Digital Performance, Down to a Science." overlayNav>
   <!-- Hero ---------------------------------------------------------------- -->
-  <LandingHero {...homeHero} />
+  <!-- Home only: the header floats on the photo and the hero owns the whole
+       viewport. Landing pages keep the solid header above the fold. -->
+  <LandingHero {...homeHero} fullBleed />
 
   <!-- (01) Digital chemistry ---------------------------------------------- -->
   <section class="section chemistry">

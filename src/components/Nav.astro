@@ -1,9 +1,20 @@
 ---
 // Site header. Mirrors the Webflow `.navigation` block: logo, location badge,
 // menu with a hover text-flip, and the Oath link.
+interface Props {
+  /** Float the header over a dark hero: no background, white type, white
+   *  logo. Used on the home page, which runs its hero full-bleed. */
+  overlay?: boolean;
+}
+
+const { overlay = false } = Astro.props;
+
 const { pathname } = Astro.url;
 const isCurrent = (href: string) =>
   href === '/' ? pathname === '/' : pathname.startsWith(href);
+
+// The white-on-transparent lockup, for the overlay treatment.
+const logo = overlay ? '/assets/frontpage-labs-logo.png' : '/assets/frontpage-labs-logo-1-.png';
 
 const links = [
   { href: '/', label: 'Home' },
@@ -14,11 +25,11 @@ const links = [
 ];
 ---
 
-<div class="navigation">
+<div class:list={['navigation', { overlay }]}>
   <div class="container-fluid">
     <div class="navigation-inner">
       <a class="logo" href="/" aria-label="FrontPage Labs — home">
-        <img src="/assets/frontpage-labs-logo-1-.png" alt="FrontPage Labs" width="160" />
+        <img src={logo} alt="FrontPage Labs" width="160" />
       </a>
 
       <div class="location">
@@ -64,6 +75,42 @@ const links = [
     position: relative;
     z-index: 100;
     background-color: var(--color-background-primary);
+  }
+
+  /* Overlay treatment — the header sits on the hero photo rather than above
+     it. Absolute, not fixed: it scrolls away with the hero, same as the live
+     site. The hero underneath carries its own top padding to clear this. */
+  .navigation.overlay {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 100;
+    background-color: transparent;
+    padding-block: 1.15rem 0;
+    color: var(--color-white);
+  }
+
+  .navigation.overlay .navigation-link,
+  .navigation.overlay .location {
+    color: var(--color-white);
+  }
+
+  .navigation.overlay .navigation-icon-text {
+    background-color: rgb(255 255 255 / 12%);
+    backdrop-filter: blur(6px);
+  }
+
+  .navigation.overlay .menu-icon span {
+    background-color: var(--color-white);
+  }
+
+  /* The rule under the header belongs to the solid treatment only. */
+  .navigation.overlay .navigation-divider {
+    display: none;
+  }
+
+  /* The current-page dot is black by default; there is a white cut of it. */
+  .navigation.overlay .navigation-link.current {
+    background-image: url('/assets/dot-white.svg');
   }
 
   .navigation-inner {

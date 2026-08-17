@@ -8,12 +8,15 @@ interface Props {
   description?: string;
   /** Ad landing pages opt out of search indexing. */
   noindex?: boolean;
+  /** Float the header over the hero instead of sitting above it. */
+  overlayNav?: boolean;
 }
 
 const {
   title,
   description = 'FrontPage Labs — Digital Performance, Down to a Science.',
   noindex = false,
+  overlayNav = false,
 } = Astro.props;
 ---
 
@@ -30,8 +33,8 @@ const {
     <link rel="preload" href="/fonts/overusedgrotesk-medium.woff2" as="font" type="font/woff2" crossorigin />
   </head>
   <body>
-    <div class="page-wrapper" id="top">
-      <Nav />
+    <div class:list={['page-wrapper', { 'has-overlay-nav': overlayNav }]} id="top">
+      <Nav overlay={overlayNav} />
       <main>
         <slot />
       </main>
