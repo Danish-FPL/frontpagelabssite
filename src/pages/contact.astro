@@ -43,8 +43,8 @@ const contactCards = [
           </p>
         </div>
 
-        <form class="contact-form" name="contact" method="POST" data-netlify="true">
-          <input type="hidden" name="form-name" value="contact" />
+        {/* Posts as JSON to /api/lead (→ Airtable) via lead-form.js. */}
+        <form class="contact-form" name="contact">
 
           <div class="field">
             <label for="name">Name:</label>
@@ -70,7 +70,7 @@ const contactCards = [
             <label for="marketing">Marketing To Review (Optional):</label>
             <textarea
               id="marketing"
-              name="marketing"
+              name="message"
               rows="3"
               placeholder="Share details on existing websites or advertising channels here."></textarea>
           </div>
@@ -83,6 +83,9 @@ const contactCards = [
             </span>
           </p>
 
+          <p class="form-error" data-lead-error hidden>
+            That didn't send — try again, or email build@frontpagelabs.com.
+          </p>
           <button class="submit-button" type="submit">Send Message</button>
         </form>
       </div>
@@ -162,6 +165,11 @@ const contactCards = [
     </div>
   </section>
 </Base>
+
+<script>
+  import { wireLeadForm } from '../scripts/lead-form.js';
+  wireLeadForm(document.querySelector('.contact-form'), { source: 'Contact page' });
+</script>
 
 <style>
   /* --- Form ---------------------------------------------------------------- */
@@ -250,6 +258,13 @@ const contactCards = [
     font-size: 0.8125rem;
     line-height: 1.45;
     color: var(--color-secondary);
+  }
+
+  .form-error {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: #c0392b;
   }
 
   .form-note img {

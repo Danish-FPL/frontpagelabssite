@@ -11,6 +11,13 @@
 [build.environment]
   NODE_VERSION = "22.12.0"
 
+# Serverless: submit-lead.mjs receives every site form at /api/lead (the path
+# is declared in the function's own `config`) and writes to Airtable. Needs
+# AIRTABLE_API_KEY / AIRTABLE_BASE_ID / AIRTABLE_LEADS_TABLE in the Netlify
+# env — until set, the function accepts leads but stores nothing (logs only).
+[functions]
+  directory = "netlify/functions"
+
 # Temporary domain only. frontpagelabs.com is still served by Webflow, and two
 # indexable copies of the same site is a duplicate-content problem — this keeps
 # the *.netlify.app preview out of search results. DELETE THIS BLOCK when the

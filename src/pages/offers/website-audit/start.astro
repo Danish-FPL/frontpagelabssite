@@ -4,7 +4,7 @@
 //
 // Five cards, one visible at a time, while the AuditWireframe scene "builds"
 // a website in step with the answers (outline → markup → flow → solidify →
-// launch). The final card posts the lead to Netlify Forms, then reveals a
+// launch). The final card posts the lead to /api/lead (Airtable), then reveals a
 // Calendly embed prefilled with the visitor's name and email. The $47 itself
 // is collected BY CALENDLY at booking (paid event, Stripe connected there) —
 // this page never touches money.
@@ -153,21 +153,6 @@ const CALENDLY_URL = 'https://calendly.com/build-frontpagelabs/30min';
         </section>
       </div>
 
-      <!-- Netlify detection twin: Netlify finds forms by scraping the BUILT
-           HTML, and the real submission is a JS fetch — so this hidden static
-           form must list every posted field name exactly. Keep it in lockstep
-           with the URLSearchParams body in the script below. -->
-      <form name="audit-questionnaire" data-netlify="true" hidden>
-        <input type="hidden" name="form-name" value="audit-questionnaire" />
-        <input name="offer" />
-        <input name="website" />
-        <input name="business" />
-        <input name="frustration" />
-        <input name="goal" />
-        <input name="name" />
-        <input name="email" />
-        <input name="phone" />
-      </form>
     </main>
 
     <script define:vars={{ CALENDLY_URL }}>
@@ -252,14 +237,14 @@ const CALENDLY_URL = 'https://calendly.com/build-frontpagelabs/30min';
         if (!validate(card)) return;
         store(card);
 
-        // Fire-and-forget: the booking is never blocked by the lead write.
-        // Field names must match the hidden detection form above exactly.
-        fetch('/', {
+        // Fire-and-forget to /api/lead (→ Airtable via submit-lead.mjs):
+        // the booking is never blocked by the lead write.
+        fetch('/api/lead', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams({
-            'form-name': 'audit-questionnaire',
-            offer: 'website-audit',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            source: 'Audit questionnaire',
+            page: 'website-audit',
             website: answers.website ?? '',
             business: answers.business ?? '',
             frustration: answers.frustration ?? '',

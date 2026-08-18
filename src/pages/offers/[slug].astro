@@ -85,9 +85,10 @@ const formId = `offer-${landing.slug}`;
         <div class="offer-form-card">
           <h2 class="offer-form-heading">{landing.formHeading}</h2>
 
-          <form class="offer-form" name="offer-landing" method="POST" data-netlify="true">
-            <input type="hidden" name="form-name" value="offer-landing" />
-            <input type="hidden" name="offer" value={landing.slug} />
+          {/* Posts as JSON to /api/lead (→ Airtable) via lead-form.js; the
+              hidden `page` field tells one landing page's leads from another's. */}
+          <form class="offer-form" name="offer-landing">
+            <input type="hidden" name="page" value={landing.slug} />
 
             <div class="offer-field">
               <label for={`${formId}-name`}>Name</label>
@@ -124,6 +125,9 @@ const formId = `offer-${landing.slug}`;
             </div>
 
             <p class="offer-form-note">{landing.formNote}</p>
+            <p class="offer-form-error" data-lead-error hidden>
+              That didn't send — try again, or email build@frontpagelabs.com.
+            </p>
             <button class="offer-submit" type="submit">{landing.formButtonLabel}</button>
           </form>
         </div>
@@ -195,6 +199,11 @@ const formId = `offer-${landing.slug}`;
     </div>
   </section>
 </Base>
+
+<script>
+  import { wireLeadForm } from '../../scripts/lead-form.js';
+  wireLeadForm(document.querySelector('.offer-form'), { source: 'Offer landing' });
+</script>
 
 <style>
   /* --- Offer + form ------------------------------------------------------- */
@@ -369,6 +378,13 @@ const formId = `offer-${landing.slug}`;
     font-size: 0.8125rem;
     line-height: 1.45;
     color: var(--color-secondary);
+  }
+
+  .offer-form-error {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: #c0392b;
   }
 
   .offer-submit {

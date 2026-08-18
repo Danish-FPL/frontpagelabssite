@@ -32,6 +32,29 @@ The home hero lives in `src/data/hero.ts` and is the baseline every landing
 page inherits from — changing it changes every page that hasn't overridden
 that field.
 
+## Lead forms → Airtable
+
+Every form on the site (audit questionnaire, offer landings, service
+landings, `/contact`) posts JSON to `/api/lead`, served by
+`netlify/functions/submit-lead.mjs`, which writes one row per lead to an
+Airtable "Leads" table with a `Source` column. Netlify Forms is NOT used —
+don't add `data-netlify` to anything.
+
+- The classic forms are wired by the shared `src/scripts/lead-form.js`
+  (intercept submit → POST → button becomes the success state). The audit
+  questionnaire posts fire-and-forget from its own state machine because the
+  Calendly reveal must never wait on the write.
+- Field-name → Airtable-column mapping lives in ONE place: the `COLUMNS` map
+  in `submit-lead.mjs`. A new form field needs an entry there and a matching
+  column in Airtable; unknown fields are silently dropped.
+- Env vars: `AIRTABLE_API_KEY`, `AIRTABLE_BASE_ID`, `AIRTABLE_LEADS_TABLE`
+  (see `.env.example`; set them in the Netlify dashboard for production).
+  **Until they're set, the endpoint runs in placeholder mode** — visitors see
+  success, the function logs the lead, nothing is stored.
+- Functions don't run under `astro dev` — use `netlify dev` (or deploy) to
+  exercise `/api/lead` for real; under `astro dev` the POST 404s and the
+  forms' error path shows.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build

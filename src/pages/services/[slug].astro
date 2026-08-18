@@ -122,11 +122,10 @@ const formId = `form-${landing.slug}`;
           <p class="lp-form-copy">{landing.formIntro}</p>
         </div>
 
-        <form class="lp-form" name="service-landing" method="POST" data-netlify="true">
-          {/* Netlify needs the form name echoed in the body, and `service`
-              is what tells one landing page's leads from another's. */}
-          <input type="hidden" name="form-name" value="service-landing" />
-          <input type="hidden" name="service" value={landing.slug} />
+        <form class="lp-form" name="service-landing">
+          {/* Posts as JSON to /api/lead (→ Airtable) via lead-form.js; the
+              hidden `page` field tells one landing page's leads from another's. */}
+          <input type="hidden" name="page" value={landing.slug} />
 
           <div class="lp-field">
             <label for={`${formId}-name`}>Name</label>
@@ -147,7 +146,7 @@ const formId = `form-${landing.slug}`;
             <label for={`${formId}-details`}>What do you need?</label>
             <textarea
               id={`${formId}-details`}
-              name="details"
+              name="message"
               rows="4"
               placeholder="Tell us about your business, your customers, and what the site needs to do."
               required></textarea>
@@ -161,12 +160,20 @@ const formId = `form-${landing.slug}`;
             </span>
           </p>
 
+          <p class="lp-form-error" data-lead-error hidden>
+            That didn't send — try again, or email build@frontpagelabs.com.
+          </p>
           <button class="lp-submit" type="submit">{landing.formButtonLabel}</button>
         </form>
       </div>
     </div>
   </section>
 </Base>
+
+<script>
+  import { wireLeadForm } from '../../scripts/lead-form.js';
+  wireLeadForm(document.querySelector('.lp-form'), { source: 'Service landing' });
+</script>
 
 <style>
   /* Plain ground throughout — one dark band for the quotes so the page has a
@@ -383,6 +390,13 @@ const formId = `form-${landing.slug}`;
     font-size: 0.8125rem;
     line-height: 1.45;
     color: var(--color-secondary);
+  }
+
+  .lp-form-error {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: #c0392b;
   }
 
   .lp-form-note img {
