@@ -1,0 +1,527 @@
+---
+// Every case study at /projects/<slug>.
+//
+// One template, thirty pages: the content comes from src/data/caseStudies.ts,
+// which builds a complete placeholder page for every entry in projects.ts and
+// lets you override it field by field as the real copy gets written. Adding a
+// project means adding it to projects.ts — there is no route to create here.
+//
+// A project that outgrows this layout can claim src/pages/projects/<slug>.astro
+// instead; a static route wins over this dynamic one.
+import Base from '../../layouts/Base.astro';
+import Button from '../../components/Button.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { caseStudies, relatedProjects, type CaseStudy } from '../../data/caseStudies';
+
+export function getStaticPaths() {
+  return caseStudies.map((study) => ({ params: { slug: study.slug }, props: { study } }));
+}
+
+interface Props {
+  study: CaseStudy;
+}
+
+const { study } = Astro.props;
+const related = relatedProjects(study.slug);
+
+const details: [string, string][] = [
+  ['Year', study.year],
+  ['Client', study.client],
+  ['Services', study.services],
+];
+---
+
+<Base title={`${study.title} | FrontPageLabs - Digital Performance, Down to a Science.`}>
+  <!-- Title ---------------------------------------------------------------- -->
+  <section class="section-top">
+    <div class="container-fluid">
+      <h1 class="page-title study-title">{study.title}</h1>
+
+      <div class="study-meta">
+        <div class="study-tags">
+          {study.tags.map((tag) => <span class="study-tag">{tag}</span>)}
+        </div>
+        <span class="study-year">({study.year})</span>
+        <a class="scroll-down" href="#overview">
+          Scroll Down
+          <img src="/assets/arrow-down-right-small.svg" alt="" aria-hidden="true" />
+        </a>
+      </div>
+      <div class="divider"></div>
+    </div>
+  </section>
+
+  <!-- Overview ------------------------------------------------------------- -->
+  <section class="section overview" id="overview">
+    <div class="container">
+      <div class="overview-grid">
+        {/* The word runs past the column edge and is clipped, the way the
+            oversized section labels do elsewhere on the site. */}
+        <div class="overview-label"><h2 class="heading-small">Overview</h2></div>
+
+        <div class="overview-body">
+          {study.overview.map((p) => <p class="paragraph-small no-text-indent">{p}</p>)}
+
+          <dl class="study-details">
+            {details.map(([label, value]) => (
+              <div class="study-detail">
+                <dt>{label}</dt>
+                <dd>{value}</dd>
+              </div>
+            ))}
+          </dl>
+
+          {study.liveUrl && (
+            <div class="button-row">
+              <Button href={study.liveUrl} label="View Online" />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Highlights ----------------------------------------------------------- -->
+  <section class="section highlights">
+    <div class="container">
+      <div class="highlights-grid">
+        <div class="highlights-image">
+          <img src={study.highlightImage} alt="" loading="lazy" />
+        </div>
+
+        <ol class="highlights-list">
+          {study.highlights.map((item, i) => (
+            <li class="highlight">
+              <div class="highlight-text">
+                <h3 class="highlight-title">{item.title}</h3>
+                <p class="highlight-body">{item.body}</p>
+              </div>
+              <span class="highlight-number">{String(i + 1).padStart(2, '0')}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- About ---------------------------------------------------------------- -->
+  <section class="section about-band">
+    <div class="container">
+      <div class="about-grid">
+        <span class="about-label">(About)</span>
+        <div class="about-body">
+          {study.about.map((p) => <p class="about-paragraph">{p}</p>)}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee -------------------------------------------------------------- -->
+  <section class="marquee-band">
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        {Array.from({ length: 4 }).map(() => (
+          <span class="marquee-item">
+            {study.marquee}
+            <img class="marquee-mark" src="/assets/arrow-up-right-white.svg" alt="" />
+          </span>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -------------------------------------------------------------- -->
+  <section class="section gallery">
+    <div class="container">
+      {study.gallery.map((src) => (
+        <figure class="gallery-item">
+          <img src={src} alt="" loading="lazy" />
+        </figure>
+      ))}
+    </div>
+  </section>
+
+  <!-- Related -------------------------------------------------------------- -->
+  <section class="section related">
+    <div class="container">
+      <div class="section-title-row">
+        <h2 class="section-title-text">Related projects</h2>
+        <div class="section-title-text">(06)</div>
+      </div>
+      <div class="divider"></div>
+
+      <div class="related-head">
+        <h3 class="heading-small related-heading">Explore<br />more</h3>
+        <div class="related-copy">
+          <p class="paragraph-small no-text-indent">
+            Our clients are proud in showcasing their products and services on the digital platforms
+            we build for them.
+          </p>
+          <p class="paragraph-small no-text-indent">You can reach your audience, too.</p>
+          <div class="button-row">
+            <Button href="/portfolio" label="View all projects" />
+          </div>
+        </div>
+      </div>
+
+      <div class="related-grid">
+        {related.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* --- Title -------------------------------------------------------------- */
+
+  .section-top {
+    padding-top: 3rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .study-title {
+    max-width: 14em;
+  }
+
+  .study-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    margin-block: 1.5rem 0.75rem;
+  }
+
+  .study-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .study-tag,
+  .study-year,
+  .scroll-down {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .study-tag:not(:last-child)::after {
+    content: ' /';
+  }
+
+  .scroll-down {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .scroll-down img {
+    width: 10px;
+    height: 10px;
+    transition: transform 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .scroll-down:hover img {
+    transform: translateY(2px);
+  }
+
+  .divider {
+    height: 1px;
+    background-color: var(--color-border-muted);
+  }
+
+  .section-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.75rem;
+  }
+
+  .button-row {
+    margin-top: 1.5rem;
+  }
+
+  /* --- Overview ----------------------------------------------------------- */
+
+  .overview-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .overview-label {
+    overflow: hidden;
+  }
+
+  .overview-label h2 {
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .overview-body {
+    display: grid;
+    gap: 1rem;
+    max-width: 34rem;
+  }
+
+  .study-details {
+    margin: 1.5rem 0 0;
+    border-top: 1px solid var(--color-border-muted);
+  }
+
+  .study-detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1.5rem;
+    padding-block: 0.85rem;
+    border-bottom: 1px solid var(--color-border-muted);
+    font-size: 0.9375rem;
+  }
+
+  .study-detail dt {
+    color: var(--color-secondary);
+  }
+
+  .study-detail dd {
+    margin: 0;
+    text-align: right;
+  }
+
+  /* --- Highlights --------------------------------------------------------- */
+
+  .highlights {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  .highlights-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1fr);
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .highlights-image img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .highlights-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .highlight {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding-block: 1.1rem;
+    border-bottom: 1px solid rgb(255 255 255 / 22%);
+  }
+
+  .highlight:first-child {
+    border-top: 1px solid rgb(255 255 255 / 22%);
+  }
+
+  .highlight-title {
+    margin: 0 0 0.3rem;
+    font-size: 1.3125rem;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.022em;
+  }
+
+  .highlight-body {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    color: rgb(255 255 255 / 70%);
+  }
+
+  .highlight-number {
+    font-size: 1.3125rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    flex: none;
+  }
+
+  /* --- About -------------------------------------------------------------- */
+
+  .about-band {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding-top: 0;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 3rem;
+    align-items: start;
+    border-top: 1px solid rgb(255 255 255 / 22%);
+    padding-top: 3rem;
+  }
+
+  .about-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 60%);
+  }
+
+  .about-body {
+    display: grid;
+    gap: 1rem;
+    max-width: 42rem;
+  }
+
+  .about-paragraph {
+    margin: 0;
+    font-size: 1.1875rem;
+    line-height: 1.45;
+    letter-spacing: -0.019em;
+  }
+
+  /* --- Marquee ------------------------------------------------------------ */
+
+  .marquee-band {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding-block: 1.5rem 4rem;
+    overflow: hidden;
+  }
+
+  .marquee {
+    display: flex;
+    width: 100%;
+  }
+
+  /* Two-and-a-bit copies of the phrase scroll one item's width and reset, so
+     the loop is seamless. Transform only. */
+  .marquee-track {
+    display: flex;
+    flex: none;
+    gap: 1.5rem;
+    padding-right: 1.5rem;
+    animation: study-marquee 22s linear infinite;
+  }
+
+  @keyframes study-marquee {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-25%, 0, 0); }
+  }
+
+  .marquee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.5rem;
+    white-space: nowrap;
+    font-family: var(--font-secondary);
+    font-size: 7vw;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.028em;
+    text-transform: uppercase;
+  }
+
+  .marquee-mark {
+    width: 0.5em;
+    height: 0.5em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+    }
+  }
+
+  /* --- Gallery ------------------------------------------------------------ */
+
+  .gallery .container {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .gallery-item {
+    margin: 0;
+    border: 1px solid var(--color-border-muted);
+    overflow: hidden;
+  }
+
+  .gallery-item img {
+    width: 100%;
+  }
+
+  /* --- Related ------------------------------------------------------------ */
+
+  .related-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+    margin-block: 2rem 2.5rem;
+  }
+
+  .related-heading {
+    margin: 0;
+  }
+
+  .related-copy {
+    max-width: 26rem;
+  }
+
+  .related-copy p + p {
+    margin-top: 0.75rem;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  /* --- Responsive --------------------------------------------------------- */
+
+  @media (max-width: 991px) {
+    .overview-grid,
+    .highlights-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .about-paragraph {
+      font-size: 1.0625rem;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .about-grid,
+    .related-grid {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .related-head {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .highlight {
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+
+    .marquee-item {
+      font-size: 13vw;
+    }
+  }
+</style>

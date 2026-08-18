@@ -233,6 +233,46 @@ const overrideCss = [
     object-fit: cover;
   }
 
+  /* Clips the drift below so the oversized photo never bleeds past the hero. */
+  .hero-media {
+    overflow: hidden;
+  }
+
+  /* Ambient drift: the photo breathes and slides on a long alternating loop,
+     so it reads as hovering rather than as a fixed backdrop.
+     Three things keep it actually perceptible:
+       - it never drops below 1.04, so there is always overfill to translate
+         into and the pan can't expose an edge (translate % resolves in the
+         scaled coordinate system, so the effective shift is scale × value);
+       - the easing stays close to linear. A true ease-in-out spends most of
+         its time parked at the endpoints, which reads as a still image;
+       - the negative delay starts the loop at its midpoint, where motion is
+         fastest, instead of at a near-stationary keyframe on page load.
+     Transform only, and it lives on the media element — putting it on an
+     ancestor would make that ancestor an isolated group and break the
+     headline's difference blend against the photo. */
+  @keyframes hero-drift {
+    from {
+      transform: scale(1.04) translate3d(-0.9%, 1.4%, 0);
+    }
+    to {
+      transform: scale(1.14) translate3d(0.9%, -1.4%, 0);
+    }
+  }
+
+  .hero-media img,
+  .hero-media video {
+    animation: hero-drift 18s cubic-bezier(0.4, 0, 0.6, 1) -9s infinite alternate;
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-media img,
+    .hero-media video {
+      animation: none;
+    }
+  }
+
   /* The photo is 3:2 and the hero is far wider, so a third of its height gets
      cropped. Biasing the crop above centre keeps the top edge of the laptop
      screen in frame and the glowing keyboard at the bottom — the composition
@@ -452,25 +492,27 @@ const overrideCss = [
     text-align: right;
   }
 
+  /* The proof lines read as one block, so they sit on a tight leading with no
+     extra gap between them; the visible separation is the kicker's margin. */
   .hero-stats {
     display: grid;
-    gap: 0.15rem;
+    gap: 0;
     max-width: 34rem;
   }
 
   .hero-stat {
     margin: 0;
     font-size: 0.9375rem;
-    line-height: 1.5;
+    line-height: 1.3;
   }
 
   .hero-stat.muted {
-    margin-top: 1rem;
+    margin-top: 0.75rem;
     color: rgb(255 255 255 / 80%);
   }
 
   .hero-cta-text {
-    margin-top: 1.25rem;
+    margin-top: 1rem;
     margin-bottom: 0.85rem;
     font-size: 0.9375rem;
     font-weight: 500;

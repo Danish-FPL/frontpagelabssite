@@ -1,0 +1,452 @@
+---
+// Service landing pages at /services/<slug> — the pages ads point at.
+//
+// Deliberately four sections and nothing else: hero, work, testimonials, form.
+// Everything is one column on a plain ground, because the job of the page is to
+// get to the form, not to demonstrate range. Content lives in
+// src/data/serviceLandings.ts; adding a service is adding an entry there.
+//
+// The form posts to Netlify Forms and carries a hidden `service` field, so
+// every service page can share one form and still be attributable in the
+// dashboard. See the note in the README about wiring the backend.
+import Base from '../../layouts/Base.astro';
+import Button from '../../components/Button.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import {
+  serviceLandings,
+  landingProjects,
+  landingTestimonials,
+  type ServiceLanding,
+} from '../../data/serviceLandings';
+
+export function getStaticPaths() {
+  return serviceLandings.map((landing) => ({
+    params: { slug: landing.slug },
+    props: { landing },
+  }));
+}
+
+interface Props {
+  landing: ServiceLanding;
+}
+
+const { landing } = Astro.props;
+const work = landingProjects(landing);
+const quotes = landingTestimonials(landing);
+const formId = `form-${landing.slug}`;
+---
+
+<Base
+  title={`${landing.metaTitle ?? landing.headline} | FrontPageLabs`}
+  description={landing.metaDescription}
+  noindex={!landing.indexable}
+>
+  <!-- Hero ----------------------------------------------------------------- -->
+  <section class="lp-hero">
+    <div class="container">
+      <p class="lp-eyebrow">{landing.eyebrow}</p>
+      <h1 class="lp-headline">{landing.headline}</h1>
+      {landing.subhead && <p class="lp-subhead">{landing.subhead}</p>}
+
+      {landing.points.length > 0 && (
+        <ul class="lp-points">
+          {landing.points.map((point) => (
+            <li class="lp-point">
+              <img src="/assets/check-circle.svg" alt="" aria-hidden="true" />
+              <span>{point}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <div class="lp-cta">
+        <Button href={`#${formId}`} label={landing.ctaLabel} />
+      </div>
+    </div>
+  </section>
+
+  <!-- Work ----------------------------------------------------------------- -->
+  <section class="section lp-work">
+    <div class="container">
+      <div class="lp-section-head">
+        <h2 class="section-title-text">{landing.workEyebrow}</h2>
+        <div class="section-title-text">(01)</div>
+      </div>
+      <div class="lp-divider"></div>
+
+      <h3 class="heading-small lp-work-heading">{landing.workHeading}</h3>
+
+      <div class="lp-work-grid">
+        {work.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials --------------------------------------------------------- -->
+  <section class="section lp-proof">
+    <div class="container">
+      <div class="lp-section-head inverse">
+        <h2 class="section-title-text">Testimonials</h2>
+        <div class="section-title-text">(02)</div>
+      </div>
+
+      <h3 class="heading-small lp-proof-heading">{landing.proofHeading}</h3>
+
+      <div class="lp-proof-grid">
+        {quotes.map(({ heading, quote, name, company }) => (
+          <figure class="lp-quote">
+            <h4 class="lp-quote-title">{heading[0]} {heading[1]}</h4>
+            <blockquote class="lp-quote-body">{quote}</blockquote>
+            <figcaption class="lp-quote-credit">
+              <span>{name}</span>
+              <span class="muted">{company}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Form ----------------------------------------------------------------- -->
+  <section class="section lp-form-section" id={formId}>
+    <div class="container">
+      <div class="lp-section-head">
+        <h2 class="section-title-text">{landing.formEyebrow}</h2>
+        <div class="section-title-text">(03)</div>
+      </div>
+      <div class="lp-divider"></div>
+
+      <div class="lp-form-grid">
+        <div class="lp-form-intro">
+          <h3 class="heading-small lp-form-heading">{landing.formHeading}</h3>
+          <p class="lp-form-copy">{landing.formIntro}</p>
+        </div>
+
+        <form class="lp-form" name="service-landing" method="POST" data-netlify="true">
+          {/* Netlify needs the form name echoed in the body, and `service`
+              is what tells one landing page's leads from another's. */}
+          <input type="hidden" name="form-name" value="service-landing" />
+          <input type="hidden" name="service" value={landing.slug} />
+
+          <div class="lp-field">
+            <label for={`${formId}-name`}>Name</label>
+            <input id={`${formId}-name`} name="name" type="text" placeholder="Your name" required />
+          </div>
+
+          <div class="lp-field">
+            <label for={`${formId}-email`}>Email</label>
+            <input id={`${formId}-email`} name="email" type="email" placeholder="you@business.com" required />
+          </div>
+
+          <div class="lp-field">
+            <label for={`${formId}-phone`}>Phone (optional)</label>
+            <input id={`${formId}-phone`} name="phone" type="tel" placeholder="(000) 000-0000" />
+          </div>
+
+          <div class="lp-field">
+            <label for={`${formId}-details`}>What do you need?</label>
+            <textarea
+              id={`${formId}-details`}
+              name="details"
+              rows="4"
+              placeholder="Tell us about your business, your customers, and what the site needs to do."
+              required></textarea>
+          </div>
+
+          <p class="lp-form-note">
+            <img src="/assets/form-info.svg" alt="" aria-hidden="true" />
+            <span>
+              By sending this form you agree to the <a href="/terms">Terms &amp; Conditions</a>
+              {' '}and{' '}<a href="/privacy">Privacy Policy</a>.
+            </span>
+          </p>
+
+          <button class="lp-submit" type="submit">{landing.formButtonLabel}</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Plain ground throughout — one dark band for the quotes so the page has a
+     break in it, and nothing else competing with the form. */
+
+  .lp-eyebrow {
+    margin: 0 0 1.25rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+  }
+
+  .lp-section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.75rem;
+  }
+
+  .lp-section-head.inverse {
+    border-bottom: 1px solid rgb(255 255 255 / 30%);
+    padding-bottom: 0.75rem;
+  }
+
+  .lp-divider {
+    height: 1px;
+    background-color: var(--color-border-muted);
+  }
+
+  /* --- Hero --------------------------------------------------------------- */
+
+  .lp-hero {
+    padding-top: 4.5rem;
+    padding-bottom: 4rem;
+    border-bottom: 1px solid var(--color-border-muted);
+  }
+
+  .lp-headline {
+    margin: 0;
+    max-width: 16em;
+    font-family: var(--font-secondary);
+    font-size: 5.4vw;
+    font-weight: 600;
+    line-height: 0.95;
+    letter-spacing: -0.028em;
+    text-transform: uppercase;
+  }
+
+  .lp-subhead {
+    margin: 1.5rem 0 0;
+    max-width: 34rem;
+    font-size: 1.1875rem;
+    line-height: 1.45;
+    letter-spacing: -0.019em;
+  }
+
+  .lp-points {
+    list-style: none;
+    margin: 1.75rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 2rem;
+  }
+
+  .lp-point {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+  }
+
+  .lp-point img {
+    width: 14px;
+    height: 14px;
+    flex: none;
+  }
+
+  .lp-cta {
+    margin-top: 2.25rem;
+  }
+
+  /* --- Work --------------------------------------------------------------- */
+
+  .lp-work-heading,
+  .lp-proof-heading {
+    margin: 2rem 0 2.5rem;
+  }
+
+  .lp-work-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  /* --- Testimonials ------------------------------------------------------- */
+
+  .lp-proof {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  .lp-proof-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .lp-quote {
+    margin: 0;
+    padding: 1.6rem;
+    background-color: var(--color-white);
+    color: var(--color-primary);
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+  }
+
+  .lp-quote-title {
+    margin: 0;
+    font-size: 1.3125rem;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .lp-quote-body {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  .lp-quote-credit {
+    display: grid;
+    gap: 0.15rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .lp-quote-credit .muted {
+    color: var(--color-secondary);
+  }
+
+  /* --- Form --------------------------------------------------------------- */
+
+  .lp-form-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+    gap: 3rem;
+    align-items: start;
+    margin-top: 2rem;
+  }
+
+  .lp-form-heading {
+    margin: 0 0 1.25rem;
+  }
+
+  .lp-form-copy {
+    margin: 0;
+    max-width: 26rem;
+    font-size: 1.0625rem;
+    line-height: 1.45;
+  }
+
+  .lp-form {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 38rem;
+  }
+
+  .lp-field {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .lp-field label {
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+
+  .lp-field input,
+  .lp-field textarea {
+    font: inherit;
+    /* 16px exactly: any smaller and iOS Safari force-zooms on focus. */
+    font-size: 16px;
+    color: var(--color-primary);
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--color-border-muted);
+    padding: 0.5rem 0;
+    resize: vertical;
+    transition: border-color 0.2s ease;
+  }
+
+  .lp-field input::placeholder,
+  .lp-field textarea::placeholder {
+    color: var(--color-form-placeholder);
+  }
+
+  .lp-field input:focus,
+  .lp-field textarea:focus {
+    outline: none;
+    border-bottom-color: var(--color-primary);
+  }
+
+  .lp-form-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--color-secondary);
+  }
+
+  .lp-form-note img {
+    width: 11px;
+    height: 11px;
+    margin-top: 0.2rem;
+    flex: none;
+  }
+
+  .lp-form-note a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .lp-submit {
+    justify-self: start;
+    border: 1px solid var(--color-primary);
+    border-radius: 999px;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  .lp-submit:hover {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  .lp-submit:focus-visible {
+    outline: 2px solid var(--fpl-blue);
+    outline-offset: 2px;
+  }
+
+  /* --- Responsive --------------------------------------------------------- */
+
+  @media (max-width: 991px) {
+    .lp-headline {
+      font-size: 8vw;
+    }
+
+    .lp-proof-grid,
+    .lp-form-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .lp-form-grid {
+      gap: 2rem;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .lp-headline {
+      font-size: 10.5vw;
+    }
+
+    .lp-subhead {
+      font-size: 1.0625rem;
+    }
+
+    .lp-work-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

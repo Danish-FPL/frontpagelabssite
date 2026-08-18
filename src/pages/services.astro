@@ -82,34 +82,41 @@ const capabilities = [
   </section>
 
   <!-- Capability blocks ---------------------------------------------------- -->
-  {capabilities.map((c) => (
-    <section class="section capability" id={c.id}>
-      <div class="container">
-        <div class="capability-grid">
-          <h2 class="heading-small capability-title">{c.title}</h2>
+  {/* Each capability pins to the top of the viewport and the next one scrolls
+      up and covers it completely — one service on screen at a time. See
+      .capability in the stylesheet. */}
+  <div class="capability-stack">
+    {capabilities.map((c) => (
+      <section class="capability" id={c.id}>
+        <div class="capability-card">
+          <div class="container">
+            <div class="capability-grid">
+              <h2 class="heading-small capability-title">{c.title}</h2>
 
-          <div class="capability-content">
-            <p class="capability-stat text-blue">{c.stat}</p>
-            <h3 class="capability-heading">{c.heading}</h3>
-            <p class="paragraph-small no-text-indent"><strong>{c.lead}</strong></p>
-            <p class="paragraph-small no-text-indent">{c.body}</p>
+              <div class="capability-content">
+                <p class="capability-stat text-blue">{c.stat}</p>
+                <h3 class="capability-heading">{c.heading}</h3>
+                <p class="paragraph-small no-text-indent"><strong>{c.lead}</strong></p>
+                <p class="paragraph-small no-text-indent">{c.body}</p>
 
-            <ul class="capability-tags">
-              {c.tags.map((tag) => <li class="capability-tag">{tag}</li>)}
-            </ul>
+                <ul class="capability-tags">
+                  {c.tags.map((tag) => <li class="capability-tag">{tag}</li>)}
+                </ul>
 
-            <div class="button-row">
-              <Button href="/contact" label={c.cta} />
+                <div class="button-row">
+                  <Button href="/contact" label={c.cta} />
+                </div>
+              </div>
+
+              <div class="capability-image">
+                <img src={c.image} alt="" loading="lazy" />
+              </div>
             </div>
           </div>
-
-          <div class="capability-image">
-            <img src={c.image} alt="" loading="lazy" />
-          </div>
         </div>
-      </div>
-    </section>
-  ))}
+      </section>
+    ))}
+  </div>
 
   <!-- Recent projects ------------------------------------------------------ -->
   <section class="section projects">
@@ -147,7 +154,7 @@ const capabilities = [
 
   .hero-subtitle {
     margin: 0;
-    font-size: 0.8125rem;
+    font-size: 0.9375rem;
     letter-spacing: 0.02em;
   }
 
@@ -155,7 +162,7 @@ const capabilities = [
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
   }
@@ -179,15 +186,45 @@ const capabilities = [
 
   /* --- Capability blocks -------------------------------------------------- */
 
+  /* --- Scroll reveal -------------------------------------------------------
+     Every capability pins at the SAME top offset and fills the viewport, so
+     the next one scrolls up and covers the previous completely — one service
+     on screen at a time, revealed by scrolling, rather than a pile of offset
+     cards with their edges showing.
+
+     Two things it depends on:
+       - an OPAQUE background on each card; a transparent one lets the card
+         underneath show through and the effect collapses.
+       - full-bleed width, so a card covers the one below edge to edge. That is
+         why .container sits INSIDE .capability-card rather than around it.
+
+     Sticky is scoped to .capability-stack so the cards release at the end of
+     the group instead of riding over the projects section below. */
+  .capability-stack {
+    position: relative;
+  }
+
   .capability {
-    padding-block: 3.5rem;
+    position: sticky;
+    top: 0;
+  }
+
+  .capability-card {
+    background-color: var(--color-background-primary);
+    /* A single hairline is all the separation the transition needs — a full
+       bordered box with a drop shadow read as far too heavy. */
+    border-top: 1px solid var(--color-border-muted);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-block: 4.5rem;
   }
 
   /* Oversized title sits on its own row so it can run full width; the copy
      starts underneath, indented, with the artwork spanning both rows. */
   .capability-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 0.42fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.52fr);
     grid-template-areas:
       'title image'
       'content image';
@@ -201,12 +238,22 @@ const capabilities = [
     margin: 0;
   }
 
+  /* Flush left, sharing the title's edge — no indent. The copy and the
+     oversized heading above it now read as one left-aligned column instead of
+     the copy floating in from the middle of the row. */
   .capability-content {
     grid-area: content;
     display: grid;
-    gap: 0.9rem;
-    max-width: 34rem;
-    padding-left: 12%;
+    gap: 1rem;
+    max-width: 44rem;
+  }
+
+  /* A step up from the shared .paragraph-small (17px): this is the page's
+     main body copy and it sits under 5vw display type, so it can carry more
+     size than a caption-scale paragraph. */
+  .capability-content .paragraph-small {
+    font-size: 1.1875rem;
+    line-height: 1.45;
   }
 
   .capability-image {
@@ -214,17 +261,25 @@ const capabilities = [
     align-self: center;
   }
 
+  /* These stat lines carry the page's only hard numbers, so they have to be
+     readable. At 11px in --fpl-blue on white they were both tiny and about
+     1.6:1 contrast — effectively invisible. Larger, and in body ink with the
+     tracking doing the accent work instead of the colour. */
   .capability-stat {
     margin: 0;
-    font-size: 0.6875rem;
+    font-size: 0.875rem;
     font-weight: 500;
     letter-spacing: 0.06em;
     text-transform: uppercase;
   }
 
+  .capability-stat.text-blue {
+    color: var(--color-primary);
+  }
+
   .capability-heading {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 2.5rem;
     font-weight: 600;
     line-height: 1.15;
     letter-spacing: -0.025em;
@@ -242,10 +297,10 @@ const capabilities = [
   .capability-tag {
     border: 1px solid var(--color-border-muted);
     border-radius: 999px;
-    padding: 0.3rem 0.75rem;
-    font-size: 0.625rem;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.8125rem;
     font-weight: 500;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
   }
 
@@ -275,14 +330,46 @@ const capabilities = [
 
   .projects-footer-text {
     margin: 0;
-    font-size: 0.75rem;
+    font-size: 0.9375rem;
     letter-spacing: 0.02em;
     color: var(--color-secondary);
   }
 
   @media (max-width: 991px) {
-    .capability-content {
-      padding-left: 0;
+    .capability-content .paragraph-small {
+      font-size: 1.0625rem;
+    }
+
+    .capability-heading {
+      font-size: 1.9375rem;
+    }
+
+    /* No pinning on small screens: a card here is taller than the viewport, so
+       pinning it would trap its own content behind the next one. Plain stacked
+       sections instead. */
+    .capability {
+      position: static;
+    }
+
+    .capability-card {
+      min-height: 0;
+      display: block;
+      padding-block: 3rem;
+    }
+  }
+
+  /* Sticky is a scroll effect, so honour the same preference the rest of the
+     site does and let the cards simply follow one another. */
+  @media (prefers-reduced-motion: reduce) {
+    .capability {
+      position: static;
+    }
+
+    /* Unpinned, the 100vh floor would just leave tall empty cards. */
+    .capability-card {
+      min-height: 0;
+      display: block;
+      padding-block: 3.5rem;
     }
   }
 

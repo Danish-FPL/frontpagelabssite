@@ -1,0 +1,585 @@
+---
+// Offer landing pages at /offers/<slug> — priced-package ad destinations.
+//
+// The second landing template. Where /services/<slug> works up to its form,
+// this one opens with it: the offer and the form share the first screen, and
+// everything below is evidence for the decision. Deliberately no scroll-reveal,
+// no philosophy section, no decorative bands — each section either states the
+// offer, proves it, or asks for the lead.
+//
+// Content lives in src/data/offerLandings.ts; adding an offer is adding an
+// entry there.
+import Base from '../../layouts/Base.astro';
+import Button from '../../components/Button.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import AuditWireframe from '../../components/AuditWireframe.astro';
+import {
+  offerLandings,
+  offerProjects,
+  offerTestimonials,
+  type OfferLanding,
+} from '../../data/offerLandings';
+
+export function getStaticPaths() {
+  return offerLandings.map((landing) => ({ params: { slug: landing.slug }, props: { landing } }));
+}
+
+interface Props {
+  landing: OfferLanding;
+}
+
+const { landing } = Astro.props;
+const work = offerProjects(landing);
+const quotes = offerTestimonials(landing);
+const formId = `offer-${landing.slug}`;
+---
+
+<Base
+  title={`${landing.metaTitle ?? landing.headline} | FrontPageLabs`}
+  description={landing.metaDescription}
+  noindex={!landing.indexable}
+>
+  <!-- Offer + form --------------------------------------------------------- -->
+  <section class="offer-hero" id={formId}>
+    <div class="container">
+      <div class="offer-grid">
+        <div class="offer-pitch">
+          <p class="offer-eyebrow">{landing.eyebrow}</p>
+          <h1 class="offer-headline">{landing.headline}</h1>
+          {landing.subhead && <p class="offer-subhead">{landing.subhead}</p>}
+
+          <div class="offer-price">
+            <span class="offer-price-value">{landing.price}</span>
+            <span class="offer-price-note">{landing.priceNote}</span>
+          </div>
+
+          {landing.includes.length > 0 && (
+            <ul class="offer-includes">
+              {landing.includes.map((item) => (
+                <li class="offer-include">
+                  <img src="/assets/check-circle.svg" alt="" aria-hidden="true" />
+                  <div>
+                    <h2 class="offer-include-title">{item.title}</h2>
+                    <p class="offer-include-body">{item.body}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        {/* CTA mode: some offers convert on a page of their own (a funnel
+            step) rather than an in-hero form. When ctaHref is set the card
+            keeps its framing but swaps the form for an offer visual and a
+            single button routing into the funnel. */}
+        {landing.ctaHref ? (
+          <div class="offer-form-card offer-cta-card">
+            <h2 class="offer-form-heading">{landing.formHeading}</h2>
+            <AuditWireframe mode="static" />
+            <p class="offer-form-note">{landing.formNote}</p>
+            <a class="offer-submit offer-cta-link" href={landing.ctaHref}>
+              {landing.ctaLabel ?? landing.formButtonLabel}
+            </a>
+          </div>
+        ) : (
+        <div class="offer-form-card">
+          <h2 class="offer-form-heading">{landing.formHeading}</h2>
+
+          <form class="offer-form" name="offer-landing" method="POST" data-netlify="true">
+            <input type="hidden" name="form-name" value="offer-landing" />
+            <input type="hidden" name="offer" value={landing.slug} />
+
+            <div class="offer-field">
+              <label for={`${formId}-name`}>Name</label>
+              <input id={`${formId}-name`} name="name" type="text" placeholder="Your name" required />
+            </div>
+
+            <div class="offer-field">
+              <label for={`${formId}-email`}>Email</label>
+              <input id={`${formId}-email`} name="email" type="email" placeholder="you@business.com" required />
+            </div>
+
+            <div class="offer-field">
+              <label for={`${formId}-phone`}>Phone (optional)</label>
+              <input id={`${formId}-phone`} name="phone" type="tel" placeholder="(000) 000-0000" />
+            </div>
+
+            <div class="offer-field">
+              <label for={`${formId}-business`}>What does your business do?</label>
+              <textarea
+                id={`${formId}-business`}
+                name="business"
+                rows="3"
+                placeholder="A sentence or two is plenty."
+                required></textarea>
+            </div>
+
+            <div class="offer-field">
+              <label for={`${formId}-channel`}>Where should the ads run?</label>
+              <select id={`${formId}-channel`} name="channel">
+                <option value="not-sure">Not sure yet, advise me</option>
+                <option value="google">Google Search</option>
+                <option value="social">Paid social</option>
+              </select>
+            </div>
+
+            <p class="offer-form-note">{landing.formNote}</p>
+            <button class="offer-submit" type="submit">{landing.formButtonLabel}</button>
+          </form>
+        </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats ---------------------------------------------------------------- -->
+  {landing.stats.length > 0 && (
+    <section class="section offer-stats">
+      <div class="container">
+        <h2 class="heading-small offer-stats-heading">{landing.statsHeading}</h2>
+
+        <dl class="offer-stats-grid">
+          {landing.stats.map((stat) => (
+            <div class="offer-stat">
+              <dt class="offer-stat-value">{stat.value}</dt>
+              <dd class="offer-stat-label">{stat.label}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  )}
+
+  <!-- Work ----------------------------------------------------------------- -->
+  <section class="section offer-work">
+    <div class="container">
+      <h2 class="heading-small offer-section-heading">{landing.workHeading}</h2>
+      <div class="offer-work-grid">
+        {work.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials --------------------------------------------------------- -->
+  <section class="section offer-proof">
+    <div class="container">
+      <h2 class="heading-small offer-section-heading">{landing.proofHeading}</h2>
+
+      <div class="offer-proof-grid">
+        {quotes.map(({ heading, quote, name, company }) => (
+          <figure class="offer-quote">
+            <h3 class="offer-quote-title">{heading[0]} {heading[1]}</h3>
+            <blockquote class="offer-quote-body">{quote}</blockquote>
+            <figcaption class="offer-quote-credit">
+              <span>{name}</span>
+              <span class="muted">{company}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Close ---------------------------------------------------------------- -->
+  <section class="section offer-close">
+    <div class="container">
+      <div class="offer-close-inner">
+        <h2 class="heading-small offer-close-heading">{landing.closeHeading}</h2>
+        <p class="offer-close-body">{landing.closeBody}</p>
+        <div class="offer-close-price">
+          <span class="offer-price-value">{landing.price}</span>
+          <span class="offer-price-note">{landing.priceNote}</span>
+        </div>
+        <Button href={landing.ctaHref ?? `#${formId}`} label={landing.closeCtaLabel} variant="white" />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* --- Offer + form ------------------------------------------------------- */
+
+  .offer-hero {
+    padding-top: 3.5rem;
+    padding-bottom: 4rem;
+  }
+
+  .offer-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.78fr);
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .offer-eyebrow {
+    margin: 0 0 1rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+  }
+
+  .offer-headline {
+    margin: 0;
+    font-family: var(--font-secondary);
+    font-size: 4.2vw;
+    font-weight: 600;
+    line-height: 0.98;
+    letter-spacing: -0.028em;
+    text-transform: uppercase;
+  }
+
+  .offer-subhead {
+    margin: 1.25rem 0 0;
+    max-width: 32rem;
+    font-size: 1.1875rem;
+    line-height: 1.45;
+    letter-spacing: -0.019em;
+  }
+
+  .offer-price {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border-muted);
+  }
+
+  .offer-price-value {
+    font-family: var(--font-secondary);
+    font-size: 3rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .offer-price-note {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+  }
+
+  .offer-includes {
+    list-style: none;
+    margin: 1.75rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1.1rem;
+  }
+
+  .offer-include {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+  }
+
+  .offer-include img {
+    width: 15px;
+    height: 15px;
+    flex: none;
+    margin-top: 0.28rem;
+  }
+
+  .offer-include-title {
+    margin: 0 0 0.15rem;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.019em;
+  }
+
+  .offer-include-body {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    color: var(--color-secondary);
+  }
+
+  .offer-form-card {
+    border: 1px solid var(--color-primary);
+    padding: 1.75rem;
+    position: sticky;
+    top: 2rem;
+  }
+
+  .offer-form-heading {
+    margin: 0 0 1.35rem;
+    font-size: 1.3125rem;
+    font-weight: 600;
+    letter-spacing: -0.022em;
+  }
+
+  .offer-form {
+    display: grid;
+    gap: 1.15rem;
+  }
+
+  .offer-field {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .offer-field label {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .offer-field input,
+  .offer-field textarea,
+  .offer-field select {
+    font: inherit;
+    /* 16px exactly — below it iOS Safari force-zooms the page on focus. */
+    font-size: 16px;
+    color: var(--color-primary);
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--color-border-muted);
+    padding: 0.45rem 0;
+    border-radius: 0;
+    resize: vertical;
+    transition: border-color 0.2s ease;
+  }
+
+  .offer-field select {
+    appearance: none;
+    background-image: url('/assets/arrow-down-right-small.svg');
+    background-repeat: no-repeat;
+    background-position: right 0.2rem center;
+    background-size: 10px 10px;
+  }
+
+  .offer-field input::placeholder,
+  .offer-field textarea::placeholder {
+    color: var(--color-form-placeholder);
+  }
+
+  .offer-field input:focus,
+  .offer-field textarea:focus,
+  .offer-field select:focus {
+    outline: none;
+    border-bottom-color: var(--color-primary);
+  }
+
+  .offer-form-note {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--color-secondary);
+  }
+
+  .offer-submit {
+    justify-self: stretch;
+    border: 1px solid var(--color-primary);
+    border-radius: 999px;
+    padding: 0.85rem 1.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  .offer-submit:hover {
+    background-color: transparent;
+    color: var(--color-primary);
+  }
+
+  .offer-submit:focus-visible {
+    outline: 2px solid var(--fpl-blue);
+    outline-offset: 2px;
+  }
+
+  /* CTA-mode card: same frame as the form card, holding a visual + one link */
+  .offer-cta-card {
+    display: grid;
+    gap: 1.15rem;
+  }
+
+  .offer-cta-card .offer-form-heading {
+    margin-bottom: 0.2rem;
+  }
+
+  .offer-cta-link {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  /* --- Stats -------------------------------------------------------------- */
+
+  .offer-stats {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  .offer-stats-heading {
+    margin: 0 0 2.5rem;
+  }
+
+  .offer-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem;
+    margin: 0;
+  }
+
+  .offer-stat {
+    border-top: 1px solid rgb(255 255 255 / 25%);
+    padding-top: 1rem;
+  }
+
+  .offer-stat-value {
+    font-family: var(--font-secondary);
+    font-size: 2.75rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .offer-stat-label {
+    margin: 0.55rem 0 0;
+    font-size: 0.875rem;
+    line-height: 1.35;
+    color: rgb(255 255 255 / 70%);
+  }
+
+  /* --- Work + proof ------------------------------------------------------- */
+
+  .offer-section-heading {
+    margin: 0 0 2.5rem;
+  }
+
+  .offer-work-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .offer-proof-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .offer-quote {
+    margin: 0;
+    padding: 1.6rem;
+    border: 1px solid var(--color-border-muted);
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+  }
+
+  .offer-quote-title {
+    margin: 0;
+    font-size: 1.3125rem;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .offer-quote-body {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  .offer-quote-credit {
+    display: grid;
+    gap: 0.15rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .offer-quote-credit .muted {
+    color: var(--color-secondary);
+  }
+
+  /* --- Close -------------------------------------------------------------- */
+
+  .offer-close {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  .offer-close-inner {
+    display: grid;
+    justify-items: start;
+    gap: 1.25rem;
+    max-width: 40rem;
+  }
+
+  .offer-close-heading {
+    margin: 0;
+  }
+
+  .offer-close-body {
+    margin: 0;
+    font-size: 1.1875rem;
+    line-height: 1.45;
+    color: rgb(255 255 255 / 78%);
+  }
+
+  .offer-close-price {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .offer-close .offer-price-note {
+    color: rgb(255 255 255 / 65%);
+  }
+
+  /* --- Responsive --------------------------------------------------------- */
+
+  @media (max-width: 991px) {
+    .offer-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+
+    .offer-form-card {
+      position: static;
+    }
+
+    .offer-headline {
+      font-size: 7.4vw;
+    }
+
+    .offer-stats-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .offer-proof-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .offer-headline {
+      font-size: 10vw;
+    }
+
+    .offer-subhead,
+    .offer-close-body {
+      font-size: 1.0625rem;
+    }
+
+    .offer-price-value {
+      font-size: 2.5rem;
+    }
+
+    .offer-stats-grid,
+    .offer-work-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

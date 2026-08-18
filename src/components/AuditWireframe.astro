@@ -1,0 +1,279 @@
+---
+// The "website being built" scene — one inline SVG of a browser-window
+// wireframe, grouped into stages that accumulate as the audit questionnaire
+// advances:
+//
+//   st1  outline    the window + content skeleton draws itself in
+//   st2  markup     measurement lines, ticks and text squiggles appear
+//   st3  flow       arrows trace the visitor's path through the page
+//   st4  solidify   blocks fill in, strokes darken — the site looks real
+//   (launch — the whole scene lifting off at the booking step — is owned by
+//   the questionnaire page, which animates `.wf-scene` as a unit.)
+//
+// Two modes:
+//   'static'  landing-page preview — stages 1–2 frozen at their end state,
+//             zero transitions. A blueprint, not a movie.
+//   'staged'  questionnaire — every stage keys off an ANCESTOR [data-step]
+//             attribute set by the page's state machine. Pure CSS, cumulative:
+//             stage n is on for every step ≥ n. No JS timeline.
+//
+// Draw-in mechanics: every stroked shape carries pathLength="1" so dash math
+// is trivial (dasharray 1, dashoffset 1→0) regardless of true path length.
+// Stagger comes from a per-element --d transition-delay custom property.
+interface Props {
+  mode?: 'static' | 'staged';
+}
+
+const { mode = 'staged' } = Astro.props;
+---
+
+<div class:list={['wf', mode === 'static' ? 'wf-static' : 'wf-staged']} aria-hidden="true">
+  <div class="wf-scene">
+    <svg viewBox="0 0 480 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- st4 first in paint order so fills sit under the strokes -->
+      <g class="st4">
+        <rect x="92" y="24" width="180" height="16" rx="8" class="f-soft" />
+        <rect x="36" y="68" width="40" height="10" class="f-soft" />
+        <rect x="300" y="92" width="128" height="84" rx="6" class="f-mid" />
+        <rect x="36" y="152" width="96" height="26" rx="13" class="f-cta" />
+        <rect x="36" y="210" width="190" height="70" rx="6" class="f-soft" />
+        <rect x="246" y="210" width="182" height="70" rx="6" class="f-soft" />
+      </g>
+
+      <g class="st1">
+        <!-- browser chrome -->
+        <rect x="16" y="12" width="448" height="336" rx="10" pathLength="1" style="--d:0s" />
+        <line x1="16" y1="52" x2="464" y2="52" pathLength="1" style="--d:.25s" />
+        <circle cx="36" cy="32" r="4.5" pathLength="1" style="--d:.35s" />
+        <circle cx="54" cy="32" r="4.5" pathLength="1" style="--d:.42s" />
+        <circle cx="72" cy="32" r="4.5" pathLength="1" style="--d:.49s" />
+        <rect x="92" y="24" width="180" height="16" rx="8" pathLength="1" style="--d:.55s" />
+        <!-- nav -->
+        <rect x="36" y="68" width="40" height="10" pathLength="1" style="--d:.65s" />
+        <line x1="352" y1="73" x2="376" y2="73" pathLength="1" style="--d:.7s" />
+        <line x1="386" y1="73" x2="410" y2="73" pathLength="1" style="--d:.75s" />
+        <line x1="420" y1="73" x2="444" y2="73" pathLength="1" style="--d:.8s" />
+        <!-- hero -->
+        <line x1="36" y1="108" x2="256" y2="108" class="thick" pathLength="1" style="--d:.85s" />
+        <line x1="36" y1="126" x2="196" y2="126" class="thick" pathLength="1" style="--d:.92s" />
+        <rect x="300" y="92" width="128" height="84" rx="6" pathLength="1" style="--d:.95s" />
+        <rect x="36" y="152" width="96" height="26" rx="13" pathLength="1" style="--d:1.05s" />
+        <!-- content columns -->
+        <rect x="36" y="210" width="190" height="70" rx="6" pathLength="1" style="--d:1.1s" />
+        <rect x="246" y="210" width="182" height="70" rx="6" pathLength="1" style="--d:1.18s" />
+        <!-- footer -->
+        <line x1="36" y1="312" x2="428" y2="312" pathLength="1" style="--d:1.26s" />
+        <line x1="36" y1="324" x2="116" y2="324" pathLength="1" style="--d:1.32s" />
+      </g>
+
+      <g class="st2">
+        <!-- width measurement over the hero image, with end ticks -->
+        <line x1="300" y1="84" x2="428" y2="84" class="dash" style="--d:0s" />
+        <line x1="300" y1="79" x2="300" y2="89" style="--d:0s" />
+        <line x1="428" y1="79" x2="428" y2="89" style="--d:0s" />
+        <rect x="346" y="70" width="36" height="11" rx="2" style="--d:.12s" />
+        <!-- height measurement beside the right column -->
+        <line x1="440" y1="210" x2="440" y2="280" class="dash" style="--d:.2s" />
+        <line x1="435" y1="210" x2="445" y2="210" style="--d:.2s" />
+        <line x1="435" y1="280" x2="445" y2="280" style="--d:.2s" />
+        <!-- text squiggles in the columns -->
+        <line x1="48" y1="228" x2="160" y2="228" class="dash" style="--d:.3s" />
+        <line x1="48" y1="242" x2="196" y2="242" class="dash" style="--d:.38s" />
+        <line x1="48" y1="256" x2="140" y2="256" class="dash" style="--d:.46s" />
+        <line x1="258" y1="228" x2="352" y2="228" class="dash" style="--d:.34s" />
+        <line x1="258" y1="242" x2="398" y2="242" class="dash" style="--d:.42s" />
+        <line x1="258" y1="256" x2="330" y2="256" class="dash" style="--d:.5s" />
+        <!-- baseline guide under the hero heading -->
+        <line x1="30" y1="134" x2="262" y2="134" class="dash" style="--d:.55s" />
+      </g>
+
+      <g class="st3">
+        <!-- heading → CTA -->
+        <path d="M 226 132 C 220 152, 180 158, 148 163" pathLength="1" style="--d:0s" />
+        <path d="M 158 156 L 146 163 L 158 169" pathLength="1" style="--d:.5s" />
+        <!-- CTA → left column -->
+        <path d="M 84 184 C 88 194, 96 200, 106 206" pathLength="1" style="--d:.65s" />
+        <path d="M 96 204 L 108 207 L 102 196" pathLength="1" style="--d:1s" />
+        <!-- hero image → right column -->
+        <path d="M 362 182 C 358 190, 350 198, 342 204" pathLength="1" style="--d:1.1s" />
+        <path d="M 340 194 L 340 206 L 351 201" pathLength="1" style="--d:1.45s" />
+      </g>
+    </svg>
+  </div>
+
+  <!-- launch motion dashes — only visible while the page runs the lift-off -->
+  <svg class="wf-dashes" viewBox="0 0 480 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <line x1="200" y1="8" x2="200" y2="52" />
+    <line x1="240" y1="2" x2="240" y2="58" />
+    <line x1="280" y1="8" x2="280" y2="52" />
+  </svg>
+</div>
+
+<!-- Global on purpose: 'staged' mode keys every stage off an ancestor
+     [data-step] set outside this component, which Astro's scoped styles
+     cannot reach. All selectors are namespaced under .wf, so nothing leaks. -->
+<style is:global>
+  .wf {
+    position: relative;
+  }
+
+  .wf svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .wf-scene {
+    transition:
+      transform 0.6s cubic-bezier(0.55, 0, 0.85, 0.4),
+      opacity 0.6s ease;
+  }
+
+  /* --- base stroke treatment -------------------------------------------- */
+
+  .wf .st1 :is(rect, line, circle) {
+    stroke: var(--fpl-wolf-grey);
+    stroke-width: 2;
+    stroke-linecap: round;
+    /* pathLength="1" on every shape makes this pair the whole draw-in */
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition:
+      stroke-dashoffset 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) var(--d, 0s),
+      stroke 0.5s ease;
+  }
+
+  .wf .st1 .thick {
+    stroke-width: 5;
+  }
+
+  .wf .st2 :is(line, rect) {
+    stroke: var(--fpl-wolf-grey);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    opacity: 0;
+    transition: opacity 0.45s ease var(--d, 0s);
+  }
+
+  .wf .st2 .dash {
+    stroke-dasharray: 5 5;
+  }
+
+  .wf .st3 path {
+    stroke: var(--fpl-blue);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) var(--d, 0s);
+  }
+
+  .wf .st4 rect {
+    transition: fill-opacity 0.7s ease var(--d, 0s);
+  }
+
+  .wf .st4 .f-soft { fill: var(--fpl-dark-blue); fill-opacity: 0; }
+  .wf .st4 .f-mid  { fill: var(--fpl-dark-blue); fill-opacity: 0; }
+  .wf .st4 .f-cta  { fill: var(--fpl-blue); fill-opacity: 0; }
+
+  .wf .st2,
+  .wf .st3 {
+    transition: opacity 0.5s ease;
+  }
+
+  .wf-dashes {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -3rem;
+    opacity: 0;
+  }
+
+  .wf-dashes line {
+    stroke: var(--fpl-wolf-grey);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 8 10;
+  }
+
+  /* --- staged mode: stages accumulate with [data-step] ------------------- */
+  /* Stage n switches on at step n and STAYS on for every later step. */
+
+  :is([data-step='1'], [data-step='2'], [data-step='3'], [data-step='4'], [data-step='5'], [data-step='done'])
+    .wf-staged .st1 :is(rect, line, circle) {
+    stroke-dashoffset: 0;
+  }
+
+  :is([data-step='2'], [data-step='3'], [data-step='4'], [data-step='5'], [data-step='done'])
+    .wf-staged .st2 :is(line, rect) {
+    opacity: 1;
+  }
+
+  :is([data-step='3'], [data-step='4'], [data-step='5'], [data-step='done'])
+    .wf-staged .st3 path {
+    stroke-dashoffset: 0;
+  }
+
+  :is([data-step='4'], [data-step='5'], [data-step='done']) .wf-staged .st4 .f-soft { fill-opacity: 0.09; }
+  :is([data-step='4'], [data-step='5'], [data-step='done']) .wf-staged .st4 .f-mid  { fill-opacity: 0.16; }
+  :is([data-step='4'], [data-step='5'], [data-step='done']) .wf-staged .st4 .f-cta  { fill-opacity: 0.9; }
+
+  /* once solid, the scaffolding recedes and the structure darkens */
+  :is([data-step='4'], [data-step='5'], [data-step='done']) .wf-staged .st1 :is(rect, line, circle) {
+    stroke: var(--color-primary);
+  }
+  :is([data-step='4'], [data-step='5'], [data-step='done']) .wf-staged .st2,
+  :is([data-step='4'], [data-step='5'], [data-step='done']) .wf-staged .st3 {
+    opacity: 0.3;
+  }
+
+  /* launch — the questionnaire page flips [data-step] to "done" */
+  [data-step='done'] .wf-staged .wf-scene {
+    transform: translateY(-130%) scale(0.95);
+    opacity: 0;
+  }
+
+  [data-step='done'] .wf-staged .wf-dashes {
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+  }
+
+  /* --- static mode: landing preview, stages 1–2 frozen at end state ------ */
+
+  .wf-static .st1 :is(rect, line, circle),
+  .wf-static .st2 :is(line, rect),
+  .wf-static .st3 path,
+  .wf-static .st4 rect,
+  .wf-static .wf-scene {
+    transition: none;
+  }
+
+  .wf-static .st1 :is(rect, line, circle) {
+    stroke-dashoffset: 0;
+  }
+
+  .wf-static .st2 :is(line, rect) {
+    opacity: 1;
+  }
+
+  .wf-static .st3,
+  .wf-static .wf-dashes {
+    display: none;
+  }
+
+  /* --- reduced motion: states still apply, nothing animates -------------- */
+
+  @media (prefers-reduced-motion: reduce) {
+    .wf .st1 :is(rect, line, circle),
+    .wf .st2 :is(line, rect),
+    .wf .st3 path,
+    .wf .st4 rect,
+    .wf .st2,
+    .wf .st3,
+    .wf-scene,
+    .wf-dashes {
+      transition: none;
+    }
+  }
+</style>

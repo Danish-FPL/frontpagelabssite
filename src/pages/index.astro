@@ -11,36 +11,142 @@ import { homeHero } from '../data/hero';
 // The hero lives in src/data/hero.ts because the Hero Lab treats it as the
 // locked baseline every landing-page variant inherits from.
 
-// "Recent client wins" table — the CMS list rendered as rows.
+// "Recent client wins" table — the CMS list rendered as expandable rows.
+//
+// ⚠ PLACEHOLDER COPY: `summary`, `stats` and `tags` below are stand-ins so the
+// drawers have something to show. Replace them with the real case-study
+// details. `href` points at the matching /projects/<slug> from
+// src/data/projects.ts — those routes are not built yet (see README,
+// "Not yet ported"), so the buttons 404 until the case-study pages exist.
 const clientWins = [
-  { win: 'Brand Launch; Blank Product Concept to Six-Figure Sales', client: 'New E-Commerce Brand', year: '2026' },
-  { win: 'New Websites for Award-Winning Real Estate Developers', client: 'Real Estate Company', year: '2026' },
-  { win: "Building and Managing Real Estate Group's Property Sites and Ads", client: 'Real Estate Company', year: '2026' },
-  { win: 'Brand Launch; Blank SAAS Concept to 2,200 Monthly Users', client: 'New Legal Research App', year: '2025' },
-  { win: 'Collecting 300 5-Star Google Reviews for Local Business', client: 'Massage Therapy Studio', year: '2025' },
-  { win: 'Driving SAAS Subscription Sales via Socials & Ads with 8:1 ROAS', client: 'Online Marketplace App', year: '2025' },
-  { win: 'New Website and Search Ads for Therapy Practice', client: 'Therapy Provider', year: '2025' },
+  {
+    win: 'Brand Launch; Blank Product Concept to Six-Figure Sales',
+    client: 'New E-Commerce Brand',
+    year: '2026',
+    href: '/projects/gunderpants',
+    summary:
+      'A tactical apparel brand came to us with a product and nothing else — no name, no identity, no storefront. We built the brand system, the e-commerce site, and the paid social engine that carried it to six figures in its first year.',
+    stats: [
+      { value: '6 figures', label: 'First-year revenue' },
+      { value: '0 → 1', label: 'Brand built from scratch' },
+      { value: '4.1x', label: 'Blended ROAS' },
+    ],
+    tags: ['Branding', 'E-Commerce', 'Paid Social'],
+  },
+  {
+    win: 'New Websites for Award-Winning Real Estate Developers',
+    client: 'Real Estate Company',
+    year: '2026',
+    href: '/projects/ak',
+    summary:
+      'An award-winning custom home builder was sending seven-figure buyers to a site that undersold the work. We rebuilt around the portfolio itself, with property pages that load fast and read like a brochure.',
+    stats: [
+      { value: '3x', label: 'Inquiry volume' },
+      { value: '<1.2s', label: 'Largest contentful paint' },
+      { value: '12', label: 'Property pages shipped' },
+    ],
+    tags: ['Website', 'Ads', 'SEO'],
+  },
+  {
+    win: "Building and Managing Real Estate Group's Property Sites and Ads",
+    client: 'Real Estate Company',
+    year: '2026',
+    href: '/projects/khangroup-real-estate',
+    summary:
+      'A multi-property group needed every listing to have its own site and its own ad campaign, without a marketing hire per building. We built one template system and run the campaigns off it.',
+    stats: [
+      { value: '8', label: 'Property sites live' },
+      { value: '−38%', label: 'Cost per lead' },
+      { value: 'Ongoing', label: 'Campaign management' },
+    ],
+    tags: ['Website', 'Ads', 'Digital Strategy'],
+  },
+  {
+    win: 'Brand Launch; Blank SAAS Concept to 2,200 Monthly Users',
+    client: 'New Legal Research App',
+    year: '2025',
+    href: '/projects/gavvy',
+    summary:
+      'A legal research tool existed as a prototype and an idea. We named it, designed the marketing site, and built the content and acquisition loop that took it to 2,200 monthly users.',
+    stats: [
+      { value: '2,200', label: 'Monthly active users' },
+      { value: '0 → 1', label: 'Brand and site' },
+      { value: '9 mo', label: 'From launch' },
+    ],
+    tags: ['Branding', 'Website', 'Content'],
+  },
+  {
+    win: 'Collecting 300 5-Star Google Reviews for Local Business',
+    client: 'Massage Therapy Studio',
+    year: '2025',
+    href: '/projects/massage',
+    summary:
+      'A studio with great service and almost no reviews was invisible in local search. We built the review-collection loop into their post-appointment flow and let volume do the rest.',
+    stats: [
+      { value: '300', label: '5-star reviews' },
+      { value: '#1', label: 'Local map pack' },
+      { value: '4.9', label: 'Average rating' },
+    ],
+    tags: ['Review Growth', 'Local SEO', 'SMS'],
+  },
+  {
+    win: 'Driving SAAS Subscription Sales via Socials & Ads with 8:1 ROAS',
+    client: 'Online Marketplace App',
+    year: '2025',
+    href: '/projects/rankhero',
+    summary:
+      'A marketplace analytics tool was spending on ads that broke even. We rebuilt the creative, the targeting, and the landing pages behind them, and took the account to an 8:1 return.',
+    stats: [
+      { value: '8:1', label: 'Return on ad spend' },
+      { value: '+214%', label: 'Subscription starts' },
+      { value: '5', label: 'Creative concepts tested' },
+    ],
+    tags: ['Ads', 'Social Media', 'Content'],
+  },
+  {
+    win: 'New Website and Search Ads for Therapy Practice',
+    client: 'Therapy Provider',
+    year: '2025',
+    href: '/projects/therapy-provider',
+    summary:
+      'A therapy practice needed to fill a caseload without competing on price. We built a site that speaks to the client, not the clinician, and paired it with tightly-scoped search ads.',
+    stats: [
+      { value: 'Full', label: 'Caseload reached' },
+      { value: '−45%', label: 'Cost per booking' },
+      { value: '6 wk', label: 'To first full month' },
+    ],
+    tags: ['Website', 'Search Ads', 'Digital Strategy'],
+  },
 ];
+
+// Services (02) — the laptop still the section opens on. It starts full-bleed
+// and narrows to the left half as the section pins; swapping the section's
+// photo is this one line.
+const SERVICES_MEDIA = '/assets/services-laptop.jpg';
 
 // Services accordion (02).
 const services = [
   {
+    id: 'websites',
     title: 'Websites',
     body: "A weak website, or no website at all, can drive away customers and mute business growth. We design websites that don't just look good—they perform. Every layout, line, and interaction is built to engage. Designed with precision and optimized for speed, our sites become the foundation for everything your brand does online.",
     note: 'Websites starting at $900',
     items: ['Service Websites', 'Portfolio Websites', 'E-Commerce Websites', 'Storefront Websites', 'Customer Portals'],
   },
   {
+    id: 'channels',
     title: 'Channels',
     body: 'We connect the dots. Social media, email, search engines, and beyond—all synced into one cohesive marketing system. Channels that operate in-sync communicate a clear, consistent message to your customers across all platforms. Every post, send, and update plays its part in a strategy engineered to expand your reach and deepen brand impact.',
     items: ['Social Media Marketing', 'SMS Marketing', 'Email Marketing', 'Google Business Listings', 'Local Business Directories', 'Service Debut Campaigns'],
   },
   {
+    id: 'ads',
     title: 'Ads',
     body: "Your customers are searching for you online; but can they find you? Our targeted ad campaigns push your business to the top of search and land right in front of who you're trying to reach. From social to search, print to paid, our campaigns move in harmony—strategic, creative, and built to convert. Every channel works together to drive awareness and sales.",
     items: ['Social Media Ad Campaigns', 'Google Search Ads', 'E-Commerce Ads', 'Paid Search Ads', 'Print Campaigns', 'Email & SMS Marketing'],
   },
   {
+    id: 'strategy',
     title: 'Strategy',
     body: 'A digital strategy is your roadmap to growth online.',
     questions: [
@@ -105,11 +211,52 @@ const services = [
         <h2 class="heading-small wins-heading">Recent<br />Client<br />Wins</h2>
 
         <div class="wins-table">
-          {clientWins.map(({ win, client, year }) => (
-            <div class="wins-row">
-              <div class="wins-win">{win}</div>
-              <div class="wins-client">{client}</div>
-              <div class="wins-year">{year}</div>
+          {clientWins.map(({ win, client, year, href, summary, stats, tags }, i) => (
+            <div class="wins-item" data-win>
+              <button
+                class="wins-row"
+                type="button"
+                id={`win-trigger-${i}`}
+                aria-expanded="false"
+                aria-controls={`win-panel-${i}`}
+                data-win-trigger
+              >
+                <span class="wins-win">{win}</span>
+                <span class="wins-client">{client}</span>
+                <span class="wins-year">{year}</span>
+                <span class="wins-toggle" aria-hidden="true"></span>
+              </button>
+
+              <div
+                class="wins-panel"
+                id={`win-panel-${i}`}
+                role="region"
+                aria-labelledby={`win-trigger-${i}`}
+                inert
+                data-win-panel
+              >
+                <div class="wins-panel-clip">
+                  <div class="wins-panel-content">
+                    <p class="wins-summary">{summary}</p>
+
+                    <dl class="wins-stats">
+                      {stats.map(({ value, label }) => (
+                        <div class="wins-stat">
+                          <dt class="wins-stat-value">{value}</dt>
+                          <dd class="wins-stat-label">{label}</dd>
+                        </div>
+                      ))}
+                    </dl>
+
+                    <div class="wins-panel-foot">
+                      <div class="wins-tags">
+                        {tags.map((tag) => <span class="wins-tag">{tag}</span>)}
+                      </div>
+                      <Button href={href} label="View project" size="small" />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           ))}
         </div>
@@ -125,49 +272,87 @@ const services = [
   </section>
 
   <!-- (02) Services -------------------------------------------------------- -->
-  <section class="section services">
-    <div class="container">
-      <div class="section-title-row">
-        <h2 class="section-title-text">Services</h2>
-        <div class="section-title-text">(02)</div>
-      </div>
-      <div class="divider margin-bottom-medium"></div>
+  <!-- Scroll-driven split: the laptop still fills the section edge to edge, then
+       narrows to the left half as the stage pins, uncovering the accordion
+       panel beside it. `--p` (0 → 1) is written by the script at the bottom of
+       this file; every transform here reads from it, so the whole reveal is one
+       number. Under reduced motion, and on tablet/phone, the stage never pins
+       and the section renders as a plain stacked layout. -->
+  <section class="services" data-services>
+    <div class="services-scroll">
+      <div class="services-stage">
+        <div class="services-media">
+          <img src={SERVICES_MEDIA} alt="" loading="lazy" />
+        </div>
 
-      <div class="services-list">
-        {services.map((service) => (
-          <article class="service-row">
-            <h3 class="heading-small service-title">{service.title}</h3>
-
-            <div class="service-body">
-              <p class="paragraph-small no-text-indent">{service.body}</p>
-
-              {service.questions && (
-                <div class="service-questions">
-                  {service.questions.map((q) => <p class="paragraph-small no-text-indent">{q}</p>)}
-                </div>
-              )}
-
-              {service.bodyAfter && (
-                <p class="paragraph-small no-text-indent">{service.bodyAfter}</p>
-              )}
-
-              {service.note && <p class="service-note">{service.note}</p>}
+        <div class="services-panel">
+          <div class="services-panel-inner">
+            <div class="services-head">
+              <h2 class="section-title-text">Services</h2>
+              <div class="section-title-text">(02)</div>
             </div>
 
-            <ul class="service-items">
-              {service.items.map((item) => (
-                <li class="service-item">
-                  <img src="/assets/check-circle.svg" alt="" aria-hidden="true" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </article>
-        ))}
-      </div>
+            <div class="services-accordion">
+              {services.map((service, i) => (
+                <div class="svc" id={service.id} data-svc>
+                  <h3 class="svc-heading">
+                    <button
+                      class="svc-trigger"
+                      type="button"
+                      id={`svc-trigger-${i}`}
+                      aria-expanded="false"
+                      aria-controls={`svc-panel-${i}`}
+                      data-svc-trigger
+                    >
+                      <span class="svc-title">{service.title}</span>
+                      <span class="svc-icon" aria-hidden="true"></span>
+                    </button>
+                  </h3>
 
-      <div class="services-footer">
-        <Button href="/services" label="View Services" />
+                  <div
+                    class="svc-panel"
+                    id={`svc-panel-${i}`}
+                    role="region"
+                    aria-labelledby={`svc-trigger-${i}`}
+                    inert
+                    data-svc-panel
+                  >
+                    <div class="svc-panel-clip">
+                      <div class="svc-panel-grid">
+                        <div class="svc-copy">
+                          <p class="svc-body">{service.body}</p>
+
+                          {service.questions && (
+                            <div class="svc-questions">
+                              {service.questions.map((q) => <p class="svc-body">{q}</p>)}
+                            </div>
+                          )}
+
+                          {service.bodyAfter && <p class="svc-body">{service.bodyAfter}</p>}
+
+                          {service.note && <p class="svc-note">{service.note}</p>}
+                        </div>
+
+                        <ul class="svc-items">
+                          {service.items.map((item) => (
+                            <li class="svc-item">
+                              <img src="/assets/check-white.svg" alt="" aria-hidden="true" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div class="services-foot">
+              <Button href="/services" label="View Services" variant="white" size="small" />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -353,7 +538,7 @@ const services = [
 
   .wins-grid {
     display: grid;
-    grid-template-columns: minmax(0, 0.45fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 0.4fr) minmax(0, 1fr);
     gap: 2.5rem;
     align-items: start;
   }
@@ -366,19 +551,155 @@ const services = [
     border-top: 1px solid var(--color-border-muted);
   }
 
-  .wins-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1.6fr) minmax(0, 0.8fr) auto;
-    gap: 1.5rem;
-    align-items: baseline;
-    padding-block: 0.85rem;
+  .wins-item {
     border-bottom: 1px solid var(--color-border-muted);
-    font-size: 0.8125rem;
-    line-height: 1.35;
+  }
+
+  /* The row itself is the drawer trigger. Hovering or opening it fills the
+     whole row black — the treatment the live site uses on row hover. */
+  /* Sized off the live site: ~26px type on a ~104px row, the win column a
+     shade narrower than the client column. */
+  .wins-row {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.85fr) auto auto;
+    gap: 1.25rem;
+    align-items: start;
+    text-align: left;
+    padding: 1.4rem 1.15rem;
+    font-size: 1.625rem;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.021em;
+    transition: background-color 0.28s ease, color 0.28s ease;
+  }
+
+  .wins-row:hover,
+  .wins-item.is-open .wins-row {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  .wins-row:focus-visible {
+    outline: 2px solid var(--fpl-blue);
+    outline-offset: -2px;
   }
 
   .wins-client,
   .wins-year {
+    color: var(--color-secondary);
+    transition: color 0.28s ease;
+  }
+
+  .wins-row:hover .wins-client,
+  .wins-row:hover .wins-year,
+  .wins-item.is-open .wins-client,
+  .wins-item.is-open .wins-year {
+    color: var(--color-white);
+  }
+
+  /* Plus that becomes a minus — two bars, one rotated away on open. */
+  .wins-toggle {
+    position: relative;
+    width: 17px;
+    height: 17px;
+    margin-top: 0.3em;
+    flex: none;
+  }
+
+  .wins-toggle::before,
+  .wins-toggle::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto 0;
+    height: 1.5px;
+    background-color: currentColor;
+    transition: transform 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .wins-toggle::after {
+    transform: rotate(90deg);
+  }
+
+  .wins-item.is-open .wins-toggle::after {
+    transform: rotate(0deg);
+  }
+
+  /* 0fr → 1fr animates the drawer open without measuring anything in JS. */
+  .wins-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .wins-item.is-open .wins-panel {
+    grid-template-rows: 1fr;
+  }
+
+  .wins-panel-clip {
+    overflow: hidden;
+  }
+
+  .wins-panel-content {
+    display: grid;
+    gap: 1.5rem;
+    padding: 1.75rem 1.5rem 2rem;
+    background-color: var(--color-background-muted);
+  }
+
+  .wins-summary {
+    margin: 0;
+    max-width: 42rem;
+    font-size: 1.0625rem;
+    line-height: 1.45;
+    letter-spacing: -0.019em;
+  }
+
+  .wins-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.5rem;
+    margin: 0;
+  }
+
+  .wins-stat-value {
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.025em;
+  }
+
+  .wins-stat-label {
+    margin: 0.35rem 0 0;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+  }
+
+  .wins-panel-foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .wins-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .wins-tag {
+    border: 1px solid var(--color-border-muted);
+    border-radius: 999px;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
     color: var(--color-secondary);
   }
 
@@ -398,68 +719,221 @@ const services = [
 
   /* --- (02) Services ------------------------------------------------------- */
 
-  .services-list {
-    display: grid;
+  .services {
+    /* `--p` is the reveal progress, 0 → 1, written by the script below. */
+    --p: 0;
+    background-color: var(--color-primary);
+    color: var(--color-white);
   }
 
-  .service-row {
-    display: grid;
-    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1fr) minmax(0, 0.62fr);
-    gap: 2.5rem;
-    padding-block: 2.5rem;
-    border-bottom: 1px solid var(--color-border-muted);
-    align-items: start;
+  /* The extra height is the scroll budget the pinned stage spends: roughly one
+     viewport to open the split, the rest as hold so the accordion is usable
+     while the section is still pinned. */
+  .services-scroll {
+    height: 260vh;
   }
 
-  /* The global .heading-small (5.36vw) is wider than this column, so the
-     accordion headings get their own smaller step to avoid colliding with
-     the body copy beside them. */
-  .service-title {
+  .services-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* Full-bleed at --p:0, half the stage at --p:1. It sits above the panel, so
+     narrowing it is what uncovers the accordion. */
+  .services-media {
+    position: absolute;
+    inset: 0 auto 0 0;
+    z-index: 2;
+    width: calc(100% - var(--p) * 50%);
+  }
+
+  /* The photo is 4:5 but the frame it sits in swings from ~16:10 (full bleed)
+     to ~4:5 (the half pane), so a fixed crop can't serve both: centred at full
+     bleed you land in the middle of the screen's gradient and lose the
+     laptop's shape entirely. The crop rides `--p` alongside the width — biased
+     high while the frame is wide so the top bezel and corner stay in shot,
+     easing back to centre as the frame narrows to the photo's own ratio. */
+  .services-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center calc(28% + var(--p) * 22%);
+  }
+
+  .services-panel {
+    position: absolute;
+    inset: 0 0 0 auto;
+    z-index: 1;
+    width: 50%;
+    display: flex;
+  }
+
+  .services-panel-inner {
+    width: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+    scrollbar-width: none;
+    padding: 3.5rem var(--container-padding) 3rem;
+    /* Both clamp on their own: opacity to 0–1, and the offset resolves to 0
+       once --p passes 1. */
+    opacity: calc((var(--p) - 0.4) * 2.4);
+    transform: translateX(calc((1 - var(--p)) * 2.5rem));
+  }
+
+  .services-panel-inner::-webkit-scrollbar {
+    display: none;
+  }
+
+  .services-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgb(255 255 255 / 30%);
+    margin-bottom: 2.5rem;
+  }
+
+  /* --- Services accordion --------------------------------------------------- */
+
+  .svc-heading {
     margin: 0;
-    font-size: 3.4vw;
   }
 
-  .service-body {
-    display: grid;
-    gap: 0.9rem;
+  .svc-trigger {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    text-align: left;
+    padding: 0;
+    color: var(--color-white);
+    transition: color 0.3s ease;
   }
 
-  .service-questions {
-    display: grid;
-    gap: 0.3rem;
-    color: var(--color-secondary);
-  }
-
-  .service-note {
-    margin: 0;
-    font-size: 0.75rem;
-    letter-spacing: 0.06em;
+  .svc-title {
+    font-family: var(--font-secondary);
+    font-size: 3.9vw;
+    font-weight: 600;
+    line-height: 0.95;
+    letter-spacing: -0.025em;
     text-transform: uppercase;
+  }
+
+  /* Open heading drops back to grey so the body copy under it leads. */
+  .svc.is-open .svc-trigger {
     color: var(--color-secondary);
   }
 
-  .service-items {
+  .svc-trigger:focus-visible {
+    outline: 2px solid var(--fpl-blue);
+    outline-offset: 4px;
+  }
+
+  /* White disc with a dark plus that loses its upright bar on open. */
+  .svc-icon {
+    position: relative;
+    flex: none;
+    width: 1.05vw;
+    min-width: 13px;
+    aspect-ratio: 1;
+    margin-top: 0.35em;
+    border-radius: 50%;
+    background-color: var(--color-white);
+  }
+
+  .svc-icon::before,
+  .svc-icon::after {
+    content: '';
+    position: absolute;
+    inset: 50% 22% auto 22%;
+    height: 1.5px;
+    background-color: var(--color-primary);
+    transition: transform 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .svc-icon::after {
+    transform: rotate(90deg);
+  }
+
+  .svc.is-open .svc-icon::after {
+    transform: rotate(0deg);
+  }
+
+  .svc-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .svc.is-open .svc-panel {
+    grid-template-rows: 1fr;
+  }
+
+  .svc-panel-clip {
+    overflow: hidden;
+  }
+
+  .svc-panel-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.72fr);
+    gap: 2rem;
+    padding: 1.25rem 0 1.75rem;
+  }
+
+  .svc-copy {
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+  }
+
+  .svc-body {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    letter-spacing: -0.019em;
+  }
+
+  .svc-questions {
+    display: grid;
+    gap: 0.25rem;
+    color: var(--color-secondary);
+  }
+
+  .svc-note {
+    margin: 0.25rem 0 0;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.019em;
+    text-decoration: underline;
+    text-underline-offset: 0.22em;
+  }
+
+  .svc-items {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 0.5rem;
+    gap: 0.55rem;
+    align-content: start;
   }
 
-  .service-item {
+  .svc-item {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.8125rem;
+    font-size: 0.9375rem;
+    letter-spacing: -0.019em;
   }
 
-  .service-item img {
+  .svc-item img {
     width: 12px;
     height: 12px;
     flex: none;
   }
 
-  .services-footer {
+  .services-foot {
     margin-top: 2.5rem;
   }
 
@@ -480,7 +954,7 @@ const services = [
   }
 
   .approach-number {
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.04em;
     padding-top: 0.4rem;
@@ -505,17 +979,20 @@ const services = [
     justify-self: end;
   }
 
+  /* Not flex: the trailing full stop after the <strong> is its own text node,
+     so a flex row made it a separate item and the gap pushed it off on its
+     own — "Strategy guides design ." Inline keeps the sentence intact and the
+     number is spaced by its own margin. */
   .approach-step {
-    display: flex;
-    align-items: baseline;
-    gap: 0.6rem;
     margin: 0;
     font-size: 1.0625rem;
     letter-spacing: -0.019em;
   }
 
   .approach-step-number {
-    font-size: 0.625rem;
+    display: inline-block;
+    margin-right: 0.6rem;
+    font-size: 0.6875rem;
     color: var(--color-secondary);
   }
 
@@ -539,11 +1016,14 @@ const services = [
     object-fit: cover;
   }
 
+  /* The clip's top third is pale, and at 15% the white "Outcomes (04)" rule
+     and heading sat on it at roughly 1.4:1. Floored at 45% so the type holds
+     wherever the video happens to be in its loop. */
   .results-media::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgb(0 0 0 / 15%) 0%, rgb(0 0 0 / 70%) 65%);
+    background: linear-gradient(180deg, rgb(0 0 0 / 45%) 0%, rgb(0 0 0 / 78%) 65%);
   }
 
   .results-inner {
@@ -560,26 +1040,30 @@ const services = [
     margin: 2rem 0 3rem;
   }
 
-  /* Cards are staggered left/right the way the Webflow layout scatters them. */
+  /* A uniform grid, not the Webflow scatter. The staggered version put five
+     cards at four different justify-self positions down a single column, which
+     read as misalignment rather than as composition — and left most of the
+     band empty. Four even columns for the four quotes: one full row, no
+     orphan card, and the band is actually filled. */
   .results-cards {
     display: grid;
-    gap: 2rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem;
+    align-items: stretch;
   }
 
   .result-card {
     margin: 0;
-    padding: 1.25rem;
-    max-width: 22rem;
+    padding: 1.35rem;
     background-color: var(--color-white);
     color: var(--color-primary);
     display: grid;
-    gap: 0.9rem;
+    gap: 1rem;
+    /* Quote pinned to the top, credit to the bottom, so the cards line up
+       across the row no matter how long each quote runs. */
+    grid-template-rows: auto 1fr auto;
+    align-content: start;
   }
-
-  .result-card.pos-1 { justify-self: end; }
-  .result-card.pos-2 { justify-self: start; }
-  .result-card.pos-3 { justify-self: center; }
-  .result-card.pos-4 { justify-self: start; }
 
   .result-card-head {
     display: flex;
@@ -588,7 +1072,7 @@ const services = [
   }
 
   .result-card-mark {
-    width: 18px;
+    width: 21px;
     height: auto;
     flex: none;
     margin-top: 0.15rem;
@@ -596,22 +1080,25 @@ const services = [
 
   .result-card-title {
     margin: 0;
-    font-size: 1.0625rem;
+    font-size: 1.3125rem;
     font-weight: 600;
     line-height: 1.15;
     letter-spacing: -0.02em;
   }
 
+  /* This is the actual client testimonial — it was the smallest text on the
+     page at 12px, and set in the muted grey on top of that. */
   .result-card-quote {
     margin: 0;
-    font-size: 0.75rem;
+    font-size: 0.9375rem;
     line-height: 1.5;
-    color: var(--color-secondary);
+    color: var(--color-primary);
   }
 
   .result-card-credit {
     display: grid;
-    font-size: 0.625rem;
+    gap: 0.15rem;
+    font-size: 0.6875rem;
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
@@ -654,43 +1141,133 @@ const services = [
 
   /* --- Responsive ----------------------------------------------------------- */
 
+  /* Nothing to reveal without scroll animation — render the finished split. */
+  @media (prefers-reduced-motion: reduce) {
+    .services {
+      --p: 1;
+    }
+
+    .services-scroll {
+      height: auto;
+    }
+
+    .services-stage {
+      position: static;
+      height: 100vh;
+    }
+
+    .services-panel-inner {
+      transform: none;
+    }
+
+    .wins-panel,
+    .svc-panel {
+      transition: none;
+    }
+  }
+
   @media (max-width: 991px) {
     .chemistry-grid {
       grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .results-cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .chemistry-image {
       grid-column: 1 / -1;
     }
 
-    .service-row {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    /* Below the desktop breakpoint the split has nowhere to go: the photo
+       stacks on top at a fixed height and the accordion runs full width. */
+    .services {
+      --p: 1;
     }
 
-    .service-title {
-      grid-column: 1 / -1;
+    .services-scroll {
+      height: auto;
+    }
+
+    .services-stage {
+      position: static;
+      height: auto;
+      display: grid;
+    }
+
+    .services-media {
+      position: static;
+      width: 100%;
+      height: 42vh;
+    }
+
+    /* Same reasoning as the desktop crop, but --p is pinned at 1 here and the
+       stacked frame is wider than it is tall, so it needs the high bias back. */
+    .services-media img {
+      object-position: center 30%;
+    }
+
+    .services-panel {
+      position: static;
+      width: 100%;
+    }
+
+    .services-panel-inner {
+      max-height: none;
+      overflow: visible;
+      transform: none;
+      padding-block: 2.5rem 3.5rem;
+    }
+
+    .svc-title {
+      font-size: 8vw;
+    }
+
+    .svc-icon {
+      width: 2.2vw;
     }
   }
 
   @media (max-width: 767px) {
     .chemistry-grid,
     .wins-grid,
-    .service-row,
     .approach-bottom,
-    .work-grid {
+    .work-grid,
+    .results-cards,
+    .svc-panel-grid {
       grid-template-columns: 1fr;
     }
 
     .wins-row {
-      grid-template-columns: 1fr auto;
+      grid-template-columns: minmax(0, 1fr) auto;
+      padding: 1.15rem 1rem;
+      font-size: 1.25rem;
+      gap: 0.5rem 1rem;
     }
 
-    .wins-client {
+    .wins-win {
       grid-column: 1;
     }
 
-    .approach-text,
-    .result-card {
+    .wins-toggle {
+      grid-row: 1;
+      grid-column: 2;
+    }
+
+    .wins-client,
+    .wins-year {
+      font-size: 0.8125rem;
+    }
+
+    .wins-panel-content {
+      padding-inline: 1rem;
+    }
+
+    .wins-stats {
+      gap: 1.5rem;
+    }
+
+    .approach-text {
       justify-self: start;
     }
 
@@ -700,5 +1277,99 @@ const services = [
       flex-direction: column;
       align-items: flex-start;
     }
+
+    .svc-title {
+      font-size: 11vw;
+    }
+
+    .svc-icon {
+      width: 3vw;
+    }
   }
 </style>
+
+<script>
+  // --- Drawers: client wins + the services accordion ------------------------
+  //
+  // Both use the same contract — a trigger carrying aria-expanded and an
+  // `inert` panel next to it, with `.is-open` on the shared parent driving the
+  // 0fr → 1fr height transition in CSS. Nothing here measures heights.
+
+  function wire(items: NodeListOf<Element>, triggerSel: string, panelSel: string, single: boolean) {
+    const entries = [...items].map((item) => ({
+      item,
+      trigger: item.querySelector<HTMLButtonElement>(triggerSel),
+      panel: item.querySelector<HTMLElement>(panelSel),
+    }));
+
+    for (const entry of entries) {
+      const { item, trigger, panel } = entry;
+      if (!trigger || !panel) continue;
+
+      trigger.addEventListener('click', () => {
+        const open = trigger.getAttribute('aria-expanded') === 'true';
+
+        // An accordion closes its siblings; the wins list lets rows stack.
+        if (single && !open) {
+          for (const other of entries) {
+            if (other === entry || !other.trigger || !other.panel) continue;
+            other.item.classList.remove('is-open');
+            other.trigger.setAttribute('aria-expanded', 'false');
+            other.panel.setAttribute('inert', '');
+          }
+        }
+
+        item.classList.toggle('is-open', !open);
+        trigger.setAttribute('aria-expanded', String(!open));
+        if (open) panel.setAttribute('inert', '');
+        else panel.removeAttribute('inert');
+      });
+    }
+  }
+
+  wire(document.querySelectorAll('[data-win]'), '[data-win-trigger]', '[data-win-panel]', false);
+  wire(document.querySelectorAll('[data-svc]'), '[data-svc-trigger]', '[data-svc-panel]', true);
+
+  // --- Services reveal ------------------------------------------------------
+  //
+  // Writes `--p` (0 → 1) on the section as it scrolls through its pinned
+  // stage. The CSS does everything else. The media queries that unpin the
+  // stage also pin --p at 1, so this is skipped below 992px and under reduced
+  // motion rather than fighting them.
+
+  const services = document.querySelector<HTMLElement>('[data-services]');
+  const wide = window.matchMedia('(min-width: 992px)');
+  const steady = window.matchMedia('(prefers-reduced-motion: no-preference)');
+
+  if (services) {
+    let queued = false;
+
+    const update = () => {
+      queued = false;
+      if (!wide.matches || !steady.matches) {
+        services.style.removeProperty('--p');
+        return;
+      }
+
+      // The stage pins at section top = 0, so -top is how far into the pin we
+      // are. One viewport of scroll opens the split; the rest of the section's
+      // height is hold time.
+      const top = services.getBoundingClientRect().top;
+      const distance = window.innerHeight;
+      const p = Math.min(Math.max(-top / distance, 0), 1);
+      services.style.setProperty('--p', p.toFixed(4));
+    };
+
+    const onScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(update);
+    };
+
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', onScroll);
+    wide.addEventListener('change', onScroll);
+    steady.addEventListener('change', onScroll);
+    update();
+  }
+</script>

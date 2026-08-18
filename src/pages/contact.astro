@@ -212,14 +212,16 @@ const contactCards = [
   }
 
   .field label {
-    font-size: 0.8125rem;
+    font-size: 0.9375rem;
     font-weight: 500;
   }
 
   .field input,
   .field textarea {
     font: inherit;
-    font-size: 0.8125rem;
+    /* 16px on the input itself: below that, iOS Safari force-zooms the
+       viewport on focus and strands the user mid-form. */
+    font-size: 16px;
     color: var(--color-primary);
     background: none;
     border: 0;
@@ -245,8 +247,8 @@ const contactCards = [
     align-items: flex-start;
     gap: 0.45rem;
     margin: 0;
-    font-size: 0.6875rem;
-    line-height: 1.4;
+    font-size: 0.8125rem;
+    line-height: 1.45;
     color: var(--color-secondary);
   }
 
@@ -266,8 +268,8 @@ const contactCards = [
     justify-self: start;
     border: 1px solid var(--color-primary);
     border-radius: 999px;
-    padding: 0.6rem 1.2rem;
-    font-size: 0.6875rem;
+    padding: 0.7rem 1.35rem;
+    font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -368,13 +370,20 @@ const contactCards = [
   .contact-card {
     background-color: var(--color-white);
     border: 1px solid var(--color-primary);
-    padding: 1.25rem;
+    padding: 1.5rem;
     display: grid;
     gap: 0.9rem;
+    /* Equal heights so the stagger below reads as a deliberate step rather
+       than three cards drifting at random. */
+    align-content: start;
+    min-height: 13rem;
   }
 
-  .contact-card.pos-2 { margin-top: 4rem; }
-  .contact-card.pos-3 { margin-top: 8rem; }
+  /* Halved from 4rem/8rem: the full-height step pushed card three most of a
+     viewport below card one, which read as broken alignment rather than
+     rhythm. */
+  .contact-card.pos-2 { margin-top: 2rem; }
+  .contact-card.pos-3 { margin-top: 4rem; }
 
   .contact-card-head {
     display: flex;
@@ -391,7 +400,7 @@ const contactCards = [
 
   .contact-card-title {
     margin: 0;
-    font-size: 1.0625rem;
+    font-size: 1.1875rem;
     font-weight: 600;
     line-height: 1.1;
     letter-spacing: -0.02em;
@@ -404,7 +413,7 @@ const contactCards = [
 
   .contact-card-body {
     margin: 0;
-    font-size: 0.75rem;
+    font-size: 0.9375rem;
     line-height: 1.45;
   }
 
@@ -416,15 +425,15 @@ const contactCards = [
   .contact-card-detail {
     display: flex;
     align-items: center;
-    gap: 0.45rem;
-    font-size: 0.625rem;
-    letter-spacing: 0.04em;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.03em;
     text-transform: uppercase;
   }
 
   .contact-card-detail img {
-    width: 11px;
-    height: 11px;
+    width: 13px;
+    height: 13px;
   }
 
   .contact-card-detail:hover {
@@ -439,9 +448,17 @@ const contactCards = [
     }
   }
 
-  @media (max-width: 767px) {
+  /* Three staggered cards need real width to work. Below the desktop
+     breakpoint they were ~280px wide with uppercase email addresses inside,
+     so they stack instead — and the stagger goes with them. */
+  @media (max-width: 991px) {
     .cards-row {
       grid-template-columns: 1fr;
+      max-width: 34rem;
+    }
+
+    .contact-card {
+      min-height: 0;
     }
 
     .contact-card.pos-2,

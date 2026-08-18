@@ -1,0 +1,637 @@
+---
+// The $47 website-audit questionnaire — the funnel step between
+// /offers/website-audit and the Calendly booking.
+//
+// Five cards, one visible at a time, while the AuditWireframe scene "builds"
+// a website in step with the answers (outline → markup → flow → solidify →
+// launch). The final card posts the lead to Netlify Forms, then reveals a
+// Calendly embed prefilled with the visitor's name and email. The $47 itself
+// is collected BY CALENDLY at booking (paid event, Stripe connected there) —
+// this page never touches money.
+//
+// Deliberately a self-contained shell rather than Base.astro: the page drops
+// Nav and Footer (nothing should compete with finishing the questionnaire),
+// and threading a one-off "minimal" mode through the shared layout would
+// couple it to a single funnel page. Small head duplication, accepted.
+import AuditWireframe from '../../../components/AuditWireframe.astro';
+import '../../../styles/global.css';
+
+const CALENDLY_URL = 'https://calendly.com/build-frontpagelabs/30min';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Book your website audit | FrontPageLabs</title>
+    <meta name="description" content="Five quick questions, then pick a time for your 30-minute website audit call." />
+    <meta name="robots" content="noindex,nofollow" />
+    <link rel="icon" href="/assets/frontpage-labs-logo.png" />
+    <link rel="preload" href="/fonts/overusedgrotesk-semibold.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/overusedgrotesk-medium.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preconnect" href="https://assets.calendly.com" />
+  </head>
+  <body>
+    <main class="q" data-step="1">
+      <header class="q-header">
+        <a class="q-logo" href="/offers/website-audit" aria-label="Back to the website audit offer">
+          <img src="/assets/frontpage-labs-logo-1-.png" alt="FrontPage Labs" width="150" />
+        </a>
+      </header>
+
+      <div class="q-body">
+        <div class="q-grid">
+          <div class="q-col">
+            <div class="q-progress" aria-hidden="true">
+              <span class="q-progress-label">Step <span data-step-num>1</span> of 5</span>
+              <div class="q-progress-bar">
+                <span></span><span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+
+            <!-- Card 1 — website -->
+            <section class="q-card" data-card="1">
+              <h1 class="q-question">Where does your website live?</h1>
+              <p class="q-helper">Paste the address — we review it before your call.</p>
+              <div class="q-field">
+                <label class="sr-only" for="q-website">Website address</label>
+                <input id="q-website" name="website" type="text" inputmode="url" autocomplete="url" placeholder="yourbusiness.com" required />
+                <p class="q-error" aria-live="polite"></p>
+              </div>
+              <div class="q-nav">
+                <button class="q-next" type="button" data-next>Next</button>
+              </div>
+            </section>
+
+            <!-- Card 2 — business -->
+            <section class="q-card" data-card="2" hidden aria-hidden="true">
+              <h2 class="q-question">What does your business do?</h2>
+              <p class="q-helper">A sentence or two is plenty.</p>
+              <div class="q-field">
+                <label class="sr-only" for="q-business">What your business does</label>
+                <textarea id="q-business" name="business" rows="3" placeholder="We are a family-run plumbing company in Naperville…" required></textarea>
+                <p class="q-error" aria-live="polite"></p>
+              </div>
+              <div class="q-nav">
+                <button class="q-back" type="button" data-back>Back</button>
+                <button class="q-next" type="button" data-next>Next</button>
+              </div>
+            </section>
+
+            <!-- Card 3 — frustration -->
+            <section class="q-card" data-card="3" hidden aria-hidden="true">
+              <h2 class="q-question">What frustrates you most about the site right now?</h2>
+              <p class="q-helper">Slow? Outdated? Nobody calls? Say it plainly.</p>
+              <div class="q-field">
+                <label class="sr-only" for="q-frustration">Your biggest frustration</label>
+                <textarea id="q-frustration" name="frustration" rows="3" placeholder="It looks fine to me but it never brings in work…" required></textarea>
+                <p class="q-error" aria-live="polite"></p>
+              </div>
+              <div class="q-nav">
+                <button class="q-back" type="button" data-back>Back</button>
+                <button class="q-next" type="button" data-next>Next</button>
+              </div>
+            </section>
+
+            <!-- Card 4 — goal -->
+            <section class="q-card" data-card="4" hidden aria-hidden="true">
+              <h2 class="q-question">What would make the site a win?</h2>
+              <p class="q-helper">More calls? More sales? Looking credible? Whatever success looks like.</p>
+              <div class="q-field">
+                <label class="sr-only" for="q-goal">What success looks like</label>
+                <textarea id="q-goal" name="goal" rows="3" placeholder="Ten more quote requests a month would change everything…" required></textarea>
+                <p class="q-error" aria-live="polite"></p>
+              </div>
+              <div class="q-nav">
+                <button class="q-back" type="button" data-back>Back</button>
+                <button class="q-next" type="button" data-next>Next</button>
+              </div>
+            </section>
+
+            <!-- Card 5 — contact + submit -->
+            <section class="q-card" data-card="5" hidden aria-hidden="true">
+              <h2 class="q-question">Where should we send your audit details?</h2>
+              <div class="q-field">
+                <label for="q-name">Name</label>
+                <input id="q-name" name="name" type="text" autocomplete="name" placeholder="Your name" required />
+                <p class="q-error" aria-live="polite"></p>
+              </div>
+              <div class="q-field">
+                <label for="q-email">Email</label>
+                <input id="q-email" name="email" type="email" autocomplete="email" placeholder="you@business.com" required />
+                <p class="q-error" aria-live="polite"></p>
+              </div>
+              <div class="q-field">
+                <label for="q-phone">Phone (optional)</label>
+                <input id="q-phone" name="phone" type="tel" autocomplete="tel" placeholder="(000) 000-0000" />
+                <p class="q-error" aria-live="polite"></p>
+              </div>
+              <p class="q-note">Next you'll pick a time — the $47 is collected when you book.</p>
+              <div class="q-nav">
+                <button class="q-back" type="button" data-back>Back</button>
+                <button class="q-next" type="button" data-submit>Book my call</button>
+              </div>
+            </section>
+          </div>
+
+          <div class="q-visual">
+            <AuditWireframe mode="staged" />
+          </div>
+        </div>
+
+        <!-- Booking panel — revealed once the questionnaire is done -->
+        <section class="q-booking" hidden aria-hidden="true">
+          <h2 class="q-question">Pick a time</h2>
+          <p class="q-helper">The $47 audit fee is collected when you book.</p>
+          <div class="q-calendly" data-calendly-slot></div>
+          <p class="q-calendly-fallback" hidden>
+            The scheduler didn't load —
+            <a data-calendly-link href={CALENDLY_URL} target="_blank" rel="noopener">book your call on Calendly</a>
+            instead.
+          </p>
+        </section>
+      </div>
+
+      <!-- Netlify detection twin: Netlify finds forms by scraping the BUILT
+           HTML, and the real submission is a JS fetch — so this hidden static
+           form must list every posted field name exactly. Keep it in lockstep
+           with the URLSearchParams body in the script below. -->
+      <form name="audit-questionnaire" data-netlify="true" hidden>
+        <input type="hidden" name="form-name" value="audit-questionnaire" />
+        <input name="offer" />
+        <input name="website" />
+        <input name="business" />
+        <input name="frustration" />
+        <input name="goal" />
+        <input name="name" />
+        <input name="email" />
+        <input name="phone" />
+      </form>
+    </main>
+
+    <script define:vars={{ CALENDLY_URL }}>
+      const main = document.querySelector('.q');
+      const cards = [...document.querySelectorAll('.q-card')];
+      const stepNum = document.querySelector('[data-step-num]');
+      const segments = [...document.querySelectorAll('.q-progress-bar span')];
+      const booking = document.querySelector('.q-booking');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      let step = 1;
+      const answers = {};
+
+      // ----- rendering ----------------------------------------------------
+
+      function render() {
+        // data-step on <main> is the single source of truth: cards, the
+        // progress bar and the wireframe animation all key off it.
+        // (This render function is also the one place to add step-view
+        // analytics events later.)
+        main.dataset.step = String(step);
+        cards.forEach((card) => {
+          const active = Number(card.dataset.card) === step;
+          card.hidden = !active;
+          card.setAttribute('aria-hidden', String(!active));
+        });
+        stepNum.textContent = String(step);
+        segments.forEach((seg, i) => seg.classList.toggle('done', i < step));
+        const first = cards[step - 1]?.querySelector('input, textarea');
+        if (first) first.focus({ preventScroll: true });
+      }
+
+      // ----- validation ---------------------------------------------------
+
+      function validate(card) {
+        let ok = true;
+        for (const field of card.querySelectorAll('input, textarea')) {
+          const error = field.closest('.q-field')?.querySelector('.q-error');
+          let message = '';
+          if (field.required && !field.value.trim()) {
+            message = 'This one we need.';
+          } else if (field.type === 'email' && field.value && !field.checkValidity()) {
+            message = 'That email does not look right.';
+          }
+          if (error) error.textContent = message;
+          field.setAttribute('aria-invalid', String(Boolean(message)));
+          if (message && ok) {
+            field.focus({ preventScroll: true });
+            ok = false;
+          }
+        }
+        return ok;
+      }
+
+      function store(card) {
+        for (const field of card.querySelectorAll('input, textarea')) {
+          answers[field.name] = field.value.trim();
+        }
+      }
+
+      // ----- navigation ---------------------------------------------------
+
+      function next() {
+        const card = cards[step - 1];
+        if (!validate(card)) return;
+        store(card);
+        step += 1;
+        render();
+      }
+
+      function back() {
+        if (step > 1) {
+          step -= 1;
+          render();
+        }
+      }
+
+      // ----- finish: lead POST (fire-and-forget) + Calendly ---------------
+
+      function submit() {
+        const card = cards[4];
+        if (!validate(card)) return;
+        store(card);
+
+        // Fire-and-forget: the booking is never blocked by the lead write.
+        // Field names must match the hidden detection form above exactly.
+        fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({
+            'form-name': 'audit-questionnaire',
+            offer: 'website-audit',
+            website: answers.website ?? '',
+            business: answers.business ?? '',
+            frustration: answers.frustration ?? '',
+            goal: answers.goal ?? '',
+            name: answers.name ?? '',
+            email: answers.email ?? '',
+            phone: answers.phone ?? '',
+          }),
+        }).catch((err) => console.error('Lead POST failed', err));
+
+        // "done" launches the wireframe; the grid collapses once the lift-off
+        // has played (immediately under reduced motion).
+        main.dataset.step = 'done';
+        segments.forEach((seg) => seg.classList.add('done'));
+        window.setTimeout(showBooking, reducedMotion ? 0 : 700);
+      }
+
+      function showBooking() {
+        main.classList.add('q-booked');
+        booking.hidden = false;
+        booking.setAttribute('aria-hidden', 'false');
+        mountCalendly();
+        booking.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+      }
+
+      function mountCalendly() {
+        const slot = document.querySelector('[data-calendly-slot]');
+        const fallback = document.querySelector('.q-calendly-fallback');
+        const url =
+          CALENDLY_URL +
+          '?hide_gdpr_banner=1' +
+          '&name=' + encodeURIComponent(answers.name ?? '') +
+          '&email=' + encodeURIComponent(answers.email ?? '');
+        document.querySelector('[data-calendly-link]').href = url;
+
+        const fail = () => {
+          fallback.hidden = false;
+        };
+
+        // Widget script loads lazily, only now — the questionnaire itself
+        // carries no third-party JS. If it is blocked or slow, the plain
+        // Calendly link appears instead; the funnel never dead-ends here.
+        const script = document.createElement('script');
+        script.src = 'https://assets.calendly.com/assets/external/widget.js';
+        script.onload = () => {
+          if (window.Calendly) {
+            window.Calendly.initInlineWidget({ url, parentElement: slot });
+          } else {
+            fail();
+          }
+        };
+        script.onerror = fail;
+        document.head.appendChild(script);
+        window.setTimeout(() => {
+          if (!window.Calendly) fail();
+        }, 4000);
+      }
+
+      // ----- wiring -------------------------------------------------------
+
+      document.querySelectorAll('[data-next]').forEach((b) => b.addEventListener('click', next));
+      document.querySelectorAll('[data-back]').forEach((b) => b.addEventListener('click', back));
+      document.querySelector('[data-submit]').addEventListener('click', submit);
+
+      // One question per card makes Enter-to-advance the expected behavior;
+      // Shift+Enter still inserts a newline in textareas.
+      cards.forEach((card, i) => {
+        card.addEventListener('keydown', (e) => {
+          if (e.key !== 'Enter' || e.shiftKey) return;
+          if (e.target.matches('input, textarea')) {
+            e.preventDefault();
+            i === 4 ? submit() : next();
+          }
+        });
+      });
+
+      render();
+    </script>
+
+    <style>
+      .q {
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        background-color: var(--color-white, #fff);
+      }
+
+      .q-header {
+        padding: 1.4rem 2rem;
+      }
+
+      .q-logo {
+        display: inline-flex;
+      }
+
+      .q-logo img {
+        width: 150px;
+        height: auto;
+      }
+
+      .q-body {
+        flex: 1;
+        width: 100%;
+        max-width: 72rem;
+        margin: 0 auto;
+        padding: 1.5rem 2rem 4rem;
+      }
+
+      .q-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 30rem) minmax(0, 1fr);
+        gap: 4rem;
+        align-items: start;
+      }
+
+      .q-visual {
+        position: sticky;
+        top: 4rem;
+        padding-top: 2.5rem;
+      }
+
+      /* --- progress ------------------------------------------------------ */
+
+      .q-progress {
+        margin-bottom: 2.25rem;
+      }
+
+      .q-progress-label {
+        display: block;
+        margin-bottom: 0.6rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--color-secondary);
+      }
+
+      .q-progress-bar {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.4rem;
+      }
+
+      .q-progress-bar span {
+        height: 3px;
+        background-color: var(--color-border-muted);
+        transition: background-color 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+
+      .q-progress-bar span.done {
+        background-color: var(--fpl-blue);
+      }
+
+      /* --- cards --------------------------------------------------------- */
+
+      .q-card:not([hidden]) {
+        animation: card-in 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+      }
+
+      @keyframes card-in {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .q-question {
+        margin: 0 0 0.6rem;
+        font-family: var(--font-secondary);
+        font-size: 2rem;
+        font-weight: 600;
+        line-height: 1.08;
+        letter-spacing: -0.025em;
+      }
+
+      .q-helper {
+        margin: 0 0 1.75rem;
+        font-size: 1rem;
+        line-height: 1.45;
+        color: var(--color-secondary);
+      }
+
+      .q-field {
+        display: grid;
+        gap: 0.4rem;
+        margin-bottom: 1.25rem;
+      }
+
+      .q-field label {
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      .q-field input,
+      .q-field textarea {
+        font: inherit;
+        /* 16px exactly — below it iOS Safari force-zooms the page on focus. */
+        font-size: 16px;
+        color: var(--color-primary);
+        background: none;
+        border: 0;
+        border-bottom: 1px solid var(--color-border-muted);
+        padding: 0.45rem 0;
+        border-radius: 0;
+        resize: vertical;
+        transition: border-color 0.2s ease;
+      }
+
+      .q-field input::placeholder,
+      .q-field textarea::placeholder {
+        color: var(--color-form-placeholder);
+      }
+
+      .q-field input:focus,
+      .q-field textarea:focus {
+        outline: none;
+        border-bottom-color: var(--color-primary);
+      }
+
+      .q-error {
+        margin: 0;
+        min-height: 1em;
+        font-size: 0.8125rem;
+        color: #c0392b;
+      }
+
+      .q-note {
+        margin: 0 0 1.25rem;
+        font-size: 0.8125rem;
+        line-height: 1.45;
+        color: var(--color-secondary);
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+
+      /* --- nav buttons ---------------------------------------------------- */
+
+      .q-nav {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 0.5rem;
+      }
+
+      .q-next {
+        border: 1px solid var(--color-primary);
+        border-radius: 999px;
+        padding: 0.85rem 2.2rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        background-color: var(--color-primary);
+        color: var(--color-white);
+        cursor: pointer;
+        transition: background-color 0.25s ease, color 0.25s ease;
+      }
+
+      .q-next:hover {
+        background-color: transparent;
+        color: var(--color-primary);
+      }
+
+      .q-next:focus-visible,
+      .q-back:focus-visible {
+        outline: 2px solid var(--fpl-blue);
+        outline-offset: 2px;
+      }
+
+      .q-back {
+        border: 0;
+        background: none;
+        padding: 0.5rem 0;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: var(--color-secondary);
+        cursor: pointer;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .q-back:hover {
+        color: var(--color-primary);
+      }
+
+      /* --- booking -------------------------------------------------------- */
+
+      .q-booking {
+        max-width: 46rem;
+        margin: 1rem auto 0;
+      }
+
+      .q-booked .q-grid {
+        display: none;
+      }
+
+      .q-calendly {
+        min-width: 320px;
+        height: 700px;
+      }
+
+      .q-calendly-fallback {
+        font-size: 1rem;
+      }
+
+      .q-calendly-fallback a {
+        color: var(--color-primary);
+        font-weight: 500;
+      }
+
+      /* --- responsive ------------------------------------------------------ */
+
+      @media (max-width: 991px) {
+        .q-body {
+          padding: 1rem 1.5rem 3.5rem;
+        }
+
+        .q-grid {
+          grid-template-columns: 1fr;
+        }
+
+        /* On phones the build scene moves behind the cards: dimmed, fixed,
+           untouchable — the site still assembles as answers land, without
+           costing any vertical space. */
+        .q-visual {
+          position: fixed;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 2rem 1rem 0;
+          opacity: 0.15;
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        .q-col {
+          position: relative;
+          z-index: 1;
+        }
+      }
+
+      @media (max-width: 479px) {
+        .q-question {
+          font-size: 1.6rem;
+        }
+
+        .q-calendly {
+          height: 660px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .q-card:not([hidden]) {
+          animation: none;
+        }
+
+        .q-progress-bar span {
+          transition: none;
+        }
+      }
+    </style>
+  </body>
+</html>

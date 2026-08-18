@@ -259,18 +259,28 @@ import SectionTitle from '../components/SectionTitle.astro';
   }
 
   .mission-heading-number {
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.04em;
     padding-top: 0.4rem;
   }
 
+  /* Centred, not bottom-aligned. The fingerprint is a 1080x1920 portrait that
+     renders ~1000px tall in this column, so `align-items: end` dropped these
+     two short paragraphs to the very bottom of it and left most of a viewport
+     of white space between the two halves. Capping the image height keeps the
+     row from being taller than its content needs. */
   .mission-bottom {
     display: grid;
     grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
     gap: 3rem;
-    align-items: end;
+    align-items: center;
     margin-top: 3rem;
+  }
+
+  .mission-image img {
+    max-height: 34rem;
+    width: auto;
   }
 
   .mission-text {
