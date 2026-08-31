@@ -46,7 +46,34 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
         <a class="q-logo" href="/" aria-label="Back to FrontPage Labs">
           <img src="/assets/frontpage-labs-logo-1-.png" alt="FrontPage Labs" width="180" />
         </a>
+
+        <div class="q-header-actions">
+          <button class="q-mini" type="button" data-strip-toggle="call" aria-expanded="false" aria-controls="strip-call">
+            Questions? Call us
+          </button>
+          <button class="q-mini" type="button" data-strip-toggle="pricing" aria-expanded="false" aria-controls="strip-pricing">
+            Pricing
+          </button>
+          <a class="q-mini" href="/portfolio">Work</a>
+        </div>
       </header>
+
+      <!-- Drawer strips — tiny banners that slide open under the header. -->
+      <div class="q-strip" id="strip-call" data-strip="call">
+        <div class="q-strip-clip">
+          <p class="q-strip-content">
+            Call us — <a href="tel:+18477570201">847-757-0201</a>
+          </p>
+        </div>
+      </div>
+      <div class="q-strip" id="strip-pricing" data-strip="pricing">
+        <div class="q-strip-clip">
+          <p class="q-strip-content">
+            Plans start at <span class="q-strip-accent">$40 a month</span> or a
+            <span class="q-strip-accent">$1,899 flat fee</span>.
+          </p>
+        </div>
+      </div>
 
       <div class="q-body">
         <div class="q-progress" aria-hidden="true">
@@ -410,6 +437,26 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
         done.setAttribute('aria-hidden', 'false');
       }
 
+      // ----- header strips ------------------------------------------------
+      // One strip open at a time; clicking its button again closes it.
+      const stripToggles = [...document.querySelectorAll('[data-strip-toggle]')];
+      stripToggles.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const strip = document.querySelector(`[data-strip="${btn.dataset.stripToggle}"]`);
+          const wasOpen = strip.classList.contains('open');
+          document.querySelectorAll('.q-strip').forEach((s) => s.classList.remove('open'));
+          stripToggles.forEach((b) => {
+            b.classList.remove('open');
+            b.setAttribute('aria-expanded', 'false');
+          });
+          if (!wasOpen) {
+            strip.classList.add('open');
+            btn.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+
       // ----- wiring -------------------------------------------------------
       document.querySelectorAll('[data-next]').forEach((b) => b.addEventListener('click', next));
       document.querySelectorAll('[data-back]').forEach((b) => b.addEventListener('click', back));
@@ -437,16 +484,96 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
       }
 
       .q-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
         padding: 1.4rem 2rem;
       }
 
       .q-logo {
         display: inline-flex;
+        flex: none;
       }
 
       .q-logo img {
         width: 180px;
         height: auto;
+      }
+
+      /* --- header mini buttons + drawer strips -----------------------------
+         Sharp-edged, minimal — the site's bordered-row language, shrunk to a
+         button. */
+
+      .q-header-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .q-mini {
+        border: 1px solid var(--color-border-muted);
+        border-radius: 0;
+        background: none;
+        padding: 0.5rem 0.85rem;
+        font-size: 0.6875rem;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--color-primary);
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.24s ease, color 0.24s ease, border-color 0.24s ease;
+      }
+
+      .q-mini:hover,
+      .q-mini.open {
+        background-color: var(--color-primary);
+        border-color: var(--color-primary);
+        color: var(--color-white);
+      }
+
+      .q-mini:focus-visible {
+        outline: 2px solid var(--fpl-blue);
+        outline-offset: 2px;
+      }
+
+      /* 0fr → 1fr slides the strip open without measuring — the site's
+         drawer trick. */
+      .q-strip {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+
+      .q-strip.open {
+        grid-template-rows: 1fr;
+      }
+
+      .q-strip-clip {
+        overflow: hidden;
+      }
+
+      .q-strip-content {
+        margin: 0;
+        padding: 0.7rem 2rem;
+        background-color: var(--color-primary);
+        color: var(--color-white);
+        font-size: 0.8125rem;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        text-align: right;
+      }
+
+      .q-strip-content a {
+        color: var(--fpl-blue);
+        font-weight: 600;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .q-strip-accent {
+        color: var(--fpl-blue);
+        font-weight: 600;
       }
 
       .q-body {
@@ -797,6 +924,29 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
       @media (max-width: 479px) {
         .q-question {
           font-size: 1.6rem;
+        }
+
+        /* The three buttons must still fit beside the logo on phones. */
+        .q-header {
+          padding: 1rem 1.25rem;
+        }
+
+        .q-logo img {
+          width: 120px;
+        }
+
+        .q-header-actions {
+          gap: 0.35rem;
+        }
+
+        .q-mini {
+          padding: 0.45rem 0.55rem;
+          font-size: 0.625rem;
+          letter-spacing: 0.04em;
+        }
+
+        .q-strip-content {
+          padding: 0.65rem 1.25rem;
         }
       }
 
