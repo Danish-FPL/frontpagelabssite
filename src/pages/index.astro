@@ -186,7 +186,7 @@ const services = [
         <h3 class="heading-small results-heading"><span class="text-blue">Results</span></h3>
 
         <div class="results-cards">
-          {testimonials.map(({ heading, quote, name, company }, i) => (
+          {testimonials.map(({ heading, quote, name, company, stat }, i) => (
             <figure class:list={['result-card', `pos-${i + 1}`]}>
               <div class="result-card-head">
                 <img class="result-card-mark" src="/assets/fpl-14-.png" alt="" aria-hidden="true" />
@@ -195,6 +195,7 @@ const services = [
                 </h4>
               </div>
               <blockquote class="result-card-quote">{quote}</blockquote>
+              {stat && <p class="result-card-stat">{stat}</p>}
               <figcaption class="result-card-credit">
                 <span>{name}</span>
                 <span class="muted">{company}</span>
@@ -1083,10 +1084,18 @@ const services = [
     color: var(--color-primary);
     display: grid;
     gap: 1rem;
-    /* Quote pinned to the top, credit to the bottom, so the cards line up
-       across the row no matter how long each quote runs. */
-    grid-template-rows: auto 1fr auto;
+    /* Quote pinned to the top, stat and credit to the bottom, so the cards
+       line up across the row no matter how long each quote runs. */
+    grid-template-rows: auto 1fr auto auto;
     align-content: start;
+  }
+
+  .result-card-stat {
+    margin: 0;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--fpl-blue);
   }
 
   .result-card-head {

@@ -79,10 +79,11 @@ const formNumber = hasPricing ? '(04)' : '(03)';
       <h3 class="heading-small lp-proof-heading">{landing.proofHeading}</h3>
 
       <div class="lp-proof-grid">
-        {quotes.map(({ heading, quote, name, company }) => (
+        {quotes.map(({ heading, quote, name, company, stat }) => (
           <figure class="lp-quote">
             <h4 class="lp-quote-title">{heading[0]} {heading[1]}</h4>
             <blockquote class="lp-quote-body">{quote}</blockquote>
+            {stat && <p class="lp-quote-stat">{stat}</p>}
             <figcaption class="lp-quote-credit">
               <span>{name}</span>
               <span class="muted">{company}</span>
@@ -350,6 +351,14 @@ const formNumber = hasPricing ? '(04)' : '(03)';
     margin: 0;
     font-size: 0.9375rem;
     line-height: 1.5;
+  }
+
+  .lp-quote-stat {
+    margin: 0;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--fpl-blue);
   }
 
   .lp-quote-credit {

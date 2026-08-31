@@ -188,6 +188,7 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
           {testimonials.map((t, i) => (
             <figure class:list={['q-proof-quote', { active: i === 0 }]} data-proof-quote>
               <blockquote class="q-proof-text">“{t.quote}”</blockquote>
+              {t.stat && <p class="q-proof-stat">{t.stat}</p>}
               <figcaption class="q-proof-credit">
                 <span>{t.name}</span>
                 <span class="q-proof-company">{t.company}</span>
@@ -747,6 +748,14 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
         font-size: 0.9375rem;
         line-height: 1.5;
         color: var(--color-primary);
+      }
+
+      .q-proof-stat {
+        margin: 0;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        color: var(--fpl-blue);
       }
 
       .q-proof-credit {
