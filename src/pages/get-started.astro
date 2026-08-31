@@ -79,64 +79,48 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
         <div class="q-progress">
           <span class="q-progress-label" aria-hidden="true">Step <span data-step-num>1</span> of 4</span>
           <div class="q-progress-bar">
-            <button type="button" data-goto="1" aria-label="Go to step 1: your goals"></button>
-            <button type="button" data-goto="2" aria-label="Go to step 2: what you have now"></button>
+            <button type="button" data-goto="1" aria-label="Go to step 1: your industry"></button>
+            <button type="button" data-goto="2" aria-label="Go to step 2: your biggest challenge"></button>
             <button type="button" data-goto="3" aria-label="Go to step 3: your budget"></button>
             <button type="button" data-goto="4" aria-label="Go to step 4: your contact details"></button>
           </div>
         </div>
 
-        {/* Card 1 — goals (multi-select) */}
+        {/* Card 1 — industry */}
         <section class="q-card" data-card="1">
-          <h1 class="q-question">What are you looking to build?</h1>
-          <p class="q-helper">Pick everything that applies. We'll shape the plan around it.</p>
-
-          <div class="q-options" data-multi>
-            <button class="q-option" type="button" data-option="A new or better website">
-              <span class="q-option-label">A new or better website</span>
-              <span class="q-option-mark" aria-hidden="true"></span>
-            </button>
-            <button class="q-option" type="button" data-option="More leads and sales">
-              <span class="q-option-label">More leads &amp; sales</span>
-              <span class="q-option-mark" aria-hidden="true"></span>
-            </button>
-            <button class="q-option" type="button" data-option="Social media and marketing channels">
-              <span class="q-option-label">Social media &amp; channels</span>
-              <span class="q-option-mark" aria-hidden="true"></span>
-            </button>
-            <button class="q-option" type="button" data-option="Ad campaigns">
-              <span class="q-option-label">Ad campaigns</span>
-              <span class="q-option-mark" aria-hidden="true"></span>
-            </button>
-            <button class="q-option" type="button" data-option="Brand and strategy">
-              <span class="q-option-label">Brand &amp; strategy</span>
-              <span class="q-option-mark" aria-hidden="true"></span>
-            </button>
-            <button class="q-option" type="button" data-option="Not sure yet">
-              <span class="q-option-label">Not sure yet, guide me</span>
-              <span class="q-option-mark" aria-hidden="true"></span>
-            </button>
+          <h1 class="q-question">What industry are you in?</h1>
+          <p class="q-helper">
+            Tell us what company you run. Details like where you're located and who you serve are
+            helpful, too.
+          </p>
+          <div class="q-field">
+            <label class="sr-only" for="q-industry">Your industry or type of company</label>
+            <input
+              id="q-industry"
+              name="industry"
+              type="text"
+              placeholder="Family-run plumbing company in Naperville, serving homeowners"
+              required
+            />
+            <p class="q-error" aria-live="polite"></p>
           </div>
-          <p class="q-error" data-options-error aria-live="polite"></p>
-
           <div class="q-nav">
             <button class="q-next" type="button" data-next>Next</button>
           </div>
         </section>
 
-        {/* Card 2 — current presence */}
+        {/* Card 2 — challenge */}
         <section class="q-card" data-card="2" hidden aria-hidden="true">
-          <h2 class="q-question">What do you have right now?</h2>
-          <p class="q-helper">
-            Paste your website or social handles, or tell us you're starting from scratch.
-          </p>
+          <h2 class="q-question">What's the biggest challenge in growing right now?</h2>
+          <p class="q-helper">Say it plainly. The clearer the problem, the better the plan.</p>
           <div class="q-field">
-            <label class="sr-only" for="q-website">Current website and social media</label>
+            <label class="sr-only" for="q-challenge">Your biggest growth challenge</label>
             <textarea
-              id="q-website"
-              name="website"
+              id="q-challenge"
+              name="challenge"
               rows="3"
-              placeholder="yourbusiness.com, @yourhandle, or 'starting from scratch'"></textarea>
+              placeholder="Nobody finds us online, our site never brings in work, ads cost too much…"
+              required></textarea>
             <p class="q-error" aria-live="polite"></p>
           </div>
           <div class="q-nav">
@@ -202,9 +186,9 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
         {/* Success — the Stripe payment step will slot in here */}
         <section class="q-done" hidden aria-hidden="true">
           <h2 class="q-question">You're on the FrontPage.</h2>
-          <p class="q-helper">
-            We've got your goals, your links, and your budget. Expect to hear from us within one
-            business day.
+          <p class="q-helper" data-done-copy>
+            We've got your industry, your challenge, and your budget. Expect to hear from us within
+            one business day.
           </p>
           <div class="q-nav">
             <a class="q-next q-done-link" href="/">Back to the site</a>
@@ -214,6 +198,44 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
         {/* Floating proof — one client quote at a time, cross-fading as the
              visitor moves through the steps, so every answer lands next to a
              reason to keep going. */}
+        {/* Exit intent: one offer, one time, with a live countdown. */}
+        <div class="q-modal" data-modal="exit" hidden>
+          <div class="q-modal-backdrop" data-modal-close></div>
+          <div class="q-modal-panel" role="dialog" aria-modal="true" aria-labelledby="exit-title">
+            <button class="q-modal-x" type="button" data-modal-close aria-label="Close">&times;</button>
+            <p class="q-modal-eyebrow">Before you go</p>
+            <h2 class="q-modal-title" id="exit-title">Here's 15% off.</h2>
+            <p class="q-modal-copy">
+              Finish your answers and it's yours. Valid for the next
+              <span class="q-modal-clock" data-exit-clock>15:00</span>.
+            </p>
+            <button class="q-next" type="button" data-modal-close>Keep my 15% off</button>
+          </div>
+        </div>
+
+        {/* Step 2 reward: a real scratch-off, drawn on canvas. */}
+        <div class="q-modal" data-modal="scratch" hidden>
+          <div class="q-modal-backdrop" data-modal-close></div>
+          <div class="q-modal-panel" role="dialog" aria-modal="true" aria-labelledby="scratch-title">
+            <button class="q-modal-x" type="button" data-modal-close aria-label="Close">&times;</button>
+            <p class="q-modal-eyebrow">You've earned a scratch-off</p>
+            <h2 class="q-modal-title" id="scratch-title">Scratch to reveal your discount.</h2>
+
+            <div class="q-scratch">
+              <div class="q-scratch-prize" data-scratch-prize>
+                <span class="q-scratch-amount" data-scratch-amount>15% off</span>
+                <span class="q-scratch-sub">your first project</span>
+              </div>
+              <canvas class="q-scratch-foil" data-scratch-canvas width="440" height="200"></canvas>
+            </div>
+
+            <p class="q-modal-copy" data-scratch-note>Drag across the panel to scratch it off.</p>
+            <button class="q-next" type="button" data-modal-close data-scratch-claim hidden>
+              Claim it and keep going
+            </button>
+          </div>
+        </div>
+
         <aside class="q-proof">
           {testimonials.map((t, i) => (
             <figure class:list={['q-proof-quote', { active: i === 0 }]} data-proof-quote>
@@ -283,7 +305,54 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       let step = 1;
-      const answers = { goals: [], budget: '' };
+      const answers = { budget: '' };
+
+      // ----- progressive save ---------------------------------------------
+      // Every completed step posts what we have so far. The first post
+      // creates the Airtable row and hands back its id; later steps update
+      // that same row, so an abandoned funnel still leaves its answers
+      // behind instead of vanishing.
+      let recordId = '';
+      // Saves run one at a time, chained: two steps answered in quick
+      // succession must not race and create two rows before the first
+      // response has handed back the id.
+      let chain = Promise.resolve();
+
+      function payload() {
+        // Budget and any scratch-off prize share the Message column, so the
+        // flow needs no new Airtable columns to start capturing.
+        const notes = [];
+        if (answers.budget) notes.push('Budget: ' + answers.budget);
+        if (answers.prize) notes.push('Scratch-off: ' + answers.prize);
+
+        return {
+          source: 'Get started',
+          page: 'get-started',
+          recordId,
+          business: answers.industry ?? '',
+          frustration: answers.challenge ?? '',
+          message: notes.join(' | '),
+          email: answers.email ?? '',
+          phone: answers.phone ?? '',
+        };
+      }
+
+      function save() {
+        chain = chain.then(async () => {
+          try {
+            const res = await fetch('/api/lead', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload()),
+            });
+            const data = await res.json();
+            if (data?.recordId) recordId = data.recordId;
+          } catch (err) {
+            console.error('Lead save failed', err);
+          }
+        });
+        return chain;
+      }
 
       function render() {
         main.dataset.step = String(step);
@@ -354,16 +423,6 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
 
       // ----- validation ---------------------------------------------------
       function validate(card) {
-        // Option steps: something must be picked (budget auto-advances, so
-        // this only ever gates the goals card and the contact fields).
-        const optionsError = card.querySelector('[data-options-error]');
-        if (card.querySelector('[data-multi]') && optionsError) {
-          if (!answers.goals.length) {
-            optionsError.textContent = 'Pick at least one. "Not sure yet" counts.';
-            return false;
-          }
-        }
-
         let ok = true;
         for (const field of card.querySelectorAll('input, textarea')) {
           const error = field.closest('.q-field')?.querySelector('.q-error');
@@ -393,9 +452,11 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
         const card = cards[step - 1];
         if (!validate(card)) return;
         store(card);
+        save(); // each step lands in Airtable as it is answered
         if (step < cards.length) {
           step += 1;
           render();
+          if (step === 2) openScratch();
         }
       }
 
@@ -432,19 +493,7 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
         if (!validate(card)) return;
         store(card);
 
-        fetch('/api/lead', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            source: 'Get started',
-            page: 'get-started',
-            goal: answers.goals.join('; '),
-            website: answers.website ?? '',
-            message: 'Budget: ' + (answers.budget || 'not given'),
-            email: answers.email ?? '',
-            phone: answers.phone ?? '',
-          }),
-        }).catch((err) => console.error('Lead POST failed', err));
+        save(); // final write: fills in the contact details on the same row
 
         if (window.fbq) {
           try {
@@ -467,6 +516,185 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
       document.querySelectorAll('[data-goto]').forEach((bar) => {
         bar.addEventListener('click', () => goTo(Number(bar.dataset.goto)));
       });
+
+      // ----- modals --------------------------------------------------------
+      const modals = {
+        exit: document.querySelector('[data-modal="exit"]'),
+        scratch: document.querySelector('[data-modal="scratch"]'),
+      };
+
+      function openModal(name) {
+        modals[name].hidden = false;
+      }
+
+      function closeModal(el) {
+        el.hidden = true;
+      }
+
+      document.querySelectorAll('[data-modal-close]').forEach((el) => {
+        el.addEventListener('click', () => closeModal(el.closest('.q-modal')));
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Escape') return;
+        document.querySelectorAll('.q-modal:not([hidden])').forEach(closeModal);
+      });
+
+      // ----- exit intent ----------------------------------------------------
+      // Fires once per visit, and never after the lead is in: the pointer
+      // leaving through the top of the window is the desktop tell, and a tab
+      // switch is the closest equivalent on a phone.
+      let exitShown = false;
+      let offerDeadline = 0;
+      const landedAt = Date.now();
+
+      function showExitOffer() {
+        // A pointer that clips the top edge in the first seconds is usually
+        // someone still arriving, not someone leaving.
+        if (Date.now() - landedAt < 6000) return;
+        if (exitShown || main.dataset.step === 'done') return;
+        // Never stack on top of the scratch-off.
+        if (!modals.scratch.hidden) return;
+        exitShown = true;
+        offerDeadline = Date.now() + 15 * 60 * 1000;
+        openModal('exit');
+        track('GetStartedExitOffer', { step });
+        tickClock();
+      }
+
+      function tickClock() {
+        const clock = document.querySelector('[data-exit-clock]');
+        const left = Math.max(0, offerDeadline - Date.now());
+        const m = Math.floor(left / 60000);
+        const s = Math.floor((left % 60000) / 1000);
+        clock.textContent = m + ':' + String(s).padStart(2, '0');
+        if (left > 0) window.setTimeout(tickClock, 1000);
+      }
+
+      document.addEventListener('mouseout', (e) => {
+        // relatedTarget null + leaving through the top edge = heading for the
+        // tab bar or the close button.
+        if (e.relatedTarget || e.clientY > 8) return;
+        showExitOffer();
+      });
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') showExitOffer();
+      });
+
+      // ----- scratch-off ----------------------------------------------------
+      // Real scratching: a canvas of foil erased by the pointer, revealed
+      // once enough of it is gone. The prize is drawn once, by chance.
+      const PRIZES = [
+        { label: '10% off', weight: 55 },
+        { label: '15% off', weight: 30 },
+        { label: '25% off', weight: 15 },
+      ];
+
+      let scratchReady = false;
+
+      function drawPrize() {
+        const total = PRIZES.reduce((sum, p) => sum + p.weight, 0);
+        let roll = Math.random() * total;
+        for (const prize of PRIZES) {
+          roll -= prize.weight;
+          if (roll <= 0) return prize.label;
+        }
+        return PRIZES[0].label;
+      }
+
+      function openScratch() {
+        if (scratchReady) return;
+        scratchReady = true;
+
+        const prize = drawPrize();
+        document.querySelector('[data-scratch-amount]').textContent = prize;
+        answers.prize = prize;
+
+        const canvas = document.querySelector('[data-scratch-canvas]');
+        const wrap = canvas.closest('.q-scratch');
+        const note = document.querySelector('[data-scratch-note]');
+        const claim = document.querySelector('[data-scratch-claim]');
+        const ctx = canvas.getContext('2d');
+
+        // Foil: a flat silver ground with the site's cyan angled through it.
+        const foil = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+        foil.addColorStop(0, '#c9ccd1');
+        foil.addColorStop(0.45, '#e8eaec');
+        foil.addColorStop(0.55, '#03f6ff');
+        foil.addColorStop(1, '#b9bdc4');
+        ctx.fillStyle = foil;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'rgb(0 0 0 / 45%)';
+        ctx.font = '600 22px system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('SCRATCH HERE', canvas.width / 2, canvas.height / 2 + 8);
+
+        // Erasing is just drawing with destination-out.
+        ctx.globalCompositeOperation = 'destination-out';
+
+        let scratching = false;
+        let revealed = false;
+
+        function pointAt(e) {
+          const rect = canvas.getBoundingClientRect();
+          return {
+            x: ((e.clientX - rect.left) / rect.width) * canvas.width,
+            y: ((e.clientY - rect.top) / rect.height) * canvas.height,
+          };
+        }
+
+        function scratch(e) {
+          if (!scratching || revealed) return;
+          const { x, y } = pointAt(e);
+          ctx.beginPath();
+          ctx.arc(x, y, 26, 0, Math.PI * 2);
+          ctx.fill();
+          checkCleared();
+        }
+
+        // Sampling every 8th pixel is plenty to know when a third is gone,
+        // and keeps this cheap enough to run on every pointer move.
+        function checkCleared() {
+          const { data } = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          let clear = 0;
+          let total = 0;
+          for (let i = 3; i < data.length; i += 32) {
+            total += 1;
+            if (data[i] === 0) clear += 1;
+          }
+          if (clear / total > 0.35) reveal();
+        }
+
+        function reveal() {
+          if (revealed) return;
+          revealed = true;
+          wrap.classList.add('revealed');
+          note.textContent = prize + ' is yours. We will apply it to your quote.';
+          claim.hidden = false;
+          track('GetStartedScratch', { prize });
+          save(); // the prize rides along on the next write
+        }
+
+        canvas.addEventListener('pointerdown', (e) => {
+          scratching = true;
+          canvas.setPointerCapture(e.pointerId);
+          scratch(e);
+        });
+        canvas.addEventListener('pointermove', scratch);
+        canvas.addEventListener('pointerup', () => {
+          scratching = false;
+        });
+        canvas.addEventListener('pointercancel', () => {
+          scratching = false;
+        });
+
+        // Keyboard and reduced-motion users get the prize without dragging.
+        if (reducedMotion) reveal();
+
+        openModal('scratch');
+        track('GetStartedScratchOpen', {});
+      }
 
       // ----- header strips ------------------------------------------------
       // One strip open at a time; clicking its button again closes it.
@@ -898,6 +1126,150 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
 
       .q-back:hover {
         color: var(--color-primary);
+      }
+
+      /* --- modals ---------------------------------------------------------- */
+
+      .q-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.25rem;
+      }
+
+      .q-modal[hidden] {
+        display: none;
+      }
+
+      .q-modal-backdrop {
+        position: absolute;
+        inset: 0;
+        background-color: rgb(0 0 0 / 55%);
+        animation: fade-in 0.24s ease both;
+      }
+
+      @keyframes fade-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      .q-modal-panel {
+        position: relative;
+        width: 100%;
+        max-width: 30rem;
+        background-color: var(--color-white);
+        padding: 2rem 1.75rem 1.75rem;
+        display: grid;
+        gap: 0.85rem;
+        justify-items: start;
+        animation: card-in 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+      }
+
+      .q-modal-x {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.75rem;
+        border: 0;
+        background: none;
+        padding: 0.25rem;
+        font-size: 1.5rem;
+        line-height: 1;
+        color: var(--color-secondary);
+        cursor: pointer;
+      }
+
+      .q-modal-x:hover {
+        color: var(--color-primary);
+      }
+
+      .q-modal-eyebrow {
+        margin: 0;
+        font-size: 0.6875rem;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--color-secondary);
+      }
+
+      .q-modal-title {
+        margin: 0;
+        font-family: var(--font-secondary);
+        font-size: 1.75rem;
+        font-weight: 600;
+        line-height: 1.08;
+        letter-spacing: -0.025em;
+      }
+
+      .q-modal-copy {
+        margin: 0;
+        font-size: 0.9375rem;
+        line-height: 1.45;
+        color: var(--color-secondary);
+      }
+
+      .q-modal-clock {
+        font-weight: 600;
+        color: var(--color-primary);
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* --- scratch-off ------------------------------------------------------ */
+
+      .q-scratch {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 44 / 20;
+        margin: 0.35rem 0 0.25rem;
+        background-color: var(--color-background-muted);
+        overflow: hidden;
+      }
+
+      .q-scratch-prize {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-content: center;
+        justify-items: center;
+        gap: 0.25rem;
+        text-align: center;
+      }
+
+      .q-scratch-amount {
+        font-family: var(--font-secondary);
+        font-size: 2.75rem;
+        font-weight: 600;
+        line-height: 1;
+        letter-spacing: -0.03em;
+      }
+
+      .q-scratch-sub {
+        font-size: 0.75rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--color-secondary);
+      }
+
+      /* The foil sits over the prize until it is scratched away. */
+      .q-scratch-foil {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        cursor: grab;
+        touch-action: none;
+        transition: opacity 0.4s ease;
+      }
+
+      .q-scratch-foil:active {
+        cursor: grabbing;
+      }
+
+      .q-scratch.revealed .q-scratch-foil {
+        opacity: 0;
+        pointer-events: none;
       }
 
       /* --- floating proof -------------------------------------------------- */

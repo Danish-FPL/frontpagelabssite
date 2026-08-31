@@ -17,6 +17,13 @@
 //
 // Writes use typecast:true so Airtable auto-creates select options (e.g. a
 // new Source value) instead of rejecting the record.
+//
+// PROGRESSIVE SAVE: /get-started posts after every step so an abandoned
+// funnel still leaves the answers it got to. The first post creates the row
+// and the response carries its `recordId`; later posts send that id back and
+// PATCH the same row instead of creating a second one. Nothing else on the
+// site sends a recordId, so every other form still creates one row per
+// submit.
 
 const MAX_FIELD = 5000; // Airtable long-text is generous; cap abuse anyway
 
@@ -62,28 +69,43 @@ export default async function handler(req) {
   } = process.env;
 
   if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID) {
-    console.warn('[submit-lead] Airtable env vars not set — lead NOT stored:', fields);
+    console.warn('[submit-lead] Airtable env vars not set, lead NOT stored:', fields);
     return Response.json({ ok: true, stored: false });
   }
 
-  const res = await fetch(
-    `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_LEADS_TABLE)}`,
-    {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${AIRTABLE_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ records: [{ fields }], typecast: true }),
-    }
-  );
+  // An id from a previous step updates that row; anything else creates one.
+  const recordId = typeof body.recordId === 'string' && /^rec[A-Za-z0-9]+$/.test(body.recordId)
+    ? body.recordId
+    : '';
+
+  const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_LEADS_TABLE)}`;
+  const res = await fetch(url, {
+    method: recordId ? 'PATCH' : 'POST',
+    headers: {
+      Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      records: [recordId ? { id: recordId, fields } : { fields }],
+      typecast: true,
+    }),
+  });
 
   if (!res.ok) {
     console.error('[submit-lead] Airtable write failed', res.status, await res.text());
     return Response.json({ ok: false, error: 'store' }, { status: 502 });
   }
 
-  return Response.json({ ok: true, stored: true });
+  // Hand back the row id so a multi-step form can keep updating one row.
+  let id = recordId;
+  try {
+    const data = await res.json();
+    id = data?.records?.[0]?.id ?? recordId;
+  } catch {
+    /* a stored lead with no id back just means the next step creates a row */
+  }
+
+  return Response.json({ ok: true, stored: true, recordId: id });
 }
 
 export const config = { path: '/api/lead' };
