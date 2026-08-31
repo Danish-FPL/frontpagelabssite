@@ -34,13 +34,22 @@ name that does not exist will make the whole write fail.
 
 ### Prompt for Airtable's Omni assistant
 
-Paste this into Omni, in a new empty base:
+Paste this whole block into Omni. It works on an empty base AND on a table
+Omni already made a first pass at, because every instruction is stated as the
+end state rather than as a change.
 
-> Create a table named `Leads` for capturing website leads. Add these fields
-> with exactly these names and types, and no other fields:
+> In this base, make the table named `Leads` match this specification exactly.
 >
-> - `Source` — single select, with options: Get started, Contact page,
->   Service landing, Offer landing, Audit questionnaire, Home page
+> First, delete every existing record in the table. All of the current rows
+> are placeholder sample data and none of it should be kept.
+>
+> Second, make sure the table has fields with exactly these names, spelled and
+> capitalized exactly like this, with these types. Create any that are
+> missing, and fix the type of any that already exist with the wrong type. Do
+> not rename or delete any field that already has the correct name.
+>
+> - `Source` — single select, with options: Get started, Contact page, Service
+>   landing, Offer landing, Audit questionnaire, Home page
 > - `Page` — single line text
 > - `Name` — single line text
 > - `Email` — email
@@ -51,15 +60,25 @@ Paste this into Omni, in a new empty base:
 > - `Frustration` — long text
 > - `Goal` — long text
 > - `Channel` — single line text
-> - `Submitted` — date field with the time included
+> - `Submitted` — date, with the time included
 >
-> Do not add any other fields, do not rename these, and do not make any of
-> them required. Then create a grid view named `New leads` sorted by
-> `Submitted` newest first, and a second view named `Finished` filtered to
-> rows where `Email` is not empty.
+> Do not make any of these fields required, and do not add any validation to
+> them. Leave any other existing field in place, but do not add new ones.
+>
+> Third, create a grid view named `New leads`, sorted by `Submitted` with the
+> newest first. Create a second grid view named `Finished`, filtered to show
+> only records where `Email` is not empty, also sorted by `Submitted` newest
+> first.
+>
+> Finally, rename this base to `FrontPage Labs Leads`.
 
-Two notes on why the last view matters: `/get-started` saves **after every
-step**, so a row appears as soon as someone answers question one. Rows
+If Omni refuses any single part (renaming the base and bulk-deleting rows are
+the two it is most likely to decline), do that one by hand: select all rows
+with the checkbox above the first row to delete them, and double-click the
+base name in the top left to rename it.
+
+Two notes on why the `Finished` view matters: `/get-started` saves **after
+every step**, so a row appears as soon as someone answers question one. Rows
 without an `Email` are people still mid-flow or who dropped out. The
 `Finished` view is your real inbox; the full table is your drop-off report.
 
