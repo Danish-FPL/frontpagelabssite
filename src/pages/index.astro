@@ -187,20 +187,22 @@ const services = [
 
         <div class="results-cards">
           {testimonials.map(({ heading, quote, name, company, stat }, i) => (
-            <figure class:list={['result-card', `pos-${i + 1}`]}>
-              <div class="result-card-head">
-                <img class="result-card-mark" src="/assets/fpl-14-.png" alt="" aria-hidden="true" />
-                <h4 class="result-card-title">
-                  {heading[0]}<br />{heading[1]}
-                </h4>
-              </div>
-              <blockquote class="result-card-quote">{quote}</blockquote>
+            <div class="result-cell">
+              <figure class:list={['result-card', `pos-${i + 1}`]}>
+                <div class="result-card-head">
+                  <img class="result-card-mark" src="/assets/fpl-14-.png" alt="" aria-hidden="true" />
+                  <h4 class="result-card-title">
+                    {heading[0]}<br />{heading[1]}
+                  </h4>
+                </div>
+                <blockquote class="result-card-quote">{quote}</blockquote>
+                <figcaption class="result-card-credit">
+                  <span>{name}</span>
+                  <span class="muted">{company}</span>
+                </figcaption>
+              </figure>
               {stat && <p class="result-card-stat">{stat}</p>}
-              <figcaption class="result-card-credit">
-                <span>{name}</span>
-                <span class="muted">{company}</span>
-              </figcaption>
-            </figure>
+            </div>
           ))}
         </div>
       </div>
@@ -1084,10 +1086,18 @@ const services = [
     color: var(--color-primary);
     display: grid;
     gap: 1rem;
-    /* Quote pinned to the top, stat and credit to the bottom, so the cards
-       line up across the row no matter how long each quote runs. */
-    grid-template-rows: auto 1fr auto auto;
+    /* Quote pinned to the top, credit to the bottom, so the cards line up
+       across the row no matter how long each quote runs. */
+    grid-template-rows: auto 1fr auto;
     align-content: start;
+  }
+
+  /* Card fills the cell; the teal stat sits under it, on the dark video
+     ground where the color actually carries. */
+  .result-cell {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    gap: 0.7rem;
   }
 
   .result-card-stat {

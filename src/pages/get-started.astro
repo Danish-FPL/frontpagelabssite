@@ -188,7 +188,6 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
           {testimonials.map((t, i) => (
             <figure class:list={['q-proof-quote', { active: i === 0 }]} data-proof-quote>
               <blockquote class="q-proof-text">“{t.quote}”</blockquote>
-              {t.stat && <p class="q-proof-stat">{t.stat}</p>}
               <figcaption class="q-proof-credit">
                 <span>{t.name}</span>
                 <span class="q-proof-company">{t.company}</span>
@@ -196,6 +195,14 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
             </figure>
           ))}
         </aside>
+
+        {/* The teal stat rides under the gray card, not in it, and swaps in
+            step with the active quote. */}
+        <div class="q-proof-stats">
+          {testimonials.map((t, i) => (
+            <p class:list={['q-proof-stat', { active: i === 0 }]} data-proof-stat>{t.stat}</p>
+          ))}
+        </div>
       </div>
     </main>
 
@@ -263,11 +270,13 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
       // A fresh quote on every step change, and a slow rotation while the
       // visitor thinks — the decision is always sitting next to a reason.
       const proofQuotes = [...document.querySelectorAll('[data-proof-quote]')];
+      const proofStats = [...document.querySelectorAll('[data-proof-stat]')];
       let proofIndex = 0;
       let proofStarted = false;
 
       function showProof(i) {
         proofQuotes.forEach((q, j) => q.classList.toggle('active', j === i));
+        proofStats.forEach((s, j) => s.classList.toggle('active', j === i));
       }
 
       function rotateProof() {
@@ -750,12 +759,24 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
         color: var(--color-primary);
       }
 
+      .q-proof-stats {
+        display: grid;
+        margin-top: 0.7rem;
+      }
+
       .q-proof-stat {
+        grid-area: 1 / 1;
         margin: 0;
         font-size: 0.9375rem;
         font-weight: 600;
         letter-spacing: -0.01em;
         color: var(--fpl-blue);
+        opacity: 0;
+        transition: opacity 0.6s ease;
+      }
+
+      .q-proof-stat.active {
+        opacity: 1;
       }
 
       .q-proof-credit {
