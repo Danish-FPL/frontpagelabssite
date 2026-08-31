@@ -14,6 +14,7 @@
 // and threading a one-off "minimal" mode through the shared layout would
 // couple it to a single funnel page. Small head duplication, accepted.
 import AuditWireframe from '../../../components/AuditWireframe.astro';
+import MetaPixel from '../../../components/MetaPixel.astro';
 import '../../../styles/global.css';
 
 const CALENDLY_URL = 'https://calendly.com/build-frontpagelabs/30min';
@@ -31,6 +32,7 @@ const CALENDLY_URL = 'https://calendly.com/build-frontpagelabs/30min';
     <link rel="preload" href="/fonts/overusedgrotesk-semibold.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/overusedgrotesk-medium.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preconnect" href="https://assets.calendly.com" />
+    <MetaPixel />
   </head>
   <body>
     <main class="q" data-step="1">

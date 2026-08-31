@@ -13,9 +13,10 @@
 // column, links ride Website, and budget rides Message ("Budget: …") so no
 // new Airtable column is needed.
 //
-// META PIXEL: paste the pixel ID below and every step fires a trackable
-// event (PageView, GetStartedStep 1–4, Lead on submit). Empty ID = no pixel
-// script is injected at all.
+// META PIXEL: the base pixel is site-wide (src/components/MetaPixel.astro,
+// ID in src/data/tracking.ts). This page adds the funnel events on top of it:
+// GetStartedStep 1-4, the scratch-off and exit-offer events, and Lead on
+// submit. See TRACKING.md.
 //
 // STRIPE: the success card is where the payment step will slot in — swap
 // the copy/CTA there once the Stripe payment page details exist.
@@ -23,9 +24,8 @@
 // Same deliberate choice as the audit page: a self-contained shell with no
 // Nav/Footer, so nothing competes with finishing the sequence.
 import '../styles/global.css';
+import MetaPixel from '../components/MetaPixel.astro';
 import { testimonials } from '../data/testimonials';
-
-const META_PIXEL_ID = '728093653651869';
 ---
 
 <!doctype html>
@@ -39,6 +39,7 @@ const META_PIXEL_ID = '728093653651869';
     <link rel="icon" type="image/png" href="/assets/favicon.png" />
     <link rel="preload" href="/fonts/overusedgrotesk-semibold.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/overusedgrotesk-medium.woff2" as="font" type="font/woff2" crossorigin />
+    <MetaPixel />
   </head>
   <body>
     <main class="q" data-step="1">
@@ -264,31 +265,12 @@ const META_PIXEL_ID = '728093653651869';
       </div>
     </main>
 
-    <script define:vars={{ META_PIXEL_ID }}>
-      // ----- Meta pixel ---------------------------------------------------
-      // Injected only when an ID is configured; every call below no-ops
-      // safely without it (or when the pixel is blocked).
-      if (META_PIXEL_ID) {
-        !(function (f, b, e, v, n, t, s) {
-          if (f.fbq) return;
-          n = f.fbq = function () {
-            n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
-          };
-          if (!f._fbq) f._fbq = n;
-          n.push = n;
-          n.loaded = true;
-          n.version = '2.0';
-          n.queue = [];
-          t = b.createElement(e);
-          t.async = true;
-          t.src = v;
-          s = b.getElementsByTagName(e)[0];
-          s.parentNode.insertBefore(t, s);
-        })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-        window.fbq('init', META_PIXEL_ID);
-        window.fbq('track', 'PageView');
-      }
-
+    <script>
+      // ----- funnel events --------------------------------------------------
+      // The base pixel (and its PageView) is loaded site-wide by MetaPixel
+      // .astro in the head above; this only adds the step-by-step events on
+      // top of the `fbq` it defines. Every call no-ops safely if the pixel is
+      // switched off or blocked.
       function track(event, params) {
         if (!window.fbq) return;
         try {

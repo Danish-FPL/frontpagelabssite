@@ -1,0 +1,52 @@
+---
+// The Meta pixel, site-wide.
+//
+// Rendered by src/layouts/Base.astro (every normal page) and by the two
+// pages that build their own shell instead of using the layout:
+// src/pages/get-started.astro and src/pages/offers/website-audit/start.astro.
+// Adding it in one place and importing it everywhere is what keeps the ID
+// from drifting between copies.
+//
+// This fires the base PageView only. Funnel events (GetStartedStep, Lead,
+// and the scratch-off / exit-offer events) are fired by the pages
+// themselves through the global `fbq` this defines. See TRACKING.md.
+import { META_PIXEL_ID } from '../data/tracking';
+---
+
+{
+  META_PIXEL_ID && (
+    <>
+      <script is:inline define:vars={{ META_PIXEL_ID }}>
+        !(function (f, b, e, v, n, t, s) {
+          if (f.fbq) return;
+          n = f.fbq = function () {
+            n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+          };
+          if (!f._fbq) f._fbq = n;
+          n.push = n;
+          n.loaded = true;
+          n.version = '2.0';
+          n.queue = [];
+          t = b.createElement(e);
+          t.async = true;
+          t.src = v;
+          s = b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t, s);
+        })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+        window.fbq('init', META_PIXEL_ID);
+        window.fbq('track', 'PageView');
+      </script>
+
+      {/* Counts visitors with JavaScript disabled. */}
+      <noscript>
+        <img
+          height="1"
+          width="1"
+          style="display:none"
+          alt=""
+          src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
+        />
+      </noscript>
+    </>
+  )
+}

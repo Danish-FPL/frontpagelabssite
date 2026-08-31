@@ -1,6 +1,7 @@
 ---
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import MetaPixel from '../components/MetaPixel.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -41,6 +42,7 @@ const {
     <meta name="twitter:image" content={new URL('/assets/og-home.jpg', Astro.site)} />
     <link rel="preload" href="/fonts/overusedgrotesk-semibold.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/overusedgrotesk-medium.woff2" as="font" type="font/woff2" crossorigin />
+    <MetaPixel />
   </head>
   <body>
     <div class:list={['page-wrapper', { 'has-overlay-nav': overlayNav }]} id="top">

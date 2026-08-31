@@ -4,7 +4,7 @@
 
 | What | Value | Where it is used |
 |---|---|---|
-| Meta pixel ID | `728093653651869` | In the page: `META_PIXEL_ID` in `src/pages/get-started.astro` |
+| Meta pixel ID | `728093653651869` | `META_PIXEL_ID` in `src/data/tracking.ts` |
 | Meta ad account ID | `1356031632720034` | Ads Manager only. **Not** used in site code. |
 
 The ad account ID never appears in page markup. It identifies the account that
@@ -12,20 +12,24 @@ owns the campaigns and is what you select in Ads Manager when building the
 audiences and conversions this pixel feeds. Keep it here so the two are
 recorded together.
 
-## Where the pixel currently fires
+## Where the pixel fires
 
-Only on `/get-started`. The rest of the site carries no tracking.
+**Every page**, so retargeting audiences build from all site traffic.
 
-That is deliberate for now: the flow was the thing that needed measuring. If
-you want retargeting audiences built from everyone who visits the site (the
-usual reason to run a pixel), it needs to move into `src/layouts/Base.astro`
-so every page fires PageView. Ask and it is a small change.
+`src/components/MetaPixel.astro` renders the base pixel and its PageView, and
+is included by `src/layouts/Base.astro` (which every normal page uses) plus
+the two pages that build their own shell instead of using the layout:
+`/get-started` and `/offers/website-audit/start`. It also renders the
+`<noscript>` fallback image, so visitors with JavaScript off are still counted.
+
+The ID lives in `src/data/tracking.ts`. **Emptying that string turns all Meta
+tracking off site-wide** — one edit, no other changes needed.
 
 ## Events
 
 | Event | Type | When |
 |---|---|---|
-| `PageView` | standard | The `/get-started` page loads |
+| `PageView` | standard | Any page on the site loads |
 | `GetStartedStep` | custom, `{ step: 1-4 }` | Each step renders |
 | `GetStartedScratchOpen` | custom | Scratch-off modal opens (start of step 2) |
 | `GetStartedScratch` | custom, `{ prize }` | A scratch-off is revealed |
