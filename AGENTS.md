@@ -1,3 +1,13 @@
+## Release workflow — push never deploys
+
+Netlify auto-builds from GitHub are STOPPED for this site (`stop_builds` on
+site `frontpagelabs`). GitHub is storage; deploying is a separate, explicit
+step. See `.claude/skills/ship/SKILL.md`.
+
+- `./commit.sh "msg"` — stage, commit, push to main. Free, never deploys.
+- `./ship.sh` — `npm run build` + `netlify deploy --prod --dir dist`. Spends
+  credits; prompts first (`-y` to skip). Never deploy unless explicitly asked.
+
 ## Development
 
 When starting the dev server, use background mode:

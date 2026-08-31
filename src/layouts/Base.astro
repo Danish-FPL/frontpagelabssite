@@ -28,7 +28,17 @@ const {
     <title>{title}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex,nofollow" />}
-    <link rel="icon" href="/assets/frontpage-labs-logo.png" />
+    <link rel="icon" type="image/png" href="/assets/favicon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FrontPage Labs" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site)} />
+    <meta property="og:image" content={new URL('/assets/og-home.jpg', Astro.site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={new URL('/assets/og-home.jpg', Astro.site)} />
     <link rel="preload" href="/fonts/overusedgrotesk-semibold.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/overusedgrotesk-medium.woff2" as="font" type="font/woff2" crossorigin />
   </head>

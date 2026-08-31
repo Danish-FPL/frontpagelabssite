@@ -29,7 +29,7 @@ const links = [
   <div class="container-fluid">
     <div class="navigation-inner">
       <a class="logo" href="/" aria-label="FrontPage Labs — home">
-        <img src={logo} alt="FrontPage Labs" width="160" />
+        <img src={logo} alt="FrontPage Labs" width="210" />
       </a>
 
       <div class="location">
@@ -128,16 +128,16 @@ const links = [
   }
 
   .logo img {
-    width: 160px;
+    width: 210px;
     height: auto;
   }
 
   .location {
     display: flex;
     align-items: center;
-    gap: 0.35rem;
-    margin-left: 1.5rem;
-    font-size: 0.6875rem;
+    gap: 0.45rem;
+    margin-left: 1.75rem;
+    font-size: 0.9375rem;
     font-weight: 500;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -145,7 +145,7 @@ const links = [
   }
 
   .location-icon {
-    width: 10px;
+    width: 14px;
     height: auto;
   }
 
@@ -161,7 +161,7 @@ const links = [
     align-items: center;
     margin-left: 0.9375rem;
     padding: 1rem 0.625rem;
-    font-size: 1.0625rem;
+    font-size: 1.1875rem;
     font-weight: 500;
     line-height: 1.25em;
     letter-spacing: 0.01em;
@@ -267,6 +267,11 @@ const links = [
   }
 
   @media (max-width: 991px) {
+    /* The bigger lockup still needs to share the bar with the menu button. */
+    .logo img {
+      width: 180px;
+    }
+
     .navigation-menu {
       position: absolute;
       inset: 100% 0 auto;

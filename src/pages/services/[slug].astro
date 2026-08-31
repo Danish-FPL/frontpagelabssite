@@ -34,6 +34,8 @@ const { landing } = Astro.props;
 const work = landingProjects(landing);
 const quotes = landingTestimonials(landing);
 const formId = `form-${landing.slug}`;
+const hasPricing = landing.plans.length > 0;
+const formNumber = hasPricing ? '(04)' : '(03)';
 ---
 
 <Base
@@ -107,12 +109,54 @@ const formId = `form-${landing.slug}`;
     </div>
   </section>
 
+  <!-- Pricing ---------------------------------------------------------------- -->
+  {hasPricing && (
+    <section class="section lp-pricing">
+      <div class="container">
+        <div class="lp-section-head">
+          <h2 class="section-title-text">Pricing</h2>
+          <div class="section-title-text">(03)</div>
+        </div>
+        <div class="lp-divider"></div>
+
+        <h3 class="heading-small lp-pricing-heading">{landing.pricingHeading}</h3>
+        <p class="lp-pricing-intro">{landing.pricingIntro}</p>
+
+        <div class:list={['lp-plans', { single: landing.plans.length === 1 }]}>
+          {landing.plans.map((plan) => (
+            <article class:list={['lp-plan', { featured: plan.featured }]}>
+              <p class="lp-plan-name">{plan.name}</p>
+              <p class="lp-plan-price">
+                {plan.price}
+                {plan.cadence && <span class="lp-plan-cadence">{plan.cadence}</span>}
+              </p>
+              {plan.note && <p class="lp-plan-note">{plan.note}</p>}
+
+              <ul class="lp-plan-features">
+                {plan.features.map((feature) => (
+                  <li>
+                    <img src="/assets/check-circle.svg" alt="" aria-hidden="true" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div class="lp-plan-cta">
+                <Button href={`#${formId}`} label={landing.ctaLabel} size="small" />
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
   <!-- Form ----------------------------------------------------------------- -->
   <section class="section lp-form-section" id={formId}>
     <div class="container">
       <div class="lp-section-head">
         <h2 class="section-title-text">{landing.formEyebrow}</h2>
-        <div class="section-title-text">(03)</div>
+        <div class="section-title-text">{formNumber}</div>
       </div>
       <div class="lp-divider"></div>
 
@@ -320,6 +364,113 @@ const formId = `form-${landing.slug}`;
     color: var(--color-secondary);
   }
 
+  /* --- Pricing ------------------------------------------------------------- */
+
+  .lp-pricing-heading {
+    margin: 2rem 0 0.75rem;
+  }
+
+  .lp-pricing-intro {
+    margin: 0 0 2.5rem;
+    max-width: 30rem;
+    font-size: 1.0625rem;
+    line-height: 1.45;
+  }
+
+  .lp-plans {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+    max-width: 46rem;
+  }
+
+  .lp-plans.single {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 26rem;
+  }
+
+  .lp-plan {
+    border: 1px solid var(--color-border-muted);
+    padding: 1.75rem 1.5rem;
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    grid-template-rows: auto auto auto 1fr auto;
+  }
+
+  .lp-plan.featured {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
+  }
+
+  .lp-plan-name {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+  }
+
+  .lp-plan.featured .lp-plan-name {
+    color: var(--fpl-blue);
+  }
+
+  .lp-plan-price {
+    margin: 0;
+    font-family: var(--font-secondary);
+    font-size: 2.5rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.025em;
+  }
+
+  .lp-plan-cadence {
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+
+  .lp-plan-note {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--color-secondary);
+  }
+
+  .lp-plan.featured .lp-plan-note {
+    color: rgb(255 255 255 / 75%);
+  }
+
+  .lp-plan-features {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.55rem;
+    align-content: start;
+  }
+
+  .lp-plan-features li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+  }
+
+  .lp-plan-features img {
+    width: 14px;
+    height: 14px;
+    flex: none;
+  }
+
+  /* The check icon is drawn for a light ground; invert it on the dark card. */
+  .lp-plan.featured .lp-plan-features img {
+    filter: invert(1);
+  }
+
   /* --- Form --------------------------------------------------------------- */
 
   .lp-form-grid {
@@ -443,6 +594,11 @@ const formId = `form-${landing.slug}`;
     .lp-proof-grid,
     .lp-form-grid {
       grid-template-columns: 1fr;
+    }
+
+    .lp-plans {
+      grid-template-columns: 1fr;
+      max-width: 26rem;
     }
 
     .lp-form-grid {

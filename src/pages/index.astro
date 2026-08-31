@@ -2,9 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Button from '../components/Button.astro';
 import SectionTitle from '../components/SectionTitle.astro';
-import ProjectCard from '../components/ProjectCard.astro';
 import LandingHero from '../components/LandingHero.astro';
-import { featuredProjects } from '../data/projects';
 import { testimonials } from '../data/testimonials';
 import { homeHero } from '../data/hero';
 
@@ -168,37 +166,41 @@ const services = [
        viewport. Landing pages keep the solid header above the fold. -->
   <LandingHero {...homeHero} fullBleed />
 
-  <!-- (01) Digital chemistry ---------------------------------------------- -->
-  <section class="section chemistry">
-    <div class="container">
-      <div class="chemistry-grid">
-        <SectionTitle number="(01)" label="Digital Chemistry" />
+  <!-- (01) Results ---------------------------------------------------------- -->
+  <section class="section results">
+    {/* The same looping clip as the hero, dimmed so the cards stay readable. */}
+    <div class="results-media">
+      <video autoplay muted loop playsinline poster="/assets/fpl-38-.png">
+        <source src="/assets/fpl-3-transcode.webm" type="video/webm" />
+        <source src="/assets/fpl-3-transcode.mp4" type="video/mp4" />
+      </video>
+    </div>
 
-        <div class="chemistry-content">
-          <div class="margin-bottom-medium">
-            <h2 class="heading-small">Form<br />or and<br />function.</h2>
-          </div>
-
-          <div class="chemistry-body">
-            <p class="paragraph-small no-text-indent">
-              From <strong>sleek websites</strong> to <strong>full-scale marketing ecosystems</strong>, we
-              blend art, outreach, and analytics to create digital experiences that <em>feel</em> as good
-              as they perform.
-            </p>
-            <p class="paragraph-small no-text-indent">
-              Every pixel, post and campaign is precision-built for audience engagement and consistent
-              conversion.
-            </p>
-            <p class="paragraph-small no-text-indent"><strong>Welcome to the FrontPage.</strong></p>
-
-            <div class="button-row">
-              <Button href="/services" label="Services" />
-            </div>
-          </div>
+    <div class="results-inner">
+      <div class="container">
+        <div class="section-title-row inverse">
+          <h2 class="section-title-text">Outcomes</h2>
+          <div class="section-title-text">(01)</div>
         </div>
 
-        <div class="chemistry-image">
-          <img src="/assets/fpl-79-.png" alt="" loading="lazy" />
+        <h3 class="heading-small results-heading"><span class="text-blue">Results</span></h3>
+
+        <div class="results-cards">
+          {testimonials.map(({ heading, quote, name, company }, i) => (
+            <figure class:list={['result-card', `pos-${i + 1}`]}>
+              <div class="result-card-head">
+                <img class="result-card-mark" src="/assets/fpl-14-.png" alt="" aria-hidden="true" />
+                <h4 class="result-card-title">
+                  {heading[0]}<br />{heading[1]}
+                </h4>
+              </div>
+              <blockquote class="result-card-quote">{quote}</blockquote>
+              <figcaption class="result-card-credit">
+                <span>{name}</span>
+                <span class="muted">{company}</span>
+              </figcaption>
+            </figure>
+          ))}
         </div>
       </div>
     </div>
@@ -271,7 +273,43 @@ const services = [
     </div>
   </section>
 
-  <!-- (02) Services -------------------------------------------------------- -->
+  <!-- (02) Digital chemistry ---------------------------------------------- -->
+  <section class="section chemistry">
+    <div class="container">
+      <div class="chemistry-grid">
+        <SectionTitle number="(02)" label="Digital Chemistry" />
+
+        <div class="chemistry-content">
+          <div class="margin-bottom-medium">
+            <h2 class="heading-small">Form<br />and<br />function.</h2>
+          </div>
+
+          <div class="chemistry-body">
+            <p class="paragraph-small no-text-indent">
+              From <strong>sleek websites</strong> to <strong>full-scale marketing ecosystems</strong>, we
+              blend art, outreach, and analytics to create digital experiences that <em>feel</em> as good
+              as they perform.
+            </p>
+            <p class="paragraph-small no-text-indent">
+              Every pixel, post and campaign is precision-built for audience engagement and consistent
+              conversion.
+            </p>
+            <p class="paragraph-small no-text-indent"><strong>Welcome to the FrontPage.</strong></p>
+
+            <div class="button-row">
+              <Button href="/services" label="Services" />
+            </div>
+          </div>
+        </div>
+
+        <div class="chemistry-image">
+          <img src="/assets/fpl-79-.png" alt="" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- (03) Services -------------------------------------------------------- -->
   <!-- Scroll-driven split: the laptop still fills the section edge to edge, then
        narrows to the left half as the stage pins, uncovering the accordion
        panel beside it. `--p` (0 → 1) is written by the script at the bottom of
@@ -289,7 +327,7 @@ const services = [
           <div class="services-panel-inner">
             <div class="services-head">
               <h2 class="section-title-text">Services</h2>
-              <div class="section-title-text">(02)</div>
+              <div class="section-title-text">(03)</div>
             </div>
 
             <div class="services-accordion">
@@ -357,12 +395,12 @@ const services = [
     </div>
   </section>
 
-  <!-- (03) Our approach ---------------------------------------------------- -->
+  <!-- (04) Our approach ---------------------------------------------------- -->
   <section class="section approach">
     <div class="container">
       <div class="section-title-row">
         <h2 class="section-title-text">Our approach</h2>
-        <div class="section-title-text">(03)</div>
+        <div class="section-title-text">(04)</div>
       </div>
       <div class="divider"></div>
     </div>
@@ -417,73 +455,59 @@ const services = [
     </div>
   </section>
 
-  <!-- (04) Lab results ----------------------------------------------------- -->
-  <section class="section results">
-    {/* The same looping clip as the hero, dimmed so the cards stay readable. */}
-    <div class="results-media">
-      <video autoplay muted loop playsinline poster="/assets/fpl-38-.png">
-        <source src="/assets/fpl-3-transcode.webm" type="video/webm" />
-        <source src="/assets/fpl-3-transcode.mp4" type="video/mp4" />
-      </video>
-    </div>
-
-    <div class="results-inner">
-      <div class="container">
-        <div class="section-title-row inverse">
-          <h2 class="section-title-text">Outcomes</h2>
-          <div class="section-title-text">(04)</div>
-        </div>
-
-        <h3 class="heading-small results-heading">Lab<br /><span class="text-blue">results</span></h3>
-
-        <div class="results-cards">
-          {testimonials.map(({ heading, quote, name, company }, i) => (
-            <figure class:list={['result-card', `pos-${i + 1}`]}>
-              <div class="result-card-head">
-                <img class="result-card-mark" src="/assets/fpl-14-.png" alt="" aria-hidden="true" />
-                <h4 class="result-card-title">
-                  {heading[0]}<br />{heading[1]}
-                </h4>
-              </div>
-              <blockquote class="result-card-quote">{quote}</blockquote>
-              <figcaption class="result-card-credit">
-                <span>{name}</span>
-                <span class="muted">{company}</span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- (05) Work that worked ------------------------------------------------ -->
-  <section class="section work">
+  <!-- (05) Contact ----------------------------------------------------------- -->
+  <!-- Minimal version of the /contact form: same fields, same /api/lead →
+       Airtable pipeline via lead-form.js, just without the optional field
+       and surrounding furniture. -->
+  <section class="section home-contact">
     <div class="container">
       <div class="section-title-row">
-        <h2 class="section-title-text">Recent projects</h2>
+        <h2 class="section-title-text">Contact</h2>
         <div class="section-title-text">(05)</div>
       </div>
       <div class="divider"></div>
 
-      <div class="work-heading-row">
-        <h3 class="heading-small work-heading">
-          <span class="text-blue">Work</span>that<br /><span class="text-blue">Work</span>ed
-        </h3>
-        <div class="work-heading-cta">
-          <Button href="/portfolio" label="View Portfolio" />
+      <div class="home-contact-grid">
+        <div class="home-contact-intro">
+          <div class="availability">
+            <span class="availability-dot" aria-hidden="true"></span>
+            <span>Available to take on new clients</span>
+          </div>
+
+          <h3 class="heading-small home-contact-heading">Let's<br />build.</h3>
+
+          <p class="paragraph-small no-text-indent">
+            <strong>Tell us a bit about your business and marketing goals</strong>, and we'll get in
+            touch with you shortly.
+          </p>
         </div>
-      </div>
 
-      <div class="work-grid">
-        {featuredProjects.map((project) => <ProjectCard project={project} />)}
-      </div>
+        <form class="home-contact-form" name="home-contact">
+          <div class="field">
+            <label for="hc-name">Name:</label>
+            <input id="hc-name" name="name" type="text" placeholder="Enter your name" required />
+          </div>
 
-      <div class="work-footer">
-        <p class="paragraph-small no-text-indent">
-          Your brand deserves the showcase. Reach out to start reaching your audience online.
-        </p>
-        <Button href="/contact" label="Get started" />
+          <div class="field">
+            <label for="hc-email">Email:</label>
+            <input id="hc-email" name="email" type="email" placeholder="Enter your email" required />
+          </div>
+
+          <div class="field">
+            <label for="hc-business">Business Details:</label>
+            <textarea
+              id="hc-business"
+              name="business"
+              rows="3"
+              placeholder="Please include some details about your business and marketing goals."
+              required></textarea>
+          </div>
+
+          <p class="form-error" data-lead-error hidden>
+            That didn't send — try again, or email build@frontpagelabs.com.
+          </p>
+          <button class="submit-button" type="submit">Send Message</button>
+        </form>
       </div>
     </div>
   </section>
@@ -1107,36 +1131,106 @@ const services = [
     color: var(--color-secondary);
   }
 
-  /* --- (05) Work ------------------------------------------------------------ */
+  /* --- (05) Contact ---------------------------------------------------------- */
+  /* Field styles mirror /contact — Astro scopes styles per page, so the form
+     furniture is duplicated here on purpose. */
 
-  .work-heading-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 2rem;
-    margin-block: 2rem 2.5rem;
-  }
-
-  .work-heading {
-    margin: 0;
-  }
-
-  .work-grid {
+  .home-contact-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.25rem;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+    gap: 4rem;
+    align-items: start;
+    margin-top: 2.5rem;
   }
 
-  .work-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 2rem;
-    margin-top: 3rem;
+  .availability {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
   }
 
-  .work-footer p {
-    max-width: 26rem;
+  .availability-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #23d100;
+  }
+
+  .home-contact-heading {
+    margin: 0 0 1.25rem;
+  }
+
+  .home-contact-intro p {
+    max-width: 22rem;
+  }
+
+  .home-contact-form {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 38rem;
+  }
+
+  .field {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .field label {
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+
+  .field input,
+  .field textarea {
+    font: inherit;
+    /* 16px on the input itself: below that, iOS Safari force-zooms the
+       viewport on focus and strands the user mid-form. */
+    font-size: 16px;
+    color: var(--color-primary);
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--color-border-muted);
+    padding: 0.5rem 0;
+    resize: vertical;
+    transition: border-color 0.2s ease;
+  }
+
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: var(--color-form-placeholder);
+  }
+
+  .field input:focus,
+  .field textarea:focus {
+    outline: none;
+    border-bottom-color: var(--color-primary);
+  }
+
+  .form-error {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: #c0392b;
+  }
+
+  .submit-button {
+    justify-self: start;
+    border: 1px solid var(--color-primary);
+    border-radius: 999px;
+    padding: 0.7rem 1.35rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  .submit-button:hover {
+    background-color: var(--color-primary);
+    color: var(--color-white);
   }
 
   /* --- Responsive ----------------------------------------------------------- */
@@ -1169,6 +1263,11 @@ const services = [
   @media (max-width: 991px) {
     .chemistry-grid {
       grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .home-contact-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
     }
 
     .results-cards {
@@ -1232,7 +1331,6 @@ const services = [
     .chemistry-grid,
     .wins-grid,
     .approach-bottom,
-    .work-grid,
     .results-cards,
     .svc-panel-grid {
       grid-template-columns: 1fr;
@@ -1271,9 +1369,7 @@ const services = [
       justify-self: start;
     }
 
-    .wins-footer,
-    .work-heading-row,
-    .work-footer {
+    .wins-footer {
       flex-direction: column;
       align-items: flex-start;
     }
@@ -1289,6 +1385,11 @@ const services = [
 </style>
 
 <script>
+  import { wireLeadForm } from '../scripts/lead-form.js';
+
+  // --- (05) Contact: posts as JSON to /api/lead (→ Airtable) ----------------
+  wireLeadForm(document.querySelector('.home-contact-form'), { source: 'Home page' });
+
   // --- Drawers: client wins + the services accordion ------------------------
   //
   // Both use the same contract — a trigger carrying aria-expanded and an
