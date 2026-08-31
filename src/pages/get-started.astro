@@ -54,7 +54,6 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
           <button class="q-mini" type="button" data-strip-toggle="pricing" aria-expanded="false" aria-controls="strip-pricing">
             Pricing
           </button>
-          <a class="q-mini" href="/portfolio">Work</a>
         </div>
       </header>
 
@@ -69,7 +68,7 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
       <div class="q-strip" id="strip-pricing" data-strip="pricing">
         <div class="q-strip-clip">
           <p class="q-strip-content">
-            Plans start at <span class="q-strip-accent">$40 a month</span> or a
+            Plans start at <span class="q-strip-accent">$40 a month</span> or a{' '}
             <span class="q-strip-accent">$1,899 flat fee</span>.
           </p>
         </div>
@@ -223,12 +222,16 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
           ))}
         </aside>
 
-        {/* The teal stat rides under the gray card, not in it, and swaps in
-            step with the active quote. */}
-        <div class="q-proof-stats">
-          {testimonials.map((t, i) => (
-            <p class:list={['q-proof-stat', { active: i === 0 }]} data-proof-stat>{t.stat}</p>
-          ))}
+        {/* Under the gray card: the teal stat left (swapping in step with the
+            active quote), the portfolio link right — together spanning the
+            card's width. */}
+        <div class="q-proof-foot">
+          <div class="q-proof-stats">
+            {testimonials.map((t, i) => (
+              <p class:list={['q-proof-stat', { active: i === 0 }]} data-proof-stat>{t.stat}</p>
+            ))}
+          </div>
+          <a class="q-proof-more" href="/portfolio">View our work</a>
         </div>
       </div>
     </main>
@@ -886,9 +889,32 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
         color: var(--color-primary);
       }
 
+      .q-proof-foot {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 1rem;
+        margin-top: 0.7rem;
+      }
+
       .q-proof-stats {
         display: grid;
-        margin-top: 0.7rem;
+        min-width: 0;
+      }
+
+      .q-proof-more {
+        flex: none;
+        font-size: 0.6875rem;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--color-primary);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .q-proof-more:hover {
+        color: var(--color-secondary);
       }
 
       .q-proof-stat {
