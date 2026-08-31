@@ -57,11 +57,11 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
         </div>
       </header>
 
-      <!-- Drawer strips — tiny banners that slide open under the header. -->
+      {/* Drawer strips — tiny banners that slide open under the header. */}
       <div class="q-strip" id="strip-call" data-strip="call">
         <div class="q-strip-clip">
           <p class="q-strip-content">
-            Call us — <a href="tel:+18477570201">847-757-0201</a>
+            Call us at <a href="tel:+18477570201">847-757-0201</a>
           </p>
         </div>
       </div>
@@ -75,17 +75,21 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
       </div>
 
       <div class="q-body">
-        <div class="q-progress" aria-hidden="true">
-          <span class="q-progress-label">Step <span data-step-num>1</span> of 4</span>
+        {/* The bars double as navigation: each one jumps back to its step. */}
+        <div class="q-progress">
+          <span class="q-progress-label" aria-hidden="true">Step <span data-step-num>1</span> of 4</span>
           <div class="q-progress-bar">
-            <span></span><span></span><span></span><span></span>
+            <button type="button" data-goto="1" aria-label="Go to step 1: your goals"></button>
+            <button type="button" data-goto="2" aria-label="Go to step 2: what you have now"></button>
+            <button type="button" data-goto="3" aria-label="Go to step 3: your budget"></button>
+            <button type="button" data-goto="4" aria-label="Go to step 4: your contact details"></button>
           </div>
         </div>
 
-        <!-- Card 1 — goals (multi-select) -->
+        {/* Card 1 — goals (multi-select) */}
         <section class="q-card" data-card="1">
           <h1 class="q-question">What are you looking to build?</h1>
-          <p class="q-helper">Pick everything that applies — we'll shape the plan around it.</p>
+          <p class="q-helper">Pick everything that applies. We'll shape the plan around it.</p>
 
           <div class="q-options" data-multi>
             <button class="q-option" type="button" data-option="A new or better website">
@@ -109,7 +113,7 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
               <span class="q-option-mark" aria-hidden="true"></span>
             </button>
             <button class="q-option" type="button" data-option="Not sure yet">
-              <span class="q-option-label">Not sure yet — guide me</span>
+              <span class="q-option-label">Not sure yet, guide me</span>
               <span class="q-option-mark" aria-hidden="true"></span>
             </button>
           </div>
@@ -120,11 +124,11 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
           </div>
         </section>
 
-        <!-- Card 2 — current presence -->
+        {/* Card 2 — current presence */}
         <section class="q-card" data-card="2" hidden aria-hidden="true">
           <h2 class="q-question">What do you have right now?</h2>
           <p class="q-helper">
-            Paste your website or social handles — or tell us you're starting from scratch.
+            Paste your website or social handles, or tell us you're starting from scratch.
           </p>
           <div class="q-field">
             <label class="sr-only" for="q-website">Current website and social media</label>
@@ -132,7 +136,7 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
               id="q-website"
               name="website"
               rows="3"
-              placeholder="yourbusiness.com, @yourhandle — or 'starting from scratch'"></textarea>
+              placeholder="yourbusiness.com, @yourhandle, or 'starting from scratch'"></textarea>
             <p class="q-error" aria-live="polite"></p>
           </div>
           <div class="q-nav">
@@ -141,10 +145,10 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
           </div>
         </section>
 
-        <!-- Card 3 — budget (single-select, click advances) -->
+        {/* Card 3 — budget (single-select, click advances) */}
         <section class="q-card" data-card="3" hidden aria-hidden="true">
           <h2 class="q-question">What's your budget?</h2>
-          <p class="q-helper">A ballpark is fine — it only shapes what we recommend first.</p>
+          <p class="q-helper">A ballpark is fine. It only shapes what we recommend first.</p>
 
           <div class="q-options" data-single>
             <button class="q-option" type="button" data-option="Under $500">
@@ -175,10 +179,10 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
           </div>
         </section>
 
-        <!-- Card 4 — contact + submit -->
+        {/* Card 4 — contact + submit */}
         <section class="q-card" data-card="4" hidden aria-hidden="true">
           <h2 class="q-question">Where do we reach you?</h2>
-          <p class="q-helper">We'll come back with a plan and a price — usually within one business day.</p>
+          <p class="q-helper">We'll come back with a plan and a price, usually within one business day.</p>
           <div class="q-field">
             <label for="q-email">Email</label>
             <input id="q-email" name="email" type="email" autocomplete="email" placeholder="you@business.com" required />
@@ -195,7 +199,7 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
           </div>
         </section>
 
-        <!-- Success — the Stripe payment step will slot in here -->
+        {/* Success — the Stripe payment step will slot in here */}
         <section class="q-done" hidden aria-hidden="true">
           <h2 class="q-question">You're on the FrontPage.</h2>
           <p class="q-helper">
@@ -207,9 +211,9 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
           </div>
         </section>
 
-        <!-- Floating proof — one client quote at a time, cross-fading as the
+        {/* Floating proof — one client quote at a time, cross-fading as the
              visitor moves through the steps, so every answer lands next to a
-             reason to keep going. -->
+             reason to keep going. */}
         <aside class="q-proof">
           {testimonials.map((t, i) => (
             <figure class:list={['q-proof-quote', { active: i === 0 }]} data-proof-quote>
@@ -274,7 +278,7 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
       const main = document.querySelector('.q');
       const cards = [...document.querySelectorAll('.q-card')];
       const stepNum = document.querySelector('[data-step-num]');
-      const segments = [...document.querySelectorAll('.q-progress-bar span')];
+      const segments = [...document.querySelectorAll('.q-progress-bar button')];
       const done = document.querySelector('.q-done');
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -355,7 +359,7 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
         const optionsError = card.querySelector('[data-options-error]');
         if (card.querySelector('[data-multi]') && optionsError) {
           if (!answers.goals.length) {
-            optionsError.textContent = 'Pick at least one — "Not sure yet" counts.';
+            optionsError.textContent = 'Pick at least one. "Not sure yet" counts.';
             return false;
           }
         }
@@ -402,6 +406,26 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
         }
       }
 
+      // Jumping via the progress bars. Going back is always allowed; jumping
+      // forward validates and stores each card on the way, so a skipped
+      // answer still stops the visitor where it is missing.
+      function goTo(target) {
+        if (target === step) return;
+        if (target < step) {
+          store(cards[step - 1]);
+          step = target;
+          render();
+          return;
+        }
+        while (step < target) {
+          const card = cards[step - 1];
+          if (!validate(card)) return;
+          store(card);
+          step += 1;
+        }
+        render();
+      }
+
       // ----- finish: lead POST (fire-and-forget) + success ----------------
       function submit() {
         const card = cards[3];
@@ -439,6 +463,10 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
         done.hidden = false;
         done.setAttribute('aria-hidden', 'false');
       }
+
+      document.querySelectorAll('[data-goto]').forEach((bar) => {
+        bar.addEventListener('click', () => goTo(Number(bar.dataset.goto)));
+      });
 
       // ----- header strips ------------------------------------------------
       // One strip open at a time; clicking its button again closes it.
@@ -609,14 +637,38 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
         gap: 0.4rem;
       }
 
-      .q-progress-bar span {
+      /* The bar is 3px, but the button keeps a taller invisible hit area so
+         it is tappable on a phone. */
+      .q-progress-bar button {
         height: 3px;
+        border: 0;
+        border-radius: 0;
+        padding: 0;
         background-color: var(--color-border-muted);
+        background-clip: padding-box;
+        border-top: 9px solid transparent;
+        border-bottom: 9px solid transparent;
+        box-sizing: content-box;
+        margin-block: -9px;
+        cursor: pointer;
         transition: background-color 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       }
 
-      .q-progress-bar span.done {
+      .q-progress-bar button.done {
         background-color: var(--fpl-blue);
+      }
+
+      .q-progress-bar button:hover {
+        background-color: var(--color-secondary);
+      }
+
+      .q-progress-bar button.done:hover {
+        background-color: var(--color-primary);
+      }
+
+      .q-progress-bar button:focus-visible {
+        outline: 2px solid var(--fpl-blue);
+        outline-offset: 3px;
       }
 
       /* --- cards --------------------------------------------------------- */
@@ -982,7 +1034,7 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
           animation: none;
         }
 
-        .q-progress-bar span {
+        .q-progress-bar button {
           transition: none;
         }
 

@@ -89,7 +89,7 @@ const DEFAULTS = {
   projectSlugs: [],
   proofHeading: 'What clients say',
   proofCount: 3,
-  pricingIntro: 'Two ways to work with us — pick the one that fits your cash flow.',
+  pricingIntro: 'Two ways to work with us. Pick the one that fits your cash flow.',
   plans: [],
   formEyebrow: 'Get started',
   formIntro: 'Tell us about your business and we will come back with a plan and a price.',
@@ -149,7 +149,7 @@ export const serviceLandings: ServiceLanding[] = [
     workHeading: 'Work that worked',
     projectSlugs: ['ak', 'therapy-provider', 'massage', 'mosaic-therapy-miami'],
     pricingIntro:
-      'Two ways to get your website built — a flat monthly rate that covers everything, or own it outright with a one-time build.',
+      'Two ways to get your website built: a flat monthly rate that covers everything, or own it outright with a one-time build.',
     plans: [
       {
         name: 'Monthly',
@@ -185,7 +185,7 @@ export const serviceLandings: ServiceLanding[] = [
     slug: 'channels',
     metaTitle: 'Start Building Channels',
     metaDescription:
-      'Social media, email, SMS, and search listings — one cohesive marketing system built and run by FrontPage Labs.',
+      'Social media, email, SMS, and search listings, all in one cohesive marketing system built and run by FrontPage Labs.',
     eyebrow: 'Marketing Channels',
     headline: 'Start building your channels.',
     subhead:
@@ -226,7 +226,7 @@ export const serviceLandings: ServiceLanding[] = [
     eyebrow: 'Advertising',
     headline: 'Start building your ads.',
     subhead:
-      'Thousands of people are searching for your services right now. We land your business gracefully in front of the right audience — and first in the results.',
+      'Thousands of people are searching for your services right now. We land your business gracefully in front of the right audience, and first in the results.',
     points: [
       'Social & Google ad campaigns',
       'Creative, targeting, and landing pages',
@@ -294,13 +294,13 @@ export const serviceLandings: ServiceLanding[] = [
 
   build({
     slug: 'landing-page',
-    metaTitle: 'Landing Page + Ad — $500',
+    metaTitle: 'Landing Page + Ad, $500',
     metaDescription:
       'One conversion-built landing page plus one ad campaign, launched together for a flat $500.',
     eyebrow: 'The Landing Page Offer',
     headline: 'A landing page, plus the ad that fills it.',
     subhead:
-      'One conversion-built landing page and one ad campaign pointed straight at it — designed, written, and launched together for a flat $500.',
+      'One conversion-built landing page and one ad campaign pointed straight at it. Designed, written, and launched together for a flat $500.',
     points: [
       'One flat fee, no surprises',
       'Page and ad launched together',

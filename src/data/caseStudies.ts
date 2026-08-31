@@ -78,7 +78,7 @@ function placeholder(project: Project): CaseStudy {
     overview: [
       `FrontPage Labs partnered with ${project.title} to build the digital system behind the brand.`,
       'Placeholder overview copy. Replace this with the story of the engagement: what the client came to us with, what we set out to change, and how the work was scoped.',
-      'A second paragraph carries the approach — the decisions that shaped the build and why they were the right ones for this brand.',
+      'A second paragraph carries the approach: the decisions that shaped the build and why they were the right ones for this brand.',
       'A closing line lands the outcome.',
     ],
     highlights: [

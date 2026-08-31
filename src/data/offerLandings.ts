@@ -108,7 +108,7 @@ function build(input: OfferInput): OfferLanding {
 export const offerLandings: OfferLanding[] = [
   build({
     slug: 'website-and-ads',
-    metaTitle: 'Website + Ad Campaign — $1,400',
+    metaTitle: 'Website + Ad Campaign, $1,400',
     metaDescription:
       'A complete website, three months of maintenance, and a live ad campaign on Google or social. One flat price of $1,400.',
 
@@ -162,29 +162,29 @@ export const offerLandings: OfferLanding[] = [
 
   build({
     slug: 'website-audit',
-    metaTitle: 'Website Audit — $47',
+    metaTitle: 'Website Audit, $47',
     metaDescription:
       'A 30-minute website audit call. We review your site before the call, then walk you through what to fix, page by page. $47 flat.',
 
     eyebrow: 'Website audit',
     headline: 'Find out what your website is costing you.',
     subhead:
-      'We review your site before the call — every page, desktop and phone. Then we get on a 30-minute call and walk you through what we found, what to fix first, and why.',
+      'We review your site before the call: every page, desktop and phone. Then we get on a 30-minute call and walk you through what we found, what to fix first, and why.',
     price: '$47',
     priceNote: 'one time, for the full review and call',
 
     includes: [
       {
         title: 'A real review, before the call',
-        body: 'We go through your website the way a customer would — every page, on desktop and on a phone.',
+        body: 'We go through your website the way a customer would: every page, on desktop and on a phone.',
       },
       {
         title: 'A 30-minute walkthrough call',
-        body: 'Screen shared, your site up. What is working, what is losing you visitors, and why — in plain language.',
+        body: 'Screen shared, your site up. What is working, what is losing you visitors, and why, in plain language.',
       },
       {
         title: 'A prioritized fix list',
-        body: 'You leave knowing what to fix first and what can wait — useful whoever ends up doing the fixing.',
+        body: 'You leave knowing what to fix first and what can wait. Useful whoever ends up doing the fixing.',
       },
     ],
 
