@@ -35,6 +35,7 @@ const work = landingProjects(landing);
 const quotes = landingTestimonials(landing);
 const formId = `form-${landing.slug}`;
 const hasPricing = landing.plans.length > 0;
+const workNumber = hasPricing ? '(03)' : '(02)';
 const formNumber = hasPricing ? '(04)' : '(03)';
 ---
 
@@ -62,24 +63,7 @@ const formNumber = hasPricing ? '(04)' : '(03)';
       )}
 
       <div class="lp-cta">
-        <Button href={`#${formId}`} label={landing.ctaLabel} />
-      </div>
-    </div>
-  </section>
-
-  <!-- Work ----------------------------------------------------------------- -->
-  <section class="section lp-work">
-    <div class="container">
-      <div class="lp-section-head">
-        <h2 class="section-title-text">{landing.workEyebrow}</h2>
-        <div class="section-title-text">(01)</div>
-      </div>
-      <div class="lp-divider"></div>
-
-      <h3 class="heading-small lp-work-heading">{landing.workHeading}</h3>
-
-      <div class="lp-work-grid">
-        {work.map((project) => <ProjectCard project={project} />)}
+        <Button href="/get-started" label={landing.ctaLabel} />
       </div>
     </div>
   </section>
@@ -89,7 +73,7 @@ const formNumber = hasPricing ? '(04)' : '(03)';
     <div class="container">
       <div class="lp-section-head inverse">
         <h2 class="section-title-text">Testimonials</h2>
-        <div class="section-title-text">(02)</div>
+        <div class="section-title-text">(01)</div>
       </div>
 
       <h3 class="heading-small lp-proof-heading">{landing.proofHeading}</h3>
@@ -115,11 +99,10 @@ const formNumber = hasPricing ? '(04)' : '(03)';
       <div class="container">
         <div class="lp-section-head">
           <h2 class="section-title-text">Pricing</h2>
-          <div class="section-title-text">(03)</div>
+          <div class="section-title-text">(02)</div>
         </div>
         <div class="lp-divider"></div>
 
-        <h3 class="heading-small lp-pricing-heading">{landing.pricingHeading}</h3>
         <p class="lp-pricing-intro">{landing.pricingIntro}</p>
 
         <div class:list={['lp-plans', { single: landing.plans.length === 1 }]}>
@@ -142,7 +125,7 @@ const formNumber = hasPricing ? '(04)' : '(03)';
               </ul>
 
               <div class="lp-plan-cta">
-                <Button href={`#${formId}`} label={landing.ctaLabel} size="small" />
+                <Button href="/get-started" label={landing.ctaLabel} size="small" />
               </div>
             </article>
           ))}
@@ -150,6 +133,23 @@ const formNumber = hasPricing ? '(04)' : '(03)';
       </div>
     </section>
   )}
+
+  <!-- Work ----------------------------------------------------------------- -->
+  <section class="section lp-work">
+    <div class="container">
+      <div class="lp-section-head">
+        <h2 class="section-title-text">{landing.workEyebrow}</h2>
+        <div class="section-title-text">{workNumber}</div>
+      </div>
+      <div class="lp-divider"></div>
+
+      <h3 class="heading-small lp-work-heading">{landing.workHeading}</h3>
+
+      <div class="lp-work-grid">
+        {work.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </div>
+  </section>
 
   <!-- Form ----------------------------------------------------------------- -->
   <section class="section lp-form-section" id={formId}>
@@ -366,12 +366,8 @@ const formNumber = hasPricing ? '(04)' : '(03)';
 
   /* --- Pricing ------------------------------------------------------------- */
 
-  .lp-pricing-heading {
-    margin: 2rem 0 0.75rem;
-  }
-
   .lp-pricing-intro {
-    margin: 0 0 2.5rem;
+    margin: 2rem 0 2.5rem;
     max-width: 30rem;
     font-size: 1.0625rem;
     line-height: 1.45;

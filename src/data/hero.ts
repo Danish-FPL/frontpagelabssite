@@ -69,7 +69,7 @@ export const homeHero: HeroFields = {
   kicker: "Here, it's **Digital Performance, Down to a Science**.",
   ctaText: 'Ready for the ~FrontPage?~',
   ctaLabel: 'Get Started',
-  ctaHref: '/contact',
+  ctaHref: '/get-started',
   // The live site's hero still: the laptop shot the display type blends
   // against. This is the landscape crop the Webflow CDN served, already in
   // /public/assets — the 4000×6000 original is the same photo uncropped and

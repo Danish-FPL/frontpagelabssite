@@ -64,7 +64,6 @@ export interface ServiceLanding {
   proofCount: number;
 
   /* Pricing — section renders only when `plans` is non-empty. */
-  pricingHeading: string;
   pricingIntro: string;
   plans: PricingPlan[];
 
@@ -90,7 +89,6 @@ const DEFAULTS = {
   projectSlugs: [],
   proofHeading: 'What clients say',
   proofCount: 3,
-  pricingHeading: 'Simple pricing',
   pricingIntro: 'Two ways to work with us — pick the one that fits your cash flow.',
   plans: [],
   formEyebrow: 'Get started',
@@ -121,7 +119,7 @@ export const serviceLandings: ServiceLanding[] = [
     workHeading: 'Sites we have built',
     projectSlugs: ['ak', 'therapy-provider', 'massage', 'mosaic-therapy-miami'],
     proofHeading: 'What clients say',
-    formHeading: 'Tell us about your business.',
+    formHeading: 'Tell us more to get started.',
     formIntro:
       'Send over what you do and where you want to be, and we will come back with a plan and a price. No obligation.',
   }),
@@ -178,7 +176,7 @@ export const serviceLandings: ServiceLanding[] = [
         ],
       },
     ],
-    formHeading: 'Tell us about your business.',
+    formHeading: 'Tell us more to get started.',
     formIntro:
       'Send over what you do and where you want to be, and we will come back with a plan and a price. No obligation.',
   }),

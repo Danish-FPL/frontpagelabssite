@@ -1,0 +1,678 @@
+---
+// /get-started — the catch-all registration sequence every "Get Started"
+// button on the site lands on. Four quick cards, one visible at a time,
+// modelled on the website-audit questionnaire's state machine (and CAF's
+// register flow), styled entirely in the site's own type and card language.
+//
+//   1. Goals            — multi-select option cards
+//   2. Current presence — website / social links (optional)
+//   3. Budget           — single-select, click advances
+//   4. Email + phone    — submit → /api/lead (Airtable), success card
+//
+// Answers post to /api/lead with source "Get started". Goals ride the Goal
+// column, links ride Website, and budget rides Message ("Budget: …") so no
+// new Airtable column is needed.
+//
+// META PIXEL: paste the pixel ID below and every step fires a trackable
+// event (PageView, GetStartedStep 1–4, Lead on submit). Empty ID = no pixel
+// script is injected at all.
+//
+// STRIPE: the success card is where the payment step will slot in — swap
+// the copy/CTA there once the Stripe payment page details exist.
+//
+// Same deliberate choice as the audit page: a self-contained shell with no
+// Nav/Footer, so nothing competes with finishing the sequence.
+import '../styles/global.css';
+
+const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking on
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Get Started | FrontPageLabs</title>
+    <meta name="description" content="Four quick questions and we'll come back with a plan and a price." />
+    <meta name="robots" content="noindex,nofollow" />
+    <link rel="icon" type="image/png" href="/assets/favicon.png" />
+    <link rel="preload" href="/fonts/overusedgrotesk-semibold.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/overusedgrotesk-medium.woff2" as="font" type="font/woff2" crossorigin />
+  </head>
+  <body>
+    <main class="q" data-step="1">
+      <header class="q-header">
+        <a class="q-logo" href="/" aria-label="Back to FrontPage Labs">
+          <img src="/assets/frontpage-labs-logo-1-.png" alt="FrontPage Labs" width="180" />
+        </a>
+      </header>
+
+      <div class="q-body">
+        <div class="q-progress" aria-hidden="true">
+          <span class="q-progress-label">Step <span data-step-num>1</span> of 4</span>
+          <div class="q-progress-bar">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+
+        <!-- Card 1 — goals (multi-select) -->
+        <section class="q-card" data-card="1">
+          <h1 class="q-question">What are you looking to build?</h1>
+          <p class="q-helper">Pick everything that applies — we'll shape the plan around it.</p>
+
+          <div class="q-options" data-multi>
+            <button class="q-option" type="button" data-option="A new or better website">
+              <span class="q-option-label">A new or better website</span>
+              <span class="q-option-mark" aria-hidden="true"></span>
+            </button>
+            <button class="q-option" type="button" data-option="More leads and sales">
+              <span class="q-option-label">More leads &amp; sales</span>
+              <span class="q-option-mark" aria-hidden="true"></span>
+            </button>
+            <button class="q-option" type="button" data-option="Social media and marketing channels">
+              <span class="q-option-label">Social media &amp; channels</span>
+              <span class="q-option-mark" aria-hidden="true"></span>
+            </button>
+            <button class="q-option" type="button" data-option="Ad campaigns">
+              <span class="q-option-label">Ad campaigns</span>
+              <span class="q-option-mark" aria-hidden="true"></span>
+            </button>
+            <button class="q-option" type="button" data-option="Brand and strategy">
+              <span class="q-option-label">Brand &amp; strategy</span>
+              <span class="q-option-mark" aria-hidden="true"></span>
+            </button>
+            <button class="q-option" type="button" data-option="Not sure yet">
+              <span class="q-option-label">Not sure yet — guide me</span>
+              <span class="q-option-mark" aria-hidden="true"></span>
+            </button>
+          </div>
+          <p class="q-error" data-options-error aria-live="polite"></p>
+
+          <div class="q-nav">
+            <button class="q-next" type="button" data-next>Next</button>
+          </div>
+        </section>
+
+        <!-- Card 2 — current presence -->
+        <section class="q-card" data-card="2" hidden aria-hidden="true">
+          <h2 class="q-question">What do you have right now?</h2>
+          <p class="q-helper">
+            Paste your website or social handles — or tell us you're starting from scratch.
+          </p>
+          <div class="q-field">
+            <label class="sr-only" for="q-website">Current website and social media</label>
+            <textarea
+              id="q-website"
+              name="website"
+              rows="3"
+              placeholder="yourbusiness.com, @yourhandle — or 'starting from scratch'"></textarea>
+            <p class="q-error" aria-live="polite"></p>
+          </div>
+          <div class="q-nav">
+            <button class="q-back" type="button" data-back>Back</button>
+            <button class="q-next" type="button" data-next>Next</button>
+          </div>
+        </section>
+
+        <!-- Card 3 — budget (single-select, click advances) -->
+        <section class="q-card" data-card="3" hidden aria-hidden="true">
+          <h2 class="q-question">What's your budget?</h2>
+          <p class="q-helper">A ballpark is fine — it only shapes what we recommend first.</p>
+
+          <div class="q-options" data-single>
+            <button class="q-option" type="button" data-option="Under $500">
+              <span class="q-option-label">Under $500</span>
+              <span class="q-option-mark" aria-hidden="true"></span>
+            </button>
+            <button class="q-option" type="button" data-option="$500 – $2,000">
+              <span class="q-option-label">$500 – $2,000</span>
+              <span class="q-option-mark" aria-hidden="true"></span>
+            </button>
+            <button class="q-option" type="button" data-option="$2,000 – $5,000">
+              <span class="q-option-label">$2,000 – $5,000</span>
+              <span class="q-option-mark" aria-hidden="true"></span>
+            </button>
+            <button class="q-option" type="button" data-option="$5,000+">
+              <span class="q-option-label">$5,000+</span>
+              <span class="q-option-mark" aria-hidden="true"></span>
+            </button>
+            <button class="q-option" type="button" data-option="Not sure yet">
+              <span class="q-option-label">Not sure yet</span>
+              <span class="q-option-mark" aria-hidden="true"></span>
+            </button>
+          </div>
+          <p class="q-error" data-options-error aria-live="polite"></p>
+
+          <div class="q-nav">
+            <button class="q-back" type="button" data-back>Back</button>
+          </div>
+        </section>
+
+        <!-- Card 4 — contact + submit -->
+        <section class="q-card" data-card="4" hidden aria-hidden="true">
+          <h2 class="q-question">Where do we reach you?</h2>
+          <p class="q-helper">We'll come back with a plan and a price — usually within one business day.</p>
+          <div class="q-field">
+            <label for="q-email">Email</label>
+            <input id="q-email" name="email" type="email" autocomplete="email" placeholder="you@business.com" required />
+            <p class="q-error" aria-live="polite"></p>
+          </div>
+          <div class="q-field">
+            <label for="q-phone">Phone</label>
+            <input id="q-phone" name="phone" type="tel" autocomplete="tel" placeholder="(000) 000-0000" required />
+            <p class="q-error" aria-live="polite"></p>
+          </div>
+          <div class="q-nav">
+            <button class="q-back" type="button" data-back>Back</button>
+            <button class="q-next" type="button" data-submit>Get started</button>
+          </div>
+        </section>
+
+        <!-- Success — the Stripe payment step will slot in here -->
+        <section class="q-done" hidden aria-hidden="true">
+          <h2 class="q-question">You're on the FrontPage.</h2>
+          <p class="q-helper">
+            We've got your goals, your links, and your budget. Expect to hear from us within one
+            business day.
+          </p>
+          <div class="q-nav">
+            <a class="q-next q-done-link" href="/">Back to the site</a>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script define:vars={{ META_PIXEL_ID }}>
+      // ----- Meta pixel ---------------------------------------------------
+      // Injected only when an ID is configured; every call below no-ops
+      // safely without it (or when the pixel is blocked).
+      if (META_PIXEL_ID) {
+        !(function (f, b, e, v, n, t, s) {
+          if (f.fbq) return;
+          n = f.fbq = function () {
+            n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+          };
+          if (!f._fbq) f._fbq = n;
+          n.push = n;
+          n.loaded = true;
+          n.version = '2.0';
+          n.queue = [];
+          t = b.createElement(e);
+          t.async = true;
+          t.src = v;
+          s = b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t, s);
+        })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+        window.fbq('init', META_PIXEL_ID);
+        window.fbq('track', 'PageView');
+      }
+
+      function track(event, params) {
+        if (!window.fbq) return;
+        try {
+          window.fbq('trackCustom', event, params);
+        } catch (e) {
+          /* tracking must never break the funnel */
+        }
+      }
+
+      // ----- state machine ------------------------------------------------
+      const main = document.querySelector('.q');
+      const cards = [...document.querySelectorAll('.q-card')];
+      const stepNum = document.querySelector('[data-step-num]');
+      const segments = [...document.querySelectorAll('.q-progress-bar span')];
+      const done = document.querySelector('.q-done');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      let step = 1;
+      const answers = { goals: [], budget: '' };
+
+      function render() {
+        main.dataset.step = String(step);
+        cards.forEach((card) => {
+          const active = Number(card.dataset.card) === step;
+          card.hidden = !active;
+          card.setAttribute('aria-hidden', String(!active));
+        });
+        stepNum.textContent = String(step);
+        segments.forEach((seg, i) => seg.classList.toggle('done', i < step));
+        const first = cards[step - 1]?.querySelector('input, textarea');
+        if (first) first.focus({ preventScroll: true });
+        track('GetStartedStep', { step });
+      }
+
+      // ----- option cards -------------------------------------------------
+      // data-multi toggles; data-single selects and auto-advances.
+      document.querySelectorAll('.q-options').forEach((group) => {
+        const single = group.hasAttribute('data-single');
+        group.querySelectorAll('.q-option').forEach((option) => {
+          option.addEventListener('click', () => {
+            if (single) {
+              group.querySelectorAll('.q-option').forEach((o) => o.classList.remove('selected'));
+              option.classList.add('selected');
+              answers.budget = option.dataset.option;
+              group.closest('.q-card').querySelector('[data-options-error]').textContent = '';
+              window.setTimeout(next, reducedMotion ? 0 : 240);
+            } else {
+              option.classList.toggle('selected');
+              const picked = [...group.querySelectorAll('.q-option.selected')];
+              answers.goals = picked.map((o) => o.dataset.option);
+              if (picked.length) {
+                group.closest('.q-card').querySelector('[data-options-error]').textContent = '';
+              }
+            }
+          });
+        });
+      });
+
+      // ----- validation ---------------------------------------------------
+      function validate(card) {
+        // Option steps: something must be picked (budget auto-advances, so
+        // this only ever gates the goals card and the contact fields).
+        const optionsError = card.querySelector('[data-options-error]');
+        if (card.querySelector('[data-multi]') && optionsError) {
+          if (!answers.goals.length) {
+            optionsError.textContent = 'Pick at least one — "Not sure yet" counts.';
+            return false;
+          }
+        }
+
+        let ok = true;
+        for (const field of card.querySelectorAll('input, textarea')) {
+          const error = field.closest('.q-field')?.querySelector('.q-error');
+          let message = '';
+          if (field.required && !field.value.trim()) {
+            message = 'This one we need.';
+          } else if (field.type === 'email' && field.value && !field.checkValidity()) {
+            message = 'That email does not look right.';
+          }
+          if (error) error.textContent = message;
+          field.setAttribute('aria-invalid', String(Boolean(message)));
+          if (message && ok) {
+            field.focus({ preventScroll: true });
+            ok = false;
+          }
+        }
+        return ok;
+      }
+
+      function store(card) {
+        for (const field of card.querySelectorAll('input, textarea')) {
+          answers[field.name] = field.value.trim();
+        }
+      }
+
+      function next() {
+        const card = cards[step - 1];
+        if (!validate(card)) return;
+        store(card);
+        if (step < cards.length) {
+          step += 1;
+          render();
+        }
+      }
+
+      function back() {
+        if (step > 1) {
+          step -= 1;
+          render();
+        }
+      }
+
+      // ----- finish: lead POST (fire-and-forget) + success ----------------
+      function submit() {
+        const card = cards[3];
+        if (!validate(card)) return;
+        store(card);
+
+        fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            source: 'Get started',
+            page: 'get-started',
+            goal: answers.goals.join('; '),
+            website: answers.website ?? '',
+            message: 'Budget: ' + (answers.budget || 'not given'),
+            email: answers.email ?? '',
+            phone: answers.phone ?? '',
+          }),
+        }).catch((err) => console.error('Lead POST failed', err));
+
+        if (window.fbq) {
+          try {
+            window.fbq('track', 'Lead', { content_name: 'get-started' });
+          } catch (e) {
+            /* never block the funnel */
+          }
+        }
+
+        main.dataset.step = 'done';
+        segments.forEach((seg) => seg.classList.add('done'));
+        cards.forEach((c) => {
+          c.hidden = true;
+          c.setAttribute('aria-hidden', 'true');
+        });
+        done.hidden = false;
+        done.setAttribute('aria-hidden', 'false');
+      }
+
+      // ----- wiring -------------------------------------------------------
+      document.querySelectorAll('[data-next]').forEach((b) => b.addEventListener('click', next));
+      document.querySelectorAll('[data-back]').forEach((b) => b.addEventListener('click', back));
+      document.querySelector('[data-submit]').addEventListener('click', submit);
+
+      cards.forEach((card, i) => {
+        card.addEventListener('keydown', (e) => {
+          if (e.key !== 'Enter' || e.shiftKey) return;
+          if (e.target.matches('input, textarea')) {
+            e.preventDefault();
+            i === 3 ? submit() : next();
+          }
+        });
+      });
+
+      render();
+    </script>
+
+    <style>
+      .q {
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        background-color: var(--color-white, #fff);
+      }
+
+      .q-header {
+        padding: 1.4rem 2rem;
+      }
+
+      .q-logo {
+        display: inline-flex;
+      }
+
+      .q-logo img {
+        width: 180px;
+        height: auto;
+      }
+
+      .q-body {
+        flex: 1;
+        width: 100%;
+        max-width: 34rem;
+        margin: 0 auto;
+        padding: 2.5rem 1.5rem 4rem;
+      }
+
+      /* --- progress ------------------------------------------------------ */
+
+      .q-progress {
+        margin-bottom: 2.25rem;
+      }
+
+      .q-progress-label {
+        display: block;
+        margin-bottom: 0.6rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--color-secondary);
+      }
+
+      .q-progress-bar {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.4rem;
+      }
+
+      .q-progress-bar span {
+        height: 3px;
+        background-color: var(--color-border-muted);
+        transition: background-color 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+
+      .q-progress-bar span.done {
+        background-color: var(--fpl-blue);
+      }
+
+      /* --- cards --------------------------------------------------------- */
+
+      .q-card:not([hidden]),
+      .q-done:not([hidden]) {
+        animation: card-in 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+      }
+
+      @keyframes card-in {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .q-question {
+        margin: 0 0 0.6rem;
+        font-family: var(--font-secondary);
+        font-size: 2rem;
+        font-weight: 600;
+        line-height: 1.08;
+        letter-spacing: -0.025em;
+      }
+
+      .q-helper {
+        margin: 0 0 1.75rem;
+        font-size: 1rem;
+        line-height: 1.45;
+        color: var(--color-secondary);
+      }
+
+      /* --- option cards ---------------------------------------------------
+         The site's row treatment: bordered rows that fill black on hover and
+         stay black once selected, plus that becomes a check. */
+
+      .q-options {
+        display: grid;
+        gap: 0.6rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .q-option {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        width: 100%;
+        text-align: left;
+        border: 1px solid var(--color-border-muted);
+        background: none;
+        padding: 1rem 1.15rem;
+        font-size: 1.0625rem;
+        font-weight: 500;
+        letter-spacing: -0.019em;
+        color: var(--color-primary);
+        cursor: pointer;
+        transition: background-color 0.24s ease, color 0.24s ease, border-color 0.24s ease;
+      }
+
+      .q-option:hover {
+        background-color: var(--color-primary);
+        border-color: var(--color-primary);
+        color: var(--color-white);
+      }
+
+      .q-option.selected {
+        background-color: var(--color-primary);
+        border-color: var(--color-primary);
+        color: var(--color-white);
+      }
+
+      .q-option:focus-visible {
+        outline: 2px solid var(--fpl-blue);
+        outline-offset: 2px;
+      }
+
+      /* Plus that becomes a check on selection. */
+      .q-option-mark {
+        position: relative;
+        flex: none;
+        width: 15px;
+        height: 15px;
+      }
+
+      .q-option-mark::before,
+      .q-option-mark::after {
+        content: '';
+        position: absolute;
+        inset: 50% 0 auto 0;
+        height: 1.5px;
+        background-color: currentColor;
+        transition: transform 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+
+      .q-option-mark::after {
+        transform: rotate(90deg);
+      }
+
+      .q-option.selected .q-option-mark::before {
+        transform: rotate(45deg) scaleX(0.55) translateY(4px);
+      }
+
+      .q-option.selected .q-option-mark::after {
+        transform: rotate(-45deg);
+      }
+
+      /* --- fields --------------------------------------------------------- */
+
+      .q-field {
+        display: grid;
+        gap: 0.4rem;
+        margin-bottom: 1.25rem;
+      }
+
+      .q-field label {
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      .q-field input,
+      .q-field textarea {
+        font: inherit;
+        /* 16px exactly — below it iOS Safari force-zooms the page on focus. */
+        font-size: 16px;
+        color: var(--color-primary);
+        background: none;
+        border: 0;
+        border-bottom: 1px solid var(--color-border-muted);
+        padding: 0.45rem 0;
+        border-radius: 0;
+        resize: vertical;
+        transition: border-color 0.2s ease;
+      }
+
+      .q-field input::placeholder,
+      .q-field textarea::placeholder {
+        color: var(--color-form-placeholder);
+      }
+
+      .q-field input:focus,
+      .q-field textarea:focus {
+        outline: none;
+        border-bottom-color: var(--color-primary);
+      }
+
+      .q-error {
+        margin: 0;
+        min-height: 1em;
+        font-size: 0.8125rem;
+        color: #c0392b;
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+
+      /* --- nav buttons ---------------------------------------------------- */
+
+      .q-nav {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .q-next {
+        border: 1px solid var(--color-primary);
+        border-radius: 999px;
+        padding: 0.85rem 2.2rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        background-color: var(--color-primary);
+        color: var(--color-white);
+        cursor: pointer;
+        transition: background-color 0.25s ease, color 0.25s ease;
+      }
+
+      .q-next:hover {
+        background-color: transparent;
+        color: var(--color-primary);
+      }
+
+      .q-next:focus-visible,
+      .q-back:focus-visible {
+        outline: 2px solid var(--fpl-blue);
+        outline-offset: 2px;
+      }
+
+      .q-done-link {
+        display: inline-flex;
+        text-decoration: none;
+      }
+
+      .q-back {
+        border: 0;
+        background: none;
+        padding: 0.5rem 0;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: var(--color-secondary);
+        cursor: pointer;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .q-back:hover {
+        color: var(--color-primary);
+      }
+
+      /* --- responsive ------------------------------------------------------ */
+
+      @media (max-width: 479px) {
+        .q-question {
+          font-size: 1.6rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .q-card:not([hidden]),
+        .q-done:not([hidden]) {
+          animation: none;
+        }
+
+        .q-progress-bar span {
+          transition: none;
+        }
+      }
+    </style>
+  </body>
+</html>
