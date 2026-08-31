@@ -69,8 +69,10 @@ without an `Email` are people still mid-flow or who dropped out. The
 
 1. Go to https://airtable.com/create/tokens
 2. Name it `frontpagelabs-site`.
-3. Scopes: `data.records:read` **and** `data.records:write`.
-   (Read is required — the site updates a row as the visitor advances.)
+3. Scopes: `data.records:read`, `data.records:write`, and
+   `schema.bases:read`. (Read is required because the site updates a row as
+   the visitor advances; schema read lets `npm run check:airtable` verify
+   your columns.)
 4. Access: the FrontPage Labs Leads base only.
 5. Copy the token. It starts with `pat…` and is shown only once.
 
@@ -90,6 +92,13 @@ netlify env:set AIRTABLE_LEADS_TABLE "Leads"
 ```
 
 Or in the dashboard: Site settings → Environment variables → Add a variable.
+
+Verify the table first:
+
+```bash
+cp .env.example .env      # then paste the three real values in
+npm run check:airtable    # prints ok / MISSING per column
+```
 
 Then `./ship.sh` to deploy. Functions read env vars at runtime, so an
 already-deployed site starts storing as soon as the vars are set and the
