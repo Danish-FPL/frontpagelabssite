@@ -205,11 +205,12 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
             <button class="q-modal-x" type="button" data-modal-close aria-label="Close">&times;</button>
             <p class="q-modal-eyebrow">Before you go</p>
             <h2 class="q-modal-title" id="exit-title">Here's 15% off.</h2>
-            <p class="q-modal-copy">
+            <p class="q-modal-copy" data-exit-copy>
               Finish your answers and it's yours. Valid for the next
               <span class="q-modal-clock" data-exit-clock>15:00</span>.
             </p>
-            <button class="q-next" type="button" data-modal-close>Keep my 15% off</button>
+            <p class="q-promo" data-exit-code hidden></p>
+            <button class="q-next" type="button" data-exit-claim>Keep my 15% off</button>
           </div>
         </div>
 
@@ -230,7 +231,8 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
             </div>
 
             <p class="q-modal-copy" data-scratch-note>Drag across the panel to scratch it off.</p>
-            <button class="q-next" type="button" data-modal-close data-scratch-claim hidden>
+            <p class="q-promo" data-scratch-code hidden></p>
+            <button class="q-next" type="button" data-scratch-claim hidden>
               Claim it and keep going
             </button>
           </div>
@@ -324,6 +326,7 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
         const notes = [];
         if (answers.budget) notes.push('Budget: ' + answers.budget);
         if (answers.prize) notes.push('Scratch-off: ' + answers.prize);
+        if (answers.promo) notes.push('Promo code: ' + answers.promo);
 
         return {
           source: 'Get started',
@@ -540,6 +543,78 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
         document.querySelectorAll('.q-modal:not([hidden])').forEach(closeModal);
       });
 
+      // ----- promo codes ----------------------------------------------------
+      // ⚠ These strings must exist as PROMOTION CODES in Stripe, or checkout
+      // will reject them. Create them there, then keep the two in sync.
+      const PROMO = {
+        '10% off': 'FPL10',
+        '15% off': 'FPL15',
+        '25% off': 'FPL25',
+      };
+
+      let claimedCode = '';
+
+      // navigator.clipboard needs a secure context and can still be denied,
+      // so fall back to a hidden textarea, and either way the code stays on
+      // screen to be read.
+      async function copyCode(code) {
+        try {
+          await navigator.clipboard.writeText(code);
+          return true;
+        } catch {
+          try {
+            const box = document.createElement('textarea');
+            box.value = code;
+            box.setAttribute('readonly', '');
+            box.style.position = 'fixed';
+            box.style.opacity = '0';
+            document.body.appendChild(box);
+            box.select();
+            const ok = document.execCommand('copy');
+            document.body.removeChild(box);
+            return ok;
+          } catch {
+            return false;
+          }
+        }
+      }
+
+      // Claim: copy the code, tell them what to do with it, and leave the
+      // button as the way out of the modal.
+      async function claim(code, codeEl, button, closingLabel) {
+        claimedCode = code;
+        answers.promo = code;
+        const copied = await copyCode(code);
+
+        codeEl.hidden = false;
+        codeEl.innerHTML = copied
+          ? '<span class="q-promo-code">' +
+            code +
+            '</span><br />Your promo code has been copied to your clipboard. Paste this as a promo code at Stripe checkout when you get there.'
+          : '<span class="q-promo-code">' +
+            code +
+            '</span><br />Copy this promo code and paste it at Stripe checkout when you get there.';
+
+        button.textContent = closingLabel;
+        button.dataset.modalClose = '';
+        button.addEventListener('click', () => closeModal(button.closest('.q-modal')), { once: true });
+        track('GetStartedPromoClaimed', { code });
+        save(); // the code rides along on the lead
+      }
+
+      document.querySelector('[data-exit-claim]').addEventListener(
+        'click',
+        (e) => {
+          claim(
+            PROMO['15% off'],
+            document.querySelector('[data-exit-code]'),
+            e.currentTarget,
+            'Got it, keep going'
+          );
+        },
+        { once: true }
+      );
+
       // ----- exit intent ----------------------------------------------------
       // Fires once per visit, and never after the lead is in: the pointer
       // leaving through the top of the window is the desktop tell, and a tab
@@ -614,7 +689,14 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
         const canvas = document.querySelector('[data-scratch-canvas]');
         const wrap = canvas.closest('.q-scratch');
         const note = document.querySelector('[data-scratch-note]');
-        const claim = document.querySelector('[data-scratch-claim]');
+        const claimBtn = document.querySelector('[data-scratch-claim]');
+        const codeEl = document.querySelector('[data-scratch-code]');
+
+        claimBtn.addEventListener(
+          'click',
+          () => claim(PROMO[prize], codeEl, claimBtn, 'Got it, keep going'),
+          { once: true }
+        );
         const ctx = canvas.getContext('2d');
 
         // Foil: a flat silver ground with the site's cyan angled through it.
@@ -670,8 +752,8 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
           if (revealed) return;
           revealed = true;
           wrap.classList.add('revealed');
-          note.textContent = prize + ' is yours. We will apply it to your quote.';
-          claim.hidden = false;
+          note.textContent = prize + ' is yours.';
+          claimBtn.hidden = false;
           track('GetStartedScratch', { prize });
           save(); // the prize rides along on the next write
         }
@@ -1214,6 +1296,31 @@ const META_PIXEL_ID = ''; // ← paste the Meta pixel ID here to turn tracking o
         font-weight: 600;
         color: var(--color-primary);
         font-variant-numeric: tabular-nums;
+      }
+
+      /* The copied promo code, shown so it can still be read (or retyped) if
+         the clipboard write is blocked. */
+      .q-promo {
+        margin: 0;
+        justify-self: stretch;
+        border: 1px dashed var(--color-border-muted);
+        background-color: var(--color-background-muted);
+        padding: 0.75rem 0.9rem;
+        font-size: 0.875rem;
+        line-height: 1.45;
+      }
+
+      .q-promo[hidden] {
+        display: none;
+      }
+
+      .q-promo-code {
+        display: inline-block;
+        font-family: var(--font-secondary);
+        font-size: 1.0625rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        color: var(--color-primary);
       }
 
       /* --- scratch-off ------------------------------------------------------ */
