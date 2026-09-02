@@ -9,9 +9,19 @@ interface Props {
 const { project } = Astro.props;
 ---
 
-<a class="project-link" href={project.href}>
+<a class:list={['project-link', { 'has-preview': project.preview }]} href={project.href}>
   <div class="project-image-wrapper">
     <img class="project-image" src={project.image} alt={project.title} loading="lazy" />
+
+    {project.preview && (
+      <img
+        class="project-preview"
+        src={project.preview}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+      />
+    )}
   </div>
 
   <div class="project-content-top">
@@ -61,6 +71,7 @@ const { project } = Astro.props;
   }
 
   .project-image-wrapper {
+    position: relative;
     overflow: hidden;
     aspect-ratio: 16 / 10;
   }
@@ -72,8 +83,61 @@ const { project } = Astro.props;
     transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
+  /* A card with a full-page screenshot scrolls the page instead of zooming. */
   .project-link:hover .project-image {
     transform: scale(1.04);
+  }
+
+  .project-link.has-preview:hover .project-image {
+    transform: none;
+  }
+
+  /*
+   * The scrollthrough. The image is its natural (very tall) height, pinned to
+   * the top of the frame; on hover it travels to bottom-aligned. Animating
+   * `top` from 0 to 100% against a constant translateY(-100%) lands the bottom
+   * edge exactly on the frame's bottom edge whatever the image height is,
+   * which no transform-only version can do without knowing that height.
+   */
+  .project-preview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    opacity: 0;
+    transform: translateY(0);
+    pointer-events: none;
+    transition:
+      opacity 0.35s ease,
+      top 7s cubic-bezier(0.4, 0, 0.35, 1),
+      transform 7s cubic-bezier(0.4, 0, 0.35, 1);
+  }
+
+  /*
+   * `.is-playing` is the touch equivalent of :hover — set by the observer below
+   * when a card sits in the middle of the screen. Both states drive the same
+   * transition, so there is only ever one animation to keep working.
+   */
+  .project-link:hover .project-preview,
+  .project-link:focus-visible .project-preview,
+  .project-link.is-playing .project-preview {
+    opacity: 1;
+    top: 100%;
+    transform: translateY(-100%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-preview {
+      transition: opacity 0.2s ease;
+    }
+
+    .project-link:hover .project-preview,
+    .project-link:focus-visible .project-preview,
+    .project-link.is-playing .project-preview {
+      top: 0;
+      transform: translateY(0);
+    }
   }
 
   .project-content-footer {
@@ -97,3 +161,39 @@ const { project } = Astro.props;
     color: var(--color-secondary);
   }
 </style>
+
+<script>
+  /*
+   * Touch devices have no hover, so the scrollthrough plays as a card passes
+   * through the middle of the screen instead. Astro hoists this script once for
+   * the whole page however many cards render.
+   *
+   * The band is deliberately narrow (the middle ~24% of the viewport), which on
+   * a phone is about the height of one card image — so one card plays at a
+   * time rather than the whole column animating at once.
+   */
+  function initPreviewAutoplay() {
+    if (!window.matchMedia('(hover: none)').matches) return;
+
+    const frames = document.querySelectorAll<HTMLElement>(
+      '.project-link.has-preview .project-image-wrapper',
+    );
+    if (!frames.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          entry.target.closest('.project-link')?.classList.toggle('is-playing', entry.isIntersecting);
+        });
+      },
+      { rootMargin: '-38% 0px -38% 0px', threshold: 0 },
+    );
+
+    frames.forEach((frame) => observer.observe(frame));
+  }
+
+  initPreviewAutoplay();
+  // The portfolio grid filters by hiding cells rather than replacing them, so
+  // the observed elements survive and there is nothing to re-bind on filter.
+  document.addEventListener('astro:after-swap', initPreviewAutoplay);
+</script>

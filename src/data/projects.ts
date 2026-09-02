@@ -7,19 +7,77 @@ export interface Project {
   href: string;
   image: string;
   tags: string[];
+  /**
+   * Full-page screenshot. When set, the card scrolls the whole page on hover
+   * instead of sitting still, and plays on its own as the card passes through
+   * the middle of a phone screen. See ProjectCard.astro. Keep these 1240px
+   * wide, which is what the case-study gallery renders them at; they are
+   * lazy-loaded, but every card on the grid holds one.
+   */
+  preview?: string;
 }
 
 export const projects: Project[] = [
+  // ── 2026 builds ────────────────────────────────────────────────────────────
+  // Everything below with a `preview` was shot from the live Netlify deploy on
+  // 2026-09-01 (scripted capture at 1440x900, full page). Re-shoot after a
+  // redesign: both the card and the preview come from the same page.
   {
-    title: "AK Custom Real Estate",
+    title: "AK Custom Homes",
     href: "/projects/ak",
-    image: '/assets/frontpagelabs-x-akcustomhomes-1-1.png',
+    image: '/assets/work-akcustomhomes.jpg',
+    preview: '/assets/work-akcustomhomes-scroll.jpg',
     tags: ["Website", "Ads", "SEO"],
   },
   {
+    title: "CuraPath",
+    href: "/projects/curapath",
+    image: '/assets/work-curapath.jpg',
+    preview: '/assets/work-curapath-scroll.jpg',
+    tags: ["Website", "Branding", "Digital Strategy"],
+  },
+  {
+    title: "The Khan Group",
+    href: "/projects/thekhangroup",
+    image: '/assets/work-khangroup.jpg',
+    preview: '/assets/work-khangroup-scroll.jpg',
+    tags: ["Website", "Branding", "Marketing"],
+  },
+  {
+    title: "Constant Good",
+    href: "/projects/constant-good",
+    image: '/assets/work-constantgood.jpg',
+    preview: '/assets/work-constantgood-scroll.jpg',
+    tags: ["Website", "Branding", "Content"],
+  },
+  {
+    title: "Get You Employed",
+    href: "/projects/get-you-employed",
+    image: '/assets/work-getyouemployed.jpg',
+    preview: '/assets/work-getyouemployed-scroll.jpg',
+    tags: ["Website", "Branding", "Digital Strategy"],
+  },
+  {
+    title: "Job Search Dashboard",
+    href: "/projects/job-search-dashboard",
+    image: '/assets/work-jobdash.jpg',
+    preview: '/assets/work-jobdash-scroll.jpg',
+    tags: ["Website", "Digital Strategy"],
+  },
+  {
+    title: "Personal Operating Dashboard",
+    href: "/projects/personal-dashboard",
+    image: '/assets/work-dashboard.jpg',
+    preview: '/assets/work-dashboard-scroll.jpg',
+    tags: ["Website", "Branding", "Digital Strategy"],
+  },
+
+  // ── Earlier work, transcribed from the Webflow CMS ─────────────────────────
+  {
     title: "Seth Taylor Fitness",
     href: "/projects/seth-taylor-fitness",
-    image: '/assets/1-0fa5f1.png',
+    image: '/assets/work-seth-taylor-fitness.jpg',
+    preview: '/assets/work-seth-taylor-fitness-scroll.jpg',
     tags: ["Website", "Branding", "Marketing"],
   },
   {
@@ -37,19 +95,17 @@ export const projects: Project[] = [
   {
     title: "Therapy Provider",
     href: "/projects/therapy-provider",
-    image: '/assets/screenshot-2026-04-29-at-10.22.47-am.png',
+    image: '/assets/work-therapy-provider.jpg',
+    preview: '/assets/work-therapy-provider-scroll.jpg',
     tags: ["Website", "Digital Strategy", "Review Growth"],
   },
-  {
-    title: "Dashboard Project",
-    href: "/projects/dashboard-project",
-    image: '/assets/screenshot-2026-04-29-at-7.31.46-am.png',
-    tags: ["Website", "Branding", "Content"],
-  },
+  // "Dashboard Project" was this same site under an older screenshot; it now
+  // lives above as Personal Operating Dashboard.
   {
     title: "Verona Residences",
     href: "/projects/verona-residences",
-    image: '/assets/verona-1.png',
+    image: '/assets/work-verona-residences.jpg',
+    preview: '/assets/work-verona-residences-scroll.jpg',
     tags: ["Website", "Digital Strategy", "Marketing"],
   },
   {
@@ -67,7 +123,8 @@ export const projects: Project[] = [
   {
     title: "Tactical Apparel Brand",
     href: "/projects/gunderpants",
-    image: '/assets/screenshot-2025-10-21-at-9.22.41-am.png',
+    image: '/assets/work-gunderpants.jpg',
+    preview: '/assets/work-gunderpants-scroll.jpg',
     tags: ["LabLaunch*", "Branding", "Website"],
   },
   {
@@ -79,13 +136,15 @@ export const projects: Project[] = [
   {
     title: "ChicagoLand Auto Fair",
     href: "/projects/autofair",
-    image: '/assets/cfa-6.png',
+    image: '/assets/work-autofair.jpg',
+    preview: '/assets/work-autofair-scroll.jpg',
     tags: ["Website", "Ads", "Social Media"],
   },
   {
     title: "Mosaic Therapy Miami",
     href: "/projects/mosaic-therapy-miami",
-    image: '/assets/mosaic-7.png',
+    image: '/assets/work-mosaic-therapy-miami.jpg',
+    preview: '/assets/work-mosaic-therapy-miami-scroll.jpg',
     tags: ["Website", "Social Media", "Ads"],
   },
   {
@@ -103,7 +162,8 @@ export const projects: Project[] = [
   {
     title: "DeSalvoFlorian Architects",
     href: "/projects/dsfarchitects",
-    image: '/assets/dsf.png',
+    image: '/assets/work-dsfarchitects.jpg',
+    preview: '/assets/work-dsfarchitects-scroll.jpg',
     tags: ["Website", "Ads", "Social Media"],
   },
   {
@@ -121,7 +181,8 @@ export const projects: Project[] = [
   {
     title: "Cale Ent. Real Estate",
     href: "/projects/cale",
-    image: '/assets/screenshot-2025-11-05-at-1.29.53-pm.png',
+    image: '/assets/work-cale.jpg',
+    preview: '/assets/work-cale-scroll.jpg',
     tags: ["Website", "Branding"],
   },
   {
@@ -133,7 +194,8 @@ export const projects: Project[] = [
   {
     title: "Kanengiser Coaching",
     href: "/projects/kanengiser-coaching",
-    image: '/assets/kanengiser-2.png',
+    image: '/assets/work-kanengiser-coaching.jpg',
+    preview: '/assets/work-kanengiser-coaching-scroll.jpg',
     tags: ["Website", "Social Media", "Marketing"],
   },
   {
@@ -157,7 +219,8 @@ export const projects: Project[] = [
   {
     title: "Funke Architects",
     href: "/projects/funke-architects",
-    image: '/assets/screenshot-2025-10-19-at-8.03.02-pm.png',
+    image: '/assets/work-funke-architects.jpg',
+    preview: '/assets/work-funke-architects-scroll.jpg',
     tags: ["Website"],
   },
   {
@@ -165,12 +228,6 @@ export const projects: Project[] = [
     href: "/projects/digital-studios",
     image: '/assets/dsf-2.png',
     tags: ["Website", "Content"],
-  },
-  {
-    title: "KhanGroup Real Estate",
-    href: "/projects/khangroup-real-estate",
-    image: '/assets/khangroup-8.png',
-    tags: ["Website"],
   },
   {
     title: "Omar Eats",
@@ -187,7 +244,8 @@ export const projects: Project[] = [
   {
     title: "BlueSky Studio Architects",
     href: "/projects/blueskyarchitects",
-    image: '/assets/bluesky-1.png',
+    image: '/assets/work-blueskyarchitects.jpg',
+    preview: '/assets/work-blueskyarchitects-scroll.jpg',
     tags: ["Website", "Branding"],
   },
 ];
