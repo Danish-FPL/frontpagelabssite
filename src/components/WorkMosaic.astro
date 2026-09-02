@@ -1,0 +1,229 @@
+---
+/*
+ * The recent-work mosaic on the home page.
+ *
+ * A staggered wall of landscape tiles rather than an even grid: each tile gets
+ * its own column span, column start, aspect ratio and vertical drop, so the
+ * eye travels down the page in a zigzag instead of scanning rows. The caption
+ * lives inside the tile — client name, then what we built — over a scrim that
+ * only covers the bottom of the frame.
+ *
+ * LAYOUT is a repeating rhythm, not one entry per project: tile n takes
+ * LAYOUT[n % LAYOUT.length], so adding or removing entries from `recentWork`
+ * in src/data/projects.ts needs no change here.
+ */
+import type { Project } from '../data/projects';
+import { caseStudyBySlug, slugOf } from '../data/caseStudies';
+
+interface Props {
+  projects: Project[];
+}
+
+const { projects } = Astro.props;
+
+/*
+ * span/start are 12-column grid units; drop is the stagger, in rem.
+ *
+ * Every ratio is 1.5 or wider. The source images are 16:10 site headers, so a
+ * frame narrower than that crops the screenshot's left and right edges and
+ * slices the client's own logo off; a wider one only trims the bottom, which
+ * is the part we care least about.
+ */
+const LAYOUT = [
+  { span: 7, start: 1, ratio: '16 / 10', drop: 0 }, // wide left
+  { span: 4, start: 9, ratio: '16 / 9', drop: 5 }, //  narrow right, dropped
+  { span: 5, start: 1, ratio: '3 / 2', drop: 0 }, //   narrow left
+  { span: 6, start: 7, ratio: '16 / 9', drop: 3.5 }, // wide right, dropped
+  { span: 6, start: 1, ratio: '16 / 9', drop: 0 }, //  wide left
+  { span: 4, start: 8, ratio: '16 / 10', drop: 4 }, // narrow right, dropped
+  { span: 7, start: 3, ratio: '21 / 9', drop: 0 }, //  closing band, inset both sides
+];
+
+const tiles = projects.map((project, i) => {
+  const study = caseStudyBySlug(slugOf(project));
+  return {
+    project,
+    /* Falls back to the project title, which is what a placeholder case study
+       uses for `client` anyway. */
+    client: study?.client ?? project.title,
+    services: study?.services ?? project.tags.join(' / '),
+    layout: LAYOUT[i % LAYOUT.length],
+    index: String(i + 1).padStart(3, '0'),
+  };
+});
+---
+
+<div class="mosaic">
+  {tiles.map(({ project, client, services, layout, index }) => (
+    <a
+      class="mosaic-tile"
+      href={project.href}
+      style={`--span:${layout.span};--start:${layout.start};--ratio:${layout.ratio};--drop:${layout.drop}rem`}
+    >
+      <div class="mosaic-frame">
+        <img class="mosaic-image" src={project.image} alt={client} loading="lazy" />
+        <div class="mosaic-scrim" aria-hidden="true"></div>
+
+        <div class="mosaic-caption">
+          <div class="mosaic-index">{index}</div>
+          <div class="mosaic-names">
+            <div class="mosaic-client">{client}</div>
+            <div class="mosaic-project">{services}</div>
+          </div>
+          <img class="mosaic-arrow" src="/assets/arrow-up-right-white.svg" alt="" aria-hidden="true" />
+        </div>
+      </div>
+    </a>
+  ))}
+</div>
+
+<style>
+  .mosaic {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 1.25rem;
+    align-items: start;
+    margin-top: 2.5rem;
+  }
+
+  .mosaic-tile {
+    grid-column: var(--start) / span var(--span);
+    margin-top: var(--drop);
+    color: var(--color-white);
+    text-decoration: none;
+  }
+
+  .mosaic-frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: var(--ratio);
+    background-color: var(--color-background-muted);
+    border: 1px solid var(--color-border-muted);
+  }
+
+  .mosaic-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .mosaic-tile:hover .mosaic-image,
+  .mosaic-tile:focus-visible .mosaic-image {
+    transform: scale(1.045);
+  }
+
+  /* Only the bottom of the frame is darkened, so the screenshot above the
+     caption stays legible on light and dark sites alike. */
+  .mosaic-scrim {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 58%;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.92),
+      rgba(0, 0, 0, 0.78) 22%,
+      rgba(0, 0, 0, 0.34) 58%,
+      transparent
+    );
+    pointer-events: none;
+  }
+
+  .mosaic-caption {
+    position: absolute;
+    inset: auto 0 0 0;
+    display: flex;
+    align-items: flex-end;
+    gap: 0.75rem;
+    padding: 1rem 1.1rem;
+  }
+
+  .mosaic-index {
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    line-height: 1.6;
+    opacity: 0.72;
+  }
+
+  .mosaic-names {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .mosaic-client {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+
+  .mosaic-project {
+    margin-top: 0.15rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    opacity: 0.74;
+  }
+
+  .mosaic-arrow {
+    width: 11px;
+    height: 11px;
+    margin-bottom: 0.3rem;
+    flex: none;
+    transition: transform 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .mosaic-tile:hover .mosaic-arrow,
+  .mosaic-tile:focus-visible .mosaic-arrow {
+    transform: translate(3px, -3px);
+  }
+
+  /* The narrow spans carry less room for the caption, so it steps down a size
+     rather than wrapping the client name onto three lines. */
+  .mosaic-tile[style*='--span:4'] .mosaic-client {
+    font-size: 0.875rem;
+  }
+
+  @media (max-width: 991px) {
+    .mosaic {
+      gap: 1rem;
+    }
+
+    /* Two up, alternating which side gets the wide tile, and no drops — the
+       stagger needs width to read as one. */
+    .mosaic-tile {
+      grid-column: span 6;
+      margin-top: 0;
+    }
+
+    .mosaic-tile:nth-child(3n + 1) {
+      grid-column: span 12;
+    }
+
+    .mosaic-frame {
+      aspect-ratio: 16 / 10;
+    }
+  }
+
+  @media (max-width: 599px) {
+    .mosaic-tile,
+    .mosaic-tile:nth-child(3n + 1) {
+      grid-column: span 12;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mosaic-image,
+    .mosaic-arrow {
+      transition: none;
+    }
+
+    .mosaic-tile:hover .mosaic-image,
+    .mosaic-tile:focus-visible .mosaic-image {
+      transform: none;
+    }
+  }
+</style>

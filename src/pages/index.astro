@@ -3,7 +3,9 @@ import Base from '../layouts/Base.astro';
 import Button from '../components/Button.astro';
 import SectionTitle from '../components/SectionTitle.astro';
 import LandingHero from '../components/LandingHero.astro';
+import WorkMosaic from '../components/WorkMosaic.astro';
 import { testimonials } from '../data/testimonials';
+import { recentWork } from '../data/projects';
 import { homeHero } from '../data/hero';
 
 // The hero lives in src/data/hero.ts because the Hero Lab treats it as the
@@ -276,6 +278,25 @@ const services = [
     </div>
   </section>
 
+  <!-- Recent work ---------------------------------------------------------- -->
+  <!-- Unnumbered like the wins table above it: the (0N) sequence belongs to
+       the five pillar sections and this sits between two of them. -->
+  <section class="section work">
+    <div class="container">
+      <div class="section-title-row">
+        <h2 class="section-title-text">Recent work</h2>
+        <div class="section-title-text">Selected projects</div>
+      </div>
+      <div class="divider"></div>
+
+      <WorkMosaic projects={recentWork} />
+
+      <div class="work-footer">
+        <Button href="/portfolio" label="View all projects" />
+      </div>
+    </div>
+  </section>
+
   <!-- (02) Digital chemistry ---------------------------------------------- -->
   <section class="section chemistry">
     <div class="container">
@@ -408,30 +429,39 @@ const services = [
       <div class="divider"></div>
     </div>
 
-    <div class="overflow-hidden">
-      <div class="container-fluid">
+    <!-- The three words sit in the same .container as the rule above them, and
+         the type is sized in cqw rather than vw, so ANALYZE. lands flush with
+         the ends of that rule at every width instead of running past it. -->
+    <div class="container approach-display">
+      <div class="approach-heading-wrapper">
+        <h3 class="heading-large">Analyze.</h3>
+        <div class="approach-number">001</div>
+      </div>
+
+      <div class="align-right">
         <div class="approach-heading-wrapper">
-          <h3 class="heading-large">Analyze.</h3>
-          <div class="approach-number">001</div>
+          <div class="approach-number left">002</div>
+          <h3 class="heading-large">Build.</h3>
         </div>
+      </div>
 
-        <div class="align-right">
-          <div class="approach-heading-wrapper">
-            <div class="approach-number left">002</div>
-            <h3 class="heading-large">Build.</h3>
-          </div>
-        </div>
-
-        <div class="approach-heading-wrapper center">
+      <!-- Grow. keeps the fingerprint company on desktop; below 992px the mark
+           drops back under the copy where there is room for it. -->
+      <div class="approach-grow-row">
+        <div class="approach-heading-wrapper">
           <h3 class="heading-large">Grow.</h3>
           <div class="approach-number">003</div>
+        </div>
+
+        <div class="approach-image approach-image-inline">
+          <img src="/assets/fpl-16-.png" alt="" loading="lazy" />
         </div>
       </div>
     </div>
 
     <div class="container">
       <div class="approach-bottom">
-        <div class="approach-image">
+        <div class="approach-image approach-image-stacked">
           <img src="/assets/fpl-16-.png" alt="" loading="lazy" />
         </div>
 
@@ -964,10 +994,40 @@ const services = [
     margin-top: 2.5rem;
   }
 
+  /* --- Recent work --------------------------------------------------------- */
+
+  .work {
+    padding-top: 2rem;
+    padding-bottom: 5rem;
+  }
+
+  .work-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 3rem;
+  }
+
   /* --- (03) Approach ------------------------------------------------------- */
 
   .approach {
     padding-top: 6rem;
+  }
+
+  /*
+   * The display block is the measuring stick for the words inside it. Sizing
+   * the type in cqw (percent of THIS box) rather than vw ties it to the
+   * container the rule above is drawn in, so ANALYZE. starts on that rule's
+   * left end and BUILD. finishes on its right end at every width — where the
+   * old vw sizing in a full-bleed wrapper ran past both. 17.5cqw holds the
+   * cap-height the vw version had once the container stops growing at 80rem.
+   */
+  .approach-display {
+    container-type: inline-size;
+    overflow: hidden;
+  }
+
+  .approach-display .heading-large {
+    font-size: 17.5cqw;
   }
 
   .approach-heading-wrapper {
@@ -976,15 +1036,43 @@ const services = [
     gap: 0.5rem;
   }
 
-  .approach-heading-wrapper.center {
-    justify-content: center;
-  }
-
   .approach-number {
     font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.04em;
     padding-top: 0.4rem;
+  }
+
+  /* Grow. and the fingerprint share the last line. The word stays centred on
+     the container — the left/right/centre stagger is the whole composition —
+     and the mark is taken out of flow so it fills the empty right-hand end
+     without pushing Grow. off centre. */
+  .approach-grow-row {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Sized off the row's height, not its width: the mark is a 9:16 PNG, so a
+     width big enough to read would stand taller than the line and collide
+     with Build. above it. */
+  /* Hangs below the line rather than above it — there is empty page under
+     Grow. and Build. directly overhead. */
+  .approach-image-inline {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 132%;
+    /* The mark's own 1080x1920 ratio, stated so the box has a width to shrink
+       to; `width: auto` alone resolves to zero against a percentage height. */
+    aspect-ratio: 1080 / 1920;
+  }
+
+  .approach-image-inline img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    object-position: bottom right;
   }
 
   .approach-bottom {
@@ -997,6 +1085,7 @@ const services = [
 
   .approach-image img {
     width: 100%;
+    display: block;
   }
 
   .approach-text {
@@ -1004,6 +1093,29 @@ const services = [
     gap: 1rem;
     max-width: 30rem;
     justify-self: end;
+  }
+
+  /* Desktop: the mark is up beside Grow., so the copy takes the whole width
+     and rides up under the words instead of sitting level with a tall image. */
+  @media (min-width: 992px) {
+    .approach-image-stacked {
+      display: none;
+    }
+
+    .approach-bottom {
+      grid-template-columns: minmax(0, 1fr);
+      margin-top: 2.75rem;
+    }
+
+    .approach-text {
+      justify-self: end;
+    }
+  }
+
+  @media (max-width: 991px) {
+    .approach-image-inline {
+      display: none;
+    }
   }
 
   /* Not flex: the trailing full stop after the <strong> is its own text node,

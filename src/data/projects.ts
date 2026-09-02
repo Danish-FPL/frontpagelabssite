@@ -19,9 +19,14 @@ export interface Project {
 
 export const projects: Project[] = [
   // ── 2026 builds ────────────────────────────────────────────────────────────
-  // Everything below with a `preview` was shot from the live Netlify deploy on
-  // 2026-09-01 (scripted capture at 1440x900, full page). Re-shoot after a
-  // redesign: both the card and the preview come from the same page.
+  // Everything below with a `preview` was shot from the live site (scripted
+  // capture, card at 1600x1000 and preview full-page at 1240 wide, capped at
+  // 6200px tall). Re-shoot after a redesign: both the card and the preview come
+  // from the same page.
+  //
+  // Second pass on 2026-09-02 added Cost Property Management, The Jagger, The
+  // Roy, Louella and Fantastic Feeling, and re-shot ChicagoLand Auto Fair from
+  // /sellers/ because the home page opens a modal over the hero.
   {
     title: "AK Custom Homes",
     href: "/projects/ak",
@@ -89,7 +94,8 @@ export const projects: Project[] = [
   {
     title: "Property Management Company",
     href: "/projects/property-management-company",
-    image: '/assets/screenshot-2026-04-29-at-11.00.34-am.png',
+    image: '/assets/work-costpropertymanagement.jpg',
+    preview: '/assets/work-costpropertymanagement-scroll.jpg',
     tags: ["Website", "Marketing", "Ads"],
   },
   {
@@ -117,7 +123,8 @@ export const projects: Project[] = [
   {
     title: "Jagger Apartments",
     href: "/projects/jagger-apartments",
-    image: '/assets/jagger-7.png',
+    image: '/assets/work-jagger-apartments.jpg',
+    preview: '/assets/work-jagger-apartments-scroll.jpg',
     tags: ["Website", "Social Media", "Ads"],
   },
   {
@@ -150,13 +157,15 @@ export const projects: Project[] = [
   {
     title: "Roy Apartments",
     href: "/projects/roy-apartments",
-    image: '/assets/roy-1.png',
+    image: '/assets/work-roy-apartments.jpg',
+    preview: '/assets/work-roy-apartments-scroll.jpg',
     tags: ["Website", "Ads", "Social Media"],
   },
   {
     title: "Louella Apartments",
     href: "/projects/louella-apartments",
-    image: '/assets/louella-1.png',
+    image: '/assets/work-louella-apartments.jpg',
+    preview: '/assets/work-louella-apartments-scroll.jpg',
     tags: ["Website", "Social Media", "Ads"],
   },
   {
@@ -195,13 +204,13 @@ export const projects: Project[] = [
     title: "Kanengiser Coaching",
     href: "/projects/kanengiser-coaching",
     image: '/assets/work-kanengiser-coaching.jpg',
-    preview: '/assets/work-kanengiser-coaching-scroll.jpg',
     tags: ["Website", "Social Media", "Marketing"],
   },
   {
     title: "Massage Therapy Studio",
     href: "/projects/massage",
-    image: '/assets/screenshot-2025-11-05-at-7.05.21-am.png',
+    image: '/assets/work-massage-studio.jpg',
+    preview: '/assets/work-massage-studio-scroll.jpg',
     tags: ["Digital Strategy", "Review Growth", "SEO"],
   },
   {
@@ -252,3 +261,26 @@ export const projects: Project[] = [
 
 /** The four projects the home and services pages feature. */
 export const featuredProjects = projects.slice(0, 4);
+
+/**
+ * The home-page mosaic, in the order it reads down the page. Hand-picked
+ * rather than sliced off the top so the section stays client work — the two
+ * in-house dashboards sit high in `projects` but do not belong in a wall of
+ * recent client builds. Edit this list to change what the mosaic shows; the
+ * layout adapts to however many entries are in it.
+ */
+const RECENT_WORK_SLUGS = [
+  'ak',
+  'curapath',
+  'thekhangroup',
+  'constant-good',
+  'property-management-company',
+  'get-you-employed',
+  'seth-taylor-fitness',
+];
+
+export const recentWork: Project[] = RECENT_WORK_SLUGS.map((slug) => {
+  const project = projects.find((p) => p.href === `/projects/${slug}`);
+  if (!project) throw new Error(`recentWork: no project with slug "${slug}"`);
+  return project;
+});

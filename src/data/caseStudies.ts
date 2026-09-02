@@ -280,8 +280,13 @@ const content: Record<string, Partial<CaseStudy>> = {
   dsfarchitects: { liveUrl: 'https://desalvoflorian.com/' },
   'funke-architects': { liveUrl: 'http://funkearchitects.com/' },
   gunderpants: { liveUrl: 'https://gunderpants.com' },
+  'jagger-apartments': { liveUrl: 'https://www.thejaggerla.com/' },
   'kanengiser-coaching': { liveUrl: 'https://www.kanengisercoaching.com/' },
+  'louella-apartments': { liveUrl: 'https://www.livelouella.com/' },
+  massage: { liveUrl: 'https://fantasticfeelingonline.com/' },
   'mosaic-therapy-miami': { liveUrl: 'https://www.mosaictherapymiami.com/' },
+  'property-management-company': { liveUrl: 'https://www.costpropertymanagement.com/' },
+  'roy-apartments': { liveUrl: 'https://www.theroyla.com/' },
   'therapy-provider': { liveUrl: 'https://www.vitopathways.com/' },
   'verona-residences': { liveUrl: 'https://veronaresidences.com/' },
 
