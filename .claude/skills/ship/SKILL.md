@@ -19,7 +19,8 @@ the CLI is the deploy.
 | command | commit | push | deploys to | cost |
 |---|---|---|---|---|
 | `./commit.sh "msg"` | ✓ | ✓ | — | free |
-| `./ship.sh ["msg"]` | ✓ | ✓ | Cloudflare | free |
+| `./ship.sh ["msg"]` | ✓ | ✓ | Cloudflare (marketing) | free |
+| `./ship-command.sh` | — | — | Cloudflare (internal board) | free |
 | `./deploy.sh` | — | — | Netlify | credits |
 
 - **Never run `./deploy.sh` unless the user explicitly asks.** It is the only
@@ -43,3 +44,10 @@ the CLI is the deploy.
 - `commit.sh` refuses to push from any branch but `main`, and refuses if
   `.env` is ever tracked.
 - Deploy only from `dist/` — never `--dir .`.
+- `./ship-command.sh` publishes the internal board to a SEPARATE Pages project,
+  `frontpagelabs-command`. It is free. It ships a read-only snapshot built by
+  `command/build.mjs`; Airtable, drafting and writes stay on the laptop, and no
+  credential reaches the edge. It refuses to deploy when `FPL_DASH_PIN` is
+  unset on that project. Read `command/README.md` before changing any of it,
+  especially the PBKDF2 iteration count, which is pinned at the Workers
+  maximum.

@@ -18,6 +18,17 @@ GitHub is storage and every deploy is explicit. See
 Netlify and `functions/api/lead.js` for Cloudflare. They are twins and differ
 only in how each runtime passes env vars. Change one and change the other.
 
+## The internal board is a THIRD deployment
+
+`./ship-command.sh` publishes `dashboard/` to its own Cloudflare project at
+https://frontpagelabs-command.pages.dev — separate from the marketing site so
+the two can never bleed into each other. It is free. What ships is a read-only
+snapshot built by `command/build.mjs`, which runs the dashboard's own library
+code on the laptop and freezes the payload; Airtable, Claude drafting and all
+writes stay local, and no key reaches the edge. Auth there has no default
+secret and 503s the project if `FPL_DASH_PIN` is unset. See
+`command/README.md`.
+
 ## Development
 
 When starting the dev server, use background mode:

@@ -5,6 +5,12 @@ hero-lab/exports/
 # raw captures from scripts/shoot-portfolio.mjs; the converted jpgs under
 # public/assets are what ship
 shots/
+# Growth Command runtime data (prospects, touches, drafts, logs: PII).
+# The two committed files are the sample wireframe data and the site QA log.
+dashboard/data/*
+!dashboard/data/sample-data.json
+!dashboard/data/site-audit.json
+
 # generated types
 .astro/
 
@@ -33,3 +39,4 @@ pnpm-debug.log*
 
 # Local wrangler state from `wrangler pages dev` (caches, trace sqlite)
 .wrangler/
+.command-build/
