@@ -33,6 +33,12 @@ if ! wrangler pages secret list --project-name "$PROJECT" 2>/dev/null | grep -q 
   exit 1
 fi
 
+# Pages binds secrets at deploy time, so a secret rotated since the last deploy
+# is not live until this script runs. That is what this deploy is for.
+echo "Using the FPL_DASH_PIN secret currently set on $PROJECT."
+echo ""
+
+
 PUB=$(node command/build.mjs)
 
 ok=0

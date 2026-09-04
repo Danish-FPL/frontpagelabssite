@@ -69,6 +69,10 @@ Rotate the passphrase with:
 wrangler pages secret put FPL_DASH_PIN --project-name frontpagelabs-command
 ```
 
+**Then redeploy.** Pages binds secrets at deploy time, so a rotated secret does
+nothing to the running deployment until `./ship-command.sh` runs again. Testing
+a new passphrase before redeploying will look like the rotation failed.
+
 Rotating it invalidates every outstanding cookie, which is the intended
 behaviour.
 
