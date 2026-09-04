@@ -36,6 +36,7 @@ stickers, scans or event-day tabs here.
 | **Campaigns** | Per-client channel spend with derived CPL and ROAS                 |
 | **Attention** | Overdue follow-ups, deals gone quiet 7+ days, at-risk accounts     |
 | **Activity**  | Chronological feed of pipeline events                              |
+| **Site**      | The marketing-site QA log from `data/site-audit.json`: what was fixed in the last pass and what is still suggested, filterable by phone/desktop. Real data, unlike the rest |
 
 Tapping any row opens the detail drawer.
 

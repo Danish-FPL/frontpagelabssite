@@ -196,6 +196,20 @@
   .chip.ink{background:var(--ink); border-color:transparent; color:var(--card)}
   .chip.cyan{background:var(--blue); border-color:transparent; color:var(--ink)}
 
+  /* --- Site QA ----------------------------------------------------------- */
+
+  .sitehd{
+    display:flex; justify-content:space-between; align-items:flex-start; gap:1rem;
+    margin-bottom:.85rem; flex-wrap:wrap;
+  }
+  .sitehd b{display:block; font-size:.8125rem; font-weight:600; letter-spacing:-.01em}
+  .sitehd span{display:block; max-width:44rem; margin-top:.2rem; font-size:.6875rem; color:var(--mut)}
+  .sitefilters{display:flex; gap:.35rem; flex-wrap:wrap}
+  .row.site{grid-template-columns:minmax(0,1.6fr) minmax(0,.55fr) auto; cursor:default}
+  .row.site:hover{transform:none; box-shadow:none; border-color:var(--line)}
+  .row.site .sb{white-space:normal; line-height:1.45}
+  .row.site .mid{white-space:normal}
+
   .empty{
     padding:2.5rem 1rem; text-align:center; color:var(--faint); font-size:.8125rem;
     background:var(--card); border:1px dashed var(--line); border-radius:6px;
@@ -358,6 +372,7 @@
     <button class="tab" role="tab" aria-selected="false" data-tab="campaigns">Campaigns <span class="n" id="n-campaigns">0</span></button>
     <button class="tab" role="tab" aria-selected="false" data-tab="attention">Attention <span class="n" id="n-attention">0</span></button>
     <button class="tab" role="tab" aria-selected="false" data-tab="activity">Activity <span class="n" id="n-activity">0</span></button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="site">Site <span class="n" id="n-site">0</span></button>
   </div>
 
   <!-- Pipeline ------------------------------------------------------------ -->
@@ -414,6 +429,23 @@
   <!-- Activity -------------------------------------------------------------- -->
   <section class="panel" id="panel-activity" role="tabpanel">
     <div class="feed" id="activityFeed"></div>
+  </section>
+
+  <!-- Site ------------------------------------------------------------------ -->
+  <section class="panel" id="panel-site" role="tabpanel">
+    <div class="sitehd">
+      <div>
+        <b>frontpagelabs.netlify.app · QA pass 2026-09-04</b>
+        <span>Every route at 1440 and 390 wide, plus an automated sweep for overflow, sub-12px text and sub-36px tap targets. “Done” items are in the repo and pushed, not deployed. Open items are suggestions; none change copy unless marked (copy).</span>
+      </div>
+      <div class="sitefilters" id="siteFilters">
+        <button class="chtab" data-sev="all" aria-pressed="true">All</button>
+        <button class="chtab" data-sev="open" aria-pressed="false">Open only</button>
+        <button class="chtab" data-sev="phone" aria-pressed="false">Phone</button>
+        <button class="chtab" data-sev="desktop" aria-pressed="false">Desktop</button>
+      </div>
+    </div>
+    <div id="siteBody"></div>
   </section>
 </div>
 
@@ -891,6 +923,44 @@ function showClient(id) {
 }
 
 /* ==========================================================================
+   Site QA — dashboard/data/site-audit.json
+   ========================================================================== */
+
+const SEV_CHIP = { fix: 'bad', polish: 'warn', idea: 'cyan' };
+let siteFilter = 'all';
+
+function renderSite() {
+  const items = DATA.siteAudit || [];
+  const open = items.filter((i) => i.status === 'open');
+  el('n-site').textContent = open.length;
+
+  const keep = (i) => {
+    if (siteFilter === 'open') return i.status === 'open';
+    if (siteFilter === 'phone') return i.viewport !== 'desktop';
+    if (siteFilter === 'desktop') return i.viewport !== 'phone';
+    return true;
+  };
+
+  const row = (i) => `<div class="row site">
+    <div><div class="nm">${esc(i.title)}</div><div class="sb">${esc(i.detail)}</div></div>
+    <div class="mid">${esc(i.page)}<br>${esc(i.viewport)}</div>
+    <div class="rt"><span class="chip ${SEV_CHIP[i.severity] || ''}">${esc(i.severity)}</span>${i.status === 'done' ? '<span class="chip ok">done</span>' : ''}</div>
+  </div>`;
+
+  const section = (title, list) =>
+    list.length
+      ? `<div class="grouphd">${title} · ${list.length}</div><div class="rows">${list.map(row).join('')}</div>`
+      : '';
+
+  const shownOpen = open.filter(keep);
+  const shownDone = items.filter((i) => i.status === 'done').filter(keep);
+  el('siteBody').innerHTML =
+    section('Suggested next — fix / polish / idea', shownOpen) +
+    section('Done in this pass', shownDone) ||
+    '<div class="empty">No site notes yet.</div>';
+}
+
+/* ==========================================================================
    Wiring
    ========================================================================== */
 
@@ -904,6 +974,7 @@ function renderAll() {
   renderCampaigns();
   renderAttention();
   renderActivity();
+  renderSite();
 
   el('updated').textContent = new Date().toLocaleTimeString('en-US', {
     hour: 'numeric', minute: '2-digit',
@@ -940,6 +1011,14 @@ document.querySelectorAll('.tab').forEach((tab) => {
 });
 
 el('q').addEventListener('input', (e) => { query = e.target.value; renderPipeline(); });
+
+el('siteFilters').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-sev]');
+  if (!b) return;
+  siteFilter = b.dataset.sev;
+  el('siteFilters').querySelectorAll('[data-sev]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+  renderSite();
+});
 
 el('stageBtn').addEventListener('click', (e) => {
   e.stopPropagation();

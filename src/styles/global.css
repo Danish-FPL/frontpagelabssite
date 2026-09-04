@@ -268,6 +268,13 @@ button {
 }
 
 @media (max-width: 767px) {
+  /* The desktop section gaps (3rem / 7.6rem) read as dead scroll on a phone,
+     where a section is already several screens tall. */
+  :root {
+    --section-padding-top: 2.5rem;
+    --section-padding-bottom: 4.5rem;
+  }
+
   .heading-small { font-size: 9vw; }
   .heading-small.about { font-size: 10vw; }
   .page-title { font-size: 12vw; }
@@ -280,6 +287,12 @@ button {
 }
 
 @media (max-width: 479px) {
+  /* 30px gutters leave 330px of copy on a 390px phone; 24px is still airy and
+     buys the display type a line's worth of room. */
+  :root {
+    --container-padding: 1.5rem;
+  }
+
   .heading-small { font-size: 10vw; line-height: 1; }
   .paragraph-extra-large,
   .paragraph-extra-large.wdd { font-size: 5.2vw; }

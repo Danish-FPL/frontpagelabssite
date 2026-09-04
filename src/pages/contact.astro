@@ -37,6 +37,8 @@ const contactCards = [
             <span>Available to take on new clients</span>
           </div>
 
+          <h1 class="heading-small form-intro-heading">Let's<br />build.</h1>
+
           <p class="form-intro-text">
             <strong>Tell us a bit about your business and marketing goals</strong>, and we'll get in
             touch with you shortly.
@@ -101,8 +103,7 @@ const contactCards = [
 
           <p class="paragraph-small">
             Whether you're just getting started or want to kick off the next evolution of your business,
-            we're prepared to help you grow. Your brand deserves the spotlight;
-            <strong>Let's start building</strong>.
+            we're prepared to help you grow. Your brand deserves the spotlight; <strong>Let's start building</strong>.
           </p>
 
           <div class="forward-links">
@@ -183,6 +184,12 @@ const contactCards = [
     grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
     gap: 4rem;
     align-items: start;
+  }
+
+  /* The page had no h1 and the intro column sat empty beside a 600px form.
+     Same heading the home page's contact block uses. */
+  .form-intro-heading {
+    margin: 0 0 1.5rem;
   }
 
   .availability {

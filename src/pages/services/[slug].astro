@@ -128,7 +128,12 @@ const formNumber = hasPricing ? '(04)' : '(03)';
               </ul>
 
               <div class="lp-plan-cta">
-                <Button href="/get-started" label={landing.ctaLabel} size="small" />
+                <Button
+                  href="/get-started"
+                  label={landing.ctaLabel}
+                  size="small"
+                  variant={plan.featured ? 'white' : 'default'}
+                />
               </div>
             </article>
           ))}

@@ -20,6 +20,9 @@ import { fileURLToPath } from 'node:url';
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = join(HERE, 'public');
 const DATA_FILE = join(HERE, 'data', 'sample-data.json');
+// Real, not placeholder: the site QA pass. Kept in its own file so the sample
+// CRM data can be swapped out without losing it.
+const AUDIT_FILE = join(HERE, 'data', 'site-audit.json');
 
 const PORT = Number(process.env.FPL_DASH_PORT || 4787);
 // Dev default keeps the wireframe runnable out of the box; set FPL_DASH_PIN
@@ -74,7 +77,13 @@ const authed = (req) => readToken(parseCookies(req.headers.cookie)[COOKIE]);
 async function loadData() {
   const raw = await readFile(DATA_FILE, 'utf8');
   const data = JSON.parse(raw);
-  return { ...data, staffList: STAFF, servedAt: new Date().toISOString() };
+  let siteAudit = [];
+  try {
+    siteAudit = JSON.parse(await readFile(AUDIT_FILE, 'utf8')).siteAudit ?? [];
+  } catch {
+    // No audit file is fine; the Site tab just shows empty.
+  }
+  return { ...data, siteAudit, staffList: STAFF, servedAt: new Date().toISOString() };
 }
 
 /* -------------------------------------------------------------------------

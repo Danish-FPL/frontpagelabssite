@@ -146,8 +146,11 @@ import SectionTitle from '../components/SectionTitle.astro';
       <div class="divider"></div>
     </div>
 
-    <div class="overflow-hidden">
-      <div class="container-fluid">
+    <!-- Same treatment as the home page's approach words: the display block is
+         a size container and the type is in cqw, so SUCCESS / LEAVES / CLUES
+         land inside the rule above them instead of running past its right
+         end at 14.25vw. -->
+    <div class="container mission-display">
         <div class="mission-heading-wrapper">
           <h3 class="heading-large">success</h3>
           <div class="mission-heading-number">001</div>
@@ -164,7 +167,6 @@ import SectionTitle from '../components/SectionTitle.astro';
           <h3 class="heading-large">clues</h3>
           <div class="mission-heading-number">003</div>
         </div>
-      </div>
     </div>
 
     <div class="container">
@@ -248,6 +250,15 @@ import SectionTitle from '../components/SectionTitle.astro';
     padding-top: 6rem;
   }
 
+  .mission-display {
+    container-type: inline-size;
+    overflow: hidden;
+  }
+
+  .mission-display .heading-large {
+    font-size: 17.5cqw;
+  }
+
   .mission-heading-wrapper {
     display: flex;
     align-items: flex-start;
@@ -302,12 +313,31 @@ import SectionTitle from '../components/SectionTitle.astro';
   }
 
   @media (max-width: 767px) {
+    .section-top {
+      padding-top: 2.5rem;
+      padding-bottom: 3.5rem;
+    }
+
+    /* FRONTPAGELABS is one unbreakable word; at the global 12vw it clipped
+       to FRONTPAGELAB inside the 330px column. */
+    .section-top .page-title {
+      font-size: 10vw;
+    }
+
     .about-grid {
       grid-template-columns: 1fr;
     }
 
+    .mission {
+      padding-top: 3.5rem;
+    }
+
     .mission-bottom {
       grid-template-columns: 1fr;
+    }
+
+    .mission-image img {
+      max-height: 15rem;
     }
 
     .mission-text {

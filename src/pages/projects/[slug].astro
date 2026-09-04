@@ -460,6 +460,18 @@ const details: [string, string][] = [
     width: 100%;
   }
 
+  /* Full-page scrollthroughs are ~5x taller than wide. At 330px wide the whole
+     capture is unreadable, so on phones the frame caps at most of a viewport
+     and the capture scrolls inside it, the way a long shot does on Dribbble. */
+  @media (max-width: 767px) {
+    .gallery-item {
+      max-height: 78vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+  }
+
   /* --- Related ------------------------------------------------------------ */
 
   .related-head {

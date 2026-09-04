@@ -1,0 +1,65 @@
+---
+// 404. Netlify serves this automatically for an unmatched path; Cloudflare
+// Pages needs the file to exist or it falls back to index.html with a 200,
+// which makes a typo'd URL look like the home page.
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+---
+
+<Base
+  title="Page not found | FrontPageLabs"
+  description="That page does not exist. Head back to the FrontPage."
+  noindex
+>
+  <section class="section notfound">
+    <div class="container-fluid">
+      <div class="page-title-wrapper">
+        <div class="overflow-hidden"><h1 class="page-title">page not</h1></div>
+        <div class="overflow-hidden"><h1 class="page-title">found</h1></div>
+      </div>
+
+      <div class="notfound-body">
+        <p class="paragraph-small no-text-indent">
+          That address does not lead anywhere. The work is all still here, so start
+          from the home page or go straight to the portfolio.
+        </p>
+
+        <div class="notfound-links">
+          <Button href="/" label="Back to home" />
+          <Button href="/portfolio" label="View the work" />
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .notfound {
+    padding-top: 4rem;
+    padding-bottom: 8rem;
+  }
+
+  .notfound-body {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 34rem;
+    margin-top: 3rem;
+  }
+
+  .notfound-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 767px) {
+    .notfound {
+      padding-top: 2.5rem;
+      padding-bottom: 4.5rem;
+    }
+
+    .notfound .page-title {
+      font-size: 13vw;
+    }
+  }
+</style>

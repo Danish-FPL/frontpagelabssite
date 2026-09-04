@@ -246,7 +246,10 @@ const links = [
   .menu-button {
     display: none;
     margin-left: auto;
-    padding: 0.5rem;
+    /* 22px icon + padding lands the tap target at ~44px; the negative margin
+       keeps the icon itself flush with the right gutter. */
+    padding: 0.85rem;
+    margin-right: -0.85rem;
   }
 
   .menu-icon {
@@ -285,6 +288,18 @@ const links = [
 
     .navigation-menu.open {
       display: flex;
+      box-shadow: 0 24px 40px -28px rgb(0 0 0 / 40%);
+    }
+
+    /* The overlay header paints its links white for the photo behind it, but
+       the dropdown is a solid white sheet, so the links go back to ink there.
+       Without this the home page menu opened as a blank white panel. */
+    .navigation.overlay .navigation-menu .navigation-link {
+      color: var(--color-primary);
+    }
+
+    .navigation.overlay .navigation-menu .navigation-link.current {
+      background-image: url('/assets/dot.svg');
     }
 
     .navigation-link {

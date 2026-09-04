@@ -269,12 +269,6 @@ const services = [
         </div>
       </div>
 
-      <div class="wins-footer">
-        <p class="wins-footer-text">
-          View More Projects<br /><span class="text-secondary">&amp; Client Success Stories</span>
-        </p>
-        <Button href="/portfolio" label="View all projects" />
-      </div>
     </div>
   </section>
 
@@ -292,6 +286,9 @@ const services = [
       <WorkMosaic projects={recentWork} />
 
       <div class="work-footer">
+        <p class="work-footer-text">
+          View More Projects<br /><span class="text-secondary">&amp; Client Success Stories</span>
+        </p>
         <Button href="/portfolio" label="View all projects" />
       </div>
     </div>
@@ -576,7 +573,7 @@ const services = [
 
   .chemistry-grid {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) minmax(0, 0.8fr);
+    grid-template-columns: auto minmax(0, 1fr) minmax(0, 0.66fr);
     gap: 2.5rem;
     align-items: start;
   }
@@ -760,19 +757,6 @@ const services = [
     color: var(--color-secondary);
   }
 
-  .wins-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 1.5rem;
-    margin-top: 2.5rem;
-  }
-
-  .wins-footer-text {
-    margin: 0;
-    font-size: 0.8125rem;
-    line-height: 1.4;
-  }
 
   /* --- (02) Services ------------------------------------------------------- */
 
@@ -787,7 +771,7 @@ const services = [
      viewport to open the split, the rest as hold so the accordion is usable
      while the section is still pinned. */
   .services-scroll {
-    height: 260vh;
+    height: 220vh;
   }
 
   .services-stage {
@@ -1001,10 +985,21 @@ const services = [
     padding-bottom: 5rem;
   }
 
+  /* One portfolio CTA closes the wins table + mosaic pair. The wins table used
+     to carry its own copy of this, so two identical buttons sat 900px apart. */
   .work-footer {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1.5rem;
     margin-top: 3rem;
+  }
+
+  .work-footer-text {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
   }
 
   /* --- (03) Approach ------------------------------------------------------- */
@@ -1086,6 +1081,13 @@ const services = [
   .approach-image img {
     width: 100%;
     display: block;
+  }
+
+  /* The stacked mark (tablet and phone) is a 9:16 portrait; uncapped it ran
+     the full column width and stood ~700px tall on a phone. */
+  .approach-image-stacked img {
+    width: auto;
+    max-height: 22rem;
   }
 
   .approach-text {
@@ -1500,7 +1502,11 @@ const services = [
       justify-self: start;
     }
 
-    .wins-footer {
+    .approach-image-stacked img {
+      max-height: 15rem;
+    }
+
+    .work-footer {
       flex-direction: column;
       align-items: flex-start;
     }

@@ -139,4 +139,17 @@ const {
   .button.small .button-text-wrapper {
     font-size: 0.6875rem;
   }
+
+  /* Pills are 30–36px tall by design; on touch screens they grow to a proper
+     44px target without changing the type or the desktop proportions. */
+  @media (pointer: coarse) {
+    .button {
+      min-height: 2.75rem;
+      padding-inline: 1.25rem;
+    }
+
+    .button.small {
+      min-height: 2.5rem;
+    }
+  }
 </style>

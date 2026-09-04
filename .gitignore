@@ -30,3 +30,6 @@ pnpm-debug.log*
 
 # Local Netlify folder
 .netlify
+
+# Local wrangler state from `wrangler pages dev` (caches, trace sqlite)
+.wrangler/
