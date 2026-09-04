@@ -1,12 +1,22 @@
-## Release workflow — push never deploys
+## Release workflow — two hosts, one of them free
 
-Netlify auto-builds from GitHub are STOPPED for this site (`stop_builds` on
-site `frontpagelabs`). GitHub is storage; deploying is a separate, explicit
-step. See `.claude/skills/ship/SKILL.md`.
+The site is served from two places on purpose. Cloudflare Pages
+(https://frontpagelabs.pages.dev) is the free everyday preview; Netlify
+(https://frontpagelabs.netlify.app) is the paid production host. Netlify
+auto-builds from GitHub are STOPPED (`stop_builds` on site `frontpagelabs`), so
+GitHub is storage and every deploy is explicit. See
+`.claude/skills/ship/SKILL.md`.
 
 - `./commit.sh "msg"` — stage, commit, push to main. Free, never deploys.
-- `./ship.sh` — `npm run build` + `netlify deploy --prod --dir dist`. Spends
-  credits; prompts first (`-y` to skip). Never deploy unless explicitly asked.
+- `./ship.sh ["msg"]` — commit + push + `npm run build` +
+  `wrangler pages deploy dist`. FREE and unlimited; this is the everyday
+  command and the right answer to "let me see it".
+- `./deploy.sh` — `npm run build` + `netlify deploy --prod --dir dist`. Spends
+  credits; prompts first (`-y` to skip). Never run unless explicitly asked.
+
+`/api/lead` exists twice on purpose: `netlify/functions/submit-lead.mjs` for
+Netlify and `functions/api/lead.js` for Cloudflare. They are twins and differ
+only in how each runtime passes env vars. Change one and change the other.
 
 ## Development
 

@@ -45,7 +45,8 @@ Every call is wrapped so a blocked or failed pixel can never break the funnel.
 
 ## Verifying it works
 
-1. Deploy (`./ship.sh`). The pixel only exists on the built site.
+1. Deploy (`./ship.sh` for the free Cloudflare preview, `./deploy.sh` for
+   Netlify production). The pixel only exists on the built site.
 2. Install the **Meta Pixel Helper** Chrome extension.
 3. Open <https://frontpagelabs.netlify.app/get-started> and watch it register
    `728093653651869` plus a PageView, then step through the flow and watch the
