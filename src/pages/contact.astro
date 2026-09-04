@@ -462,6 +462,25 @@ const contactCards = [
     color: var(--fpl-blue);
   }
 
+  /* These are the phone numbers and addresses the page exists to hand over,
+     and they were 18px tall. On touch they get a real hit area without moving
+     anything on desktop. */
+  @media (pointer: coarse) {
+    .contact-card-detail {
+      min-height: 2.75rem;
+    }
+
+    .contact-card-details {
+      gap: 0;
+    }
+
+    .forward-link {
+      min-height: 2.75rem;
+      display: inline-flex;
+      align-items: center;
+    }
+  }
+
   @media (max-width: 991px) {
     .form-grid,
     .forward-grid {

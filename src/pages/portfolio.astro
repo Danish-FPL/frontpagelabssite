@@ -204,6 +204,22 @@ const filters = ['All', ...new Set(projects.flatMap((p) => p.tags))];
     color: var(--color-primary);
   }
 
+  /* The chips and the toggle are the only controls on this page, and a filter
+     row is the one thing people actually poke at on a phone. 33px is close
+     enough to look right and just small enough to mis-tap. */
+  @media (pointer: coarse) {
+    .view-button,
+    .filter-chip {
+      min-height: 2.75rem;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .filter-row {
+      gap: 0.5rem;
+    }
+  }
+
   .filter-chip.is-active {
     background-color: var(--color-primary);
     border-color: var(--color-primary);
