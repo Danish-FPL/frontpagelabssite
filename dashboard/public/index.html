@@ -32,136 +32,77 @@
     font:500 16px/1.5 'Overused-Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
     -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
   }
-  button{font:inherit; color:inherit; background:none; border:0; cursor:pointer}
+  button{font:inherit; color:inherit; background:none; border:0; cursor:pointer; touch-action:manipulation}
   input,select,textarea{font:inherit}
+  a{color:inherit}
 
   /* --- Header ------------------------------------------------------------ */
 
   header{position:sticky; top:0; z-index:60; background:var(--ink); color:var(--card)}
-  .hbar{
-    display:flex; align-items:center; gap:.85rem;
-    padding:.7rem 1.1rem; max-width:100rem; margin:0 auto;
-  }
-  .brand{
-    font-size:1.05rem; font-weight:600; letter-spacing:-.02em;
-    text-transform:uppercase; white-space:nowrap;
-  }
+  .hbar{display:flex; align-items:center; gap:.85rem; padding:.7rem 1.1rem; max-width:100rem; margin:0 auto; flex-wrap:wrap}
+  .brand{font-size:1.05rem; font-weight:600; letter-spacing:-.02em; text-transform:uppercase; white-space:nowrap}
   .brand i{font-style:normal; color:var(--wolf)}
-  .htitle{
-    display:flex; flex-direction:column; line-height:1.05;
-    padding-left:.85rem; margin-left:.1rem; border-left:1px solid #2b2b2b;
-  }
+  .htitle{display:flex; flex-direction:column; line-height:1.05; padding-left:.85rem; margin-left:.1rem; border-left:1px solid #2b2b2b}
   .htitle b{font-size:.8125rem; font-weight:600; letter-spacing:.02em}
   .htitle small{font-size:.5625rem; letter-spacing:.16em; text-transform:uppercase; color:var(--faint)}
-
-  .badge{
-    display:inline-flex; align-items:center; gap:.35rem;
-    padding:.22rem .55rem; border-radius:999px; background:#1c1c1c;
-    font-size:.5625rem; letter-spacing:.12em; text-transform:uppercase;
-  }
+  .badge{display:inline-flex; align-items:center; gap:.35rem; padding:.22rem .55rem; border-radius:999px; background:#1c1c1c; font-size:.5625rem; letter-spacing:.12em; text-transform:uppercase; white-space:nowrap}
   .badge .dot{width:6px; height:6px; border-radius:50%; background:#2ecc71}
   .badge.off .dot{background:#e8a33d}
-
-  .hmeta{display:flex; align-items:center; gap:.55rem; margin-left:auto; font-size:.625rem}
+  .badge.dim{color:var(--faint)}
+  .hmeta{display:flex; align-items:center; gap:.55rem; margin-left:auto; font-size:.625rem; flex-wrap:wrap}
   .upd{color:var(--faint); letter-spacing:.08em; text-transform:uppercase}
   .upd b{color:var(--card); font-weight:500}
-  .iconbtn{
-    padding:.3rem .55rem; border-radius:999px; border:1px solid #2b2b2b;
-    font-size:.5625rem; letter-spacing:.1em; text-transform:uppercase;
-    transition:background-color .2s ease, color .2s ease, border-color .2s ease;
-  }
+  .iconbtn{padding:.3rem .55rem; border-radius:999px; border:1px solid #2b2b2b; font-size:.5625rem; letter-spacing:.1em; text-transform:uppercase; transition:background-color .2s ease, color .2s ease, border-color .2s ease; white-space:nowrap}
   .iconbtn:hover{background:var(--card); color:var(--ink); border-color:var(--card)}
+  .iconbtn.hi{background:var(--blue); color:var(--ink); border-color:var(--blue)}
   .whoami{display:flex; align-items:center; gap:.35rem}
-  .av{
-    display:grid; place-items:center; width:20px; height:20px; border-radius:50%;
-    background:var(--blue); color:var(--ink); font-size:.5625rem; font-weight:600;
-  }
+  .av{display:grid; place-items:center; width:20px; height:20px; border-radius:50%; background:var(--blue); color:var(--ink); font-size:.5625rem; font-weight:600}
 
   /* --- Layout ------------------------------------------------------------ */
 
   .wrap{max-width:100rem; margin:0 auto; padding:1.1rem 1.1rem 5rem}
-
-  .deck{
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));
-    gap:.7rem; margin-bottom:1.1rem;
-  }
-  .tile{
-    background:var(--card); border:1px solid var(--line); border-radius:6px;
-    padding:.85rem .9rem; box-shadow:var(--shadow);
-  }
+  .deck{display:grid; grid-template-columns:repeat(auto-fit,minmax(11rem,1fr)); gap:.7rem; margin-bottom:1.1rem}
+  .tile{background:var(--card); border:1px solid var(--line); border-radius:6px; padding:.85rem .9rem; box-shadow:var(--shadow)}
   .tile.alert{border-color:#f0b8b8}
-  .tile .k{
-    font-size:.5625rem; letter-spacing:.14em; text-transform:uppercase;
-    color:var(--mut); margin-bottom:.4rem;
-  }
+  .tile.hot{border-color:var(--ink)}
+  .tile .k{font-size:.5625rem; letter-spacing:.14em; text-transform:uppercase; color:var(--mut); margin-bottom:.4rem}
   .tile .v{font-size:1.75rem; font-weight:600; line-height:1; letter-spacing:-.03em}
   .tile .v small{font-size:.875rem; font-weight:500; color:var(--faint); letter-spacing:0}
   .tile .s{margin-top:.35rem; font-size:.625rem; color:var(--mut)}
-  .tile .s.up{color:var(--ok)}
-  .tile .s.down{color:var(--bad)}
   .tile.alert .v{color:var(--bad)}
-
-  .spark{display:flex; align-items:flex-end; gap:3px; height:22px; margin-top:.5rem}
-  .spark i{flex:1; background:var(--line); border-radius:1px; min-height:2px}
-  .spark i.hot{background:var(--blue)}
+  .bar{height:5px; border-radius:3px; background:var(--panel); margin-top:.5rem; overflow:hidden}
+  .bar i{display:block; height:100%; background:var(--ink); border-radius:3px; transition:width .3s ease}
+  .bar i.full{background:var(--ok)}
 
   /* --- Tabs -------------------------------------------------------------- */
 
-  .tabs{
-    display:flex; gap:.25rem; overflow-x:auto; scrollbar-width:none;
-    background:var(--card); border:1px solid var(--line); border-radius:999px;
-    padding:.28rem; margin-bottom:1.1rem; box-shadow:var(--shadow);
-  }
+  .tabs{display:flex; gap:.25rem; overflow-x:auto; scrollbar-width:none; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:.28rem; margin-bottom:1.1rem; box-shadow:var(--shadow)}
   .tabs::-webkit-scrollbar{display:none}
-  .tab{
-    display:inline-flex; align-items:center; gap:.4rem; white-space:nowrap;
-    padding:.5rem .9rem; border-radius:999px;
-    font-size:.6875rem; letter-spacing:.08em; text-transform:uppercase; color:var(--mut);
-    transition:background-color .2s ease, color .2s ease;
-  }
+  .tab{display:inline-flex; align-items:center; gap:.4rem; white-space:nowrap; padding:.5rem .9rem; border-radius:999px; font-size:.6875rem; letter-spacing:.08em; text-transform:uppercase; color:var(--mut); transition:background-color .2s ease, color .2s ease}
   .tab:hover{color:var(--ink)}
   .tab[aria-selected="true"]{background:var(--ink); color:var(--card)}
-  .tab .n{
-    padding:.05rem .35rem; border-radius:999px; background:var(--panel);
-    color:var(--mut); font-size:.5625rem; font-weight:600;
-  }
+  .tab .n{padding:.05rem .35rem; border-radius:999px; background:var(--panel); color:var(--mut); font-size:.5625rem; font-weight:600}
   .tab[aria-selected="true"] .n{background:#2b2b2b; color:var(--card)}
-
   .panel{display:none}
   .panel.on{display:block; animation:fade .18s ease}
   @keyframes fade{from{opacity:0; transform:translateY(3px)} to{opacity:1; transform:none}}
 
   /* --- Tools row --------------------------------------------------------- */
 
-  .tools{display:flex; gap:.5rem; margin-bottom:.85rem; flex-wrap:wrap}
-  .search{
-    display:flex; align-items:center; gap:.5rem; flex:1; min-width:13rem;
-    background:var(--card); border:1px solid var(--line); border-radius:999px;
-    padding:.45rem .85rem;
-  }
+  .tools{display:flex; gap:.5rem; margin-bottom:.85rem; flex-wrap:wrap; align-items:center}
+  .search{display:flex; align-items:center; gap:.5rem; flex:1; min-width:13rem; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:.45rem .85rem}
   .search svg{width:14px; height:14px; stroke:var(--faint); fill:none; flex:none}
   .search input{width:100%; border:0; background:none; font-size:16px; outline:none}
   .search input::placeholder{color:var(--faint)}
-
   .menuwrap{position:relative}
-  .mbtn{
-    display:inline-flex; align-items:center; gap:.4rem;
-    background:var(--card); border:1px solid var(--line); border-radius:999px;
-    padding:.5rem .9rem; font-size:.6875rem; letter-spacing:.08em; text-transform:uppercase;
-  }
+  .mbtn{display:inline-flex; align-items:center; gap:.4rem; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:.5rem .9rem; font-size:.6875rem; letter-spacing:.08em; text-transform:uppercase; white-space:nowrap}
   .mbtn:hover{border-color:var(--ink)}
+  .mbtn.ink{background:var(--ink); color:var(--card); border-color:var(--ink)}
   .mbtn .cur{color:var(--mut); text-transform:none; letter-spacing:0}
-  .menu{
-    display:none; position:absolute; z-index:40; top:calc(100% + .35rem); left:0;
-    min-width:13rem; background:var(--card); border:1px solid var(--line);
-    border-radius:6px; padding:.3rem; box-shadow:var(--shadow-lg);
-  }
+  .mbtn[disabled]{opacity:.5; cursor:default}
+  .menu{display:none; position:absolute; z-index:40; top:calc(100% + .35rem); left:0; min-width:13rem; background:var(--card); border:1px solid var(--line); border-radius:6px; padding:.3rem; box-shadow:var(--shadow-lg)}
   .menu.on{display:block}
-  .mi{
-    display:flex; justify-content:space-between; align-items:center; gap:.75rem;
-    width:100%; text-align:left; padding:.5rem .6rem; border-radius:4px;
-    font-size:.75rem;
-  }
+  .mi{display:flex; justify-content:space-between; align-items:center; gap:.75rem; width:100%; text-align:left; padding:.5rem .6rem; border-radius:4px; font-size:.75rem}
   .mi:hover{background:var(--panel)}
   .mi[aria-pressed="true"]{background:var(--ink); color:var(--card)}
   .mi .n{font-size:.625rem; color:var(--faint)}
@@ -170,139 +111,122 @@
   /* --- Rows -------------------------------------------------------------- */
 
   .rows{display:grid; gap:.4rem}
-  .row{
-    display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) auto;
-    gap:.85rem; align-items:center;
-    background:var(--card); border:1px solid var(--line); border-radius:6px;
-    padding:.75rem .9rem; text-align:left; width:100%;
-    transition:border-color .16s ease, transform .16s var(--spring), box-shadow .16s ease;
-  }
+  .row{display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) auto; gap:.85rem; align-items:center; background:var(--card); border:1px solid var(--line); border-radius:6px; padding:.75rem .9rem; text-align:left; width:100%; transition:border-color .16s ease, transform .16s var(--spring), box-shadow .16s ease}
   .row:hover{border-color:var(--ink); transform:translateY(-1px); box-shadow:var(--shadow)}
   .row .nm{font-size:.875rem; font-weight:600; letter-spacing:-.01em}
   .row .sb{margin-top:.15rem; font-size:.6875rem; color:var(--mut)}
   .row .mid{font-size:.6875rem; color:var(--mut)}
-  .row .rt{display:flex; align-items:center; gap:.4rem; justify-self:end}
+  .row .rt{display:flex; align-items:center; gap:.4rem; justify-self:end; flex-wrap:wrap}
   .amt{font-family:var(--mono); font-size:.8125rem; font-weight:600; white-space:nowrap}
-
-  .chip{
-    display:inline-flex; align-items:center; gap:.25rem;
-    padding:.2rem .5rem; border-radius:999px; border:1px solid var(--line);
-    font-size:.5625rem; letter-spacing:.08em; text-transform:uppercase; color:var(--mut);
-    white-space:nowrap;
-  }
+  .chip{display:inline-flex; align-items:center; gap:.25rem; padding:.2rem .5rem; border-radius:999px; border:1px solid var(--line); font-size:.5625rem; letter-spacing:.08em; text-transform:uppercase; color:var(--mut); white-space:nowrap}
   .chip.ok{background:var(--ok-bg); border-color:transparent; color:var(--ok)}
   .chip.bad{background:var(--bad-bg); border-color:transparent; color:var(--bad)}
   .chip.warn{background:var(--warn-bg); border-color:transparent; color:var(--warn)}
   .chip.ink{background:var(--ink); border-color:transparent; color:var(--card)}
   .chip.cyan{background:var(--blue); border-color:transparent; color:var(--ink)}
+  .empty{padding:2.5rem 1rem; text-align:center; color:var(--faint); font-size:.8125rem; background:var(--card); border:1px dashed var(--line); border-radius:6px}
+  .empty b{display:block; color:var(--ink); font-weight:600; margin-bottom:.3rem}
+  .grouphd{margin:1.2rem 0 .5rem; font-size:.5625rem; letter-spacing:.14em; text-transform:uppercase; color:var(--mut); display:flex; justify-content:space-between; align-items:center; gap:.6rem}
+  .grouphd:first-child{margin-top:0}
+  .grouphd .lnk{text-transform:none; letter-spacing:0; font-size:.6875rem; color:var(--mut); text-decoration:underline; cursor:pointer}
+
+  /* --- Today ------------------------------------------------------------- */
+
+  .subbar{display:flex; gap:.4rem; flex-wrap:wrap; align-items:center; margin-bottom:.85rem}
+  .subbar .chtab{display:inline-flex; align-items:center; gap:.45rem}
+  .subbar .chtab .n{font-family:var(--mono); font-size:.625rem; color:var(--faint)}
+  .subbar .chtab[aria-pressed="true"] .n{color:var(--wolf)}
+  .subbar .sp{flex:1}
+  .prog{display:grid; grid-template-columns:repeat(auto-fit,minmax(9rem,1fr)); gap:.5rem; margin-bottom:1rem}
+  .prog .p{background:var(--card); border:1px solid var(--line); border-radius:6px; padding:.55rem .7rem}
+  .prog .p .k{display:flex; justify-content:space-between; font-size:.5625rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mut)}
+  .prog .p .k b{font-family:var(--mono); letter-spacing:0; color:var(--ink)}
+  .trow{background:var(--card); border:1px solid var(--line); border-radius:6px; padding:.85rem .95rem; transition:border-color .16s ease, box-shadow .16s ease}
+  .trow.active{border-color:var(--ink); box-shadow:0 0 0 2px var(--blue), var(--shadow)}
+  .trow.done{opacity:.45}
+  .thd{display:flex; justify-content:space-between; gap:.8rem; align-items:flex-start; flex-wrap:wrap}
+  .thd .nm{font-size:.9375rem; font-weight:600; letter-spacing:-.01em}
+  .thd .nm button{text-decoration:underline; text-decoration-color:var(--line); text-underline-offset:3px}
+  .thd .sb{margin-top:.15rem; font-size:.6875rem; color:var(--mut)}
+  .thd .chips{display:flex; gap:.35rem; flex-wrap:wrap; align-items:center}
+  .obs{margin:.6rem 0 .45rem; font-size:.75rem; color:var(--mut); line-height:1.5}
+  .obs b{color:var(--ink); font-weight:600}
+  .gate{margin:.4rem 0; font-size:.6875rem; color:var(--warn); background:var(--warn-bg); border-radius:4px; padding:.4rem .6rem}
+  .subj{width:100%; border:1px solid var(--line); border-radius:4px; padding:.5rem .7rem; font-size:.8125rem; margin-bottom:.4rem; background:var(--panel)}
+  .subj:focus{outline:none; border-color:var(--ink); background:var(--card)}
+  .ta{width:100%; min-height:7rem; resize:vertical; border:1px solid var(--line); border-radius:4px; padding:.65rem .75rem; font-family:var(--mono); font-size:.75rem; line-height:1.55; background:var(--panel); color:var(--ink)}
+  .ta:focus{outline:none; border-color:var(--ink); background:var(--card)}
+  .ta.nodraft{color:var(--faint); font-style:italic}
+  .warnline{margin:.35rem 0 0; font-size:.625rem; color:var(--warn)}
+  .tacts{display:flex; gap:.4rem; flex-wrap:wrap; margin-top:.6rem; align-items:center}
+  .abtn{padding:.5rem .85rem; border-radius:999px; border:1px solid var(--line); font-size:.5625rem; letter-spacing:.1em; text-transform:uppercase; transition:background-color .2s ease, color .2s ease, border-color .2s ease; white-space:nowrap; text-decoration:none; display:inline-flex; align-items:center; gap:.3rem}
+  .abtn:hover{background:var(--ink); border-color:var(--ink); color:var(--card)}
+  .abtn.pri{background:var(--ink); border-color:var(--ink); color:var(--card)}
+  .abtn.pri:hover{background:var(--blue); border-color:var(--blue); color:var(--ink)}
+  .abtn.ok{background:var(--ok-bg); border-color:transparent; color:var(--ok)}
+  .abtn.danger:hover{background:var(--bad); border-color:var(--bad)}
+  .abtn[disabled]{opacity:.45; cursor:default}
+  .abtn .kbd{font-family:var(--mono); font-size:.5rem; color:var(--faint); border:1px solid var(--line); border-radius:3px; padding:0 .25rem}
+  .abtn:hover .kbd,.abtn.pri .kbd{color:inherit; border-color:currentColor}
+  .tacts .sp{flex:1}
+  .tacts .meta{font-size:.625rem; color:var(--faint)}
+  .copy{padding:.3rem .7rem; border-radius:999px; border:1px solid var(--line); font-size:.5625rem; letter-spacing:.1em; text-transform:uppercase; transition:background-color .2s ease, color .2s ease}
+  .copy:hover{background:var(--ink); border-color:var(--ink); color:var(--card)}
+  .copy.done{background:var(--blue); border-color:var(--blue); color:var(--ink)}
+
+  /* --- Templates ---------------------------------------------------------- */
+
+  .chtabs{display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:.85rem}
+  .chtab{padding:.5rem .9rem; border-radius:6px; background:var(--card); border:1px solid var(--line); font-size:.6875rem; letter-spacing:.06em; text-transform:uppercase}
+  .chtab:hover{border-color:var(--ink)}
+  .chtab[aria-pressed="true"]{background:var(--ink); border-color:var(--ink); color:var(--card)}
+  .chbox{background:var(--card); border:1px solid var(--line); border-radius:6px; padding:.9rem; margin-bottom:1.1rem}
+  .blk + .blk{margin-top:1rem; padding-top:1rem; border-top:1px solid var(--line)}
+  .blkhd{display:flex; justify-content:space-between; align-items:center; gap:.75rem; margin-bottom:.45rem}
+  .blkhd b{font-size:.6875rem; letter-spacing:.1em; text-transform:uppercase}
+  .hint{margin:.4rem 0 0; font-size:.625rem; color:var(--faint)}
+  .hint code{font-family:var(--mono); color:var(--mut)}
+
+  /* --- Tables -------------------------------------------------------------- */
+
+  .tablewrap{overflow-x:auto; background:var(--card); border:1px solid var(--line); border-radius:6px}
+  table{width:100%; border-collapse:collapse; min-width:44rem}
+  th,td{padding:.65rem .8rem; text-align:left; border-bottom:1px solid var(--line); white-space:nowrap}
+  th{font-size:.5625rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mut); font-weight:500}
+  td{font-size:.8125rem}
+  td.num,th.num{font-family:var(--mono); text-align:right}
+  th.num{font-family:inherit}
+  tbody tr:last-child td{border-bottom:0}
+  tbody tr:hover{background:var(--panel)}
+  tfoot td{font-weight:600; border-top:1px solid var(--ink); background:var(--panel)}
+  td .lo{color:var(--faint)}
 
   /* --- Site QA ----------------------------------------------------------- */
 
-  .sitehd{
-    display:flex; justify-content:space-between; align-items:flex-start; gap:1rem;
-    margin-bottom:.85rem; flex-wrap:wrap;
-  }
+  .sitehd{display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; margin-bottom:.85rem; flex-wrap:wrap}
   .sitehd b{display:block; font-size:.8125rem; font-weight:600; letter-spacing:-.01em}
   .sitehd span{display:block; max-width:44rem; margin-top:.2rem; font-size:.6875rem; color:var(--mut)}
   .sitefilters{display:flex; gap:.35rem; flex-wrap:wrap}
   .row.site{grid-template-columns:minmax(0,1.6fr) minmax(0,.55fr) auto; cursor:default}
   .row.site:hover{transform:none; box-shadow:none; border-color:var(--line)}
-  .row.site .sb{white-space:normal; line-height:1.45}
-  .row.site .mid{white-space:normal}
-
-  .empty{
-    padding:2.5rem 1rem; text-align:center; color:var(--faint); font-size:.8125rem;
-    background:var(--card); border:1px dashed var(--line); border-radius:6px;
-  }
-  .grouphd{
-    margin:1.2rem 0 .5rem; font-size:.5625rem; letter-spacing:.14em;
-    text-transform:uppercase; color:var(--mut);
-  }
-  .grouphd:first-child{margin-top:0}
-
-  /* --- Outreach ---------------------------------------------------------- */
-
-  .chtabs{display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:.85rem}
-  .chtab{
-    padding:.5rem .9rem; border-radius:6px; background:var(--card);
-    border:1px solid var(--line); font-size:.6875rem; letter-spacing:.06em;
-    text-transform:uppercase;
-  }
-  .chtab:hover{border-color:var(--ink)}
-  .chtab[aria-pressed="true"]{background:var(--ink); border-color:var(--ink); color:var(--card)}
-
-  .chbox{
-    background:var(--card); border:1px solid var(--line); border-radius:6px;
-    padding:.9rem; margin-bottom:1.1rem;
-  }
-  .blk + .blk{margin-top:1rem; padding-top:1rem; border-top:1px solid var(--line)}
-  .blkhd{display:flex; justify-content:space-between; align-items:center; gap:.75rem; margin-bottom:.45rem}
-  .blkhd b{font-size:.6875rem; letter-spacing:.1em; text-transform:uppercase}
-  .copy{
-    padding:.3rem .7rem; border-radius:999px; border:1px solid var(--line);
-    font-size:.5625rem; letter-spacing:.1em; text-transform:uppercase;
-    transition:background-color .2s ease, color .2s ease;
-  }
-  .copy:hover{background:var(--ink); border-color:var(--ink); color:var(--card)}
-  .copy.done{background:var(--blue); border-color:var(--blue); color:var(--ink)}
-  .ta{
-    width:100%; min-height:7rem; resize:vertical;
-    border:1px solid var(--line); border-radius:4px; padding:.65rem .75rem;
-    font-family:var(--mono); font-size:.75rem; line-height:1.55;
-    background:var(--panel); color:var(--ink);
-  }
-  .ta:focus{outline:none; border-color:var(--ink); background:var(--card)}
-  .hint{margin:.4rem 0 0; font-size:.625rem; color:var(--faint)}
-  .hint code{font-family:var(--mono); color:var(--mut)}
-
-  /* --- Campaign table ----------------------------------------------------- */
-
-  .tablewrap{overflow-x:auto; background:var(--card); border:1px solid var(--line); border-radius:6px}
-  table{width:100%; border-collapse:collapse; min-width:44rem}
-  th,td{padding:.65rem .8rem; text-align:left; border-bottom:1px solid var(--line); white-space:nowrap}
-  th{
-    font-size:.5625rem; letter-spacing:.12em; text-transform:uppercase;
-    color:var(--mut); font-weight:500;
-  }
-  td{font-size:.8125rem}
-  td.num{font-family:var(--mono); text-align:right}
-  th.num{text-align:right}
-  tbody tr:last-child td{border-bottom:0}
-  tbody tr:hover{background:var(--panel)}
-  tfoot td{font-weight:600; border-top:1px solid var(--ink); background:var(--panel)}
+  .row.site .sb,.row.site .mid{white-space:normal; line-height:1.45}
 
   /* --- Activity ----------------------------------------------------------- */
 
   .feed{display:grid; gap:.4rem}
-  .ev{
-    display:flex; align-items:flex-start; gap:.7rem;
-    background:var(--card); border:1px solid var(--line); border-radius:6px; padding:.7rem .9rem;
-  }
-  .ev .ic{
-    display:grid; place-items:center; flex:none;
-    width:24px; height:24px; border-radius:50%; background:var(--panel); font-size:.75rem;
-  }
+  .ev{display:flex; align-items:flex-start; gap:.7rem; background:var(--card); border:1px solid var(--line); border-radius:6px; padding:.7rem .9rem}
+  .ev .ic{display:grid; place-items:center; flex:none; width:24px; height:24px; border-radius:50%; background:var(--panel); font-size:.75rem}
   .ev .tx{font-size:.8125rem}
   .ev .tm{margin-top:.1rem; font-size:.625rem; color:var(--faint)}
+  .ev .bd{margin-top:.3rem; font-size:.6875rem; color:var(--mut); white-space:pre-wrap; max-height:5.5rem; overflow:hidden}
 
   /* --- Drawer -------------------------------------------------------------- */
 
-  .scrim{
-    position:fixed; inset:0; z-index:80; background:rgba(0,0,0,.45);
-    opacity:0; pointer-events:none; transition:opacity .22s ease;
-  }
+  .scrim{position:fixed; inset:0; z-index:80; background:rgba(0,0,0,.45); opacity:0; pointer-events:none; transition:opacity .22s ease}
   .scrim.on{opacity:1; pointer-events:auto}
-  .drawer{
-    position:fixed; z-index:90; top:0; right:0; bottom:0; width:min(27rem,100%);
-    background:var(--card); box-shadow:var(--shadow-lg);
-    transform:translateX(100%); transition:transform .26s var(--spring);
-    display:flex; flex-direction:column;
-  }
+  .drawer{position:fixed; z-index:90; top:0; right:0; bottom:0; width:min(29rem,100%); background:var(--card); box-shadow:var(--shadow-lg); transform:translateX(100%); transition:transform .26s var(--spring); display:flex; flex-direction:column}
   .drawer.on{transform:none}
-  .dhd{
-    display:flex; justify-content:space-between; align-items:flex-start; gap:1rem;
-    padding:1.1rem; border-bottom:1px solid var(--line);
-  }
+  .dhd{display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; padding:1.1rem; border-bottom:1px solid var(--line)}
   .dhd h2{margin:0; font-size:1.1rem; font-weight:600; letter-spacing:-.02em}
   .dhd .sb{margin-top:.2rem; font-size:.6875rem; color:var(--mut)}
   .x{font-size:1.1rem; line-height:1; color:var(--mut); padding:.2rem .4rem}
@@ -310,36 +234,47 @@
   .dbd{padding:1.1rem; overflow-y:auto; flex:1}
   .kv{display:grid; grid-template-columns:auto 1fr; gap:.45rem .9rem; font-size:.75rem}
   .kv dt{color:var(--faint); letter-spacing:.06em; text-transform:uppercase; font-size:.5625rem; padding-top:.15rem}
-  .kv dd{margin:0}
+  .kv dd{margin:0; overflow-wrap:anywhere}
   .dsec{margin-top:1.3rem; padding-top:1.1rem; border-top:1px solid var(--line)}
-  .dsec h3{
-    margin:0 0 .6rem; font-size:.5625rem; letter-spacing:.14em;
-    text-transform:uppercase; color:var(--mut); font-weight:500;
-  }
-  .note{
-    background:var(--panel); border-radius:4px; padding:.7rem .8rem;
-    font-size:.75rem; line-height:1.5;
-  }
+  .dsec h3{margin:0 0 .6rem; font-size:.5625rem; letter-spacing:.14em; text-transform:uppercase; color:var(--mut); font-weight:500}
+  .note{background:var(--panel); border-radius:4px; padding:.7rem .8rem; font-size:.75rem; line-height:1.5; white-space:pre-wrap}
   .dact{display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.6rem}
-  .abtn{
-    padding:.5rem .85rem; border-radius:999px; border:1px solid var(--line);
-    font-size:.5625rem; letter-spacing:.1em; text-transform:uppercase;
-    transition:background-color .2s ease, color .2s ease, border-color .2s ease;
-  }
-  .abtn:hover{background:var(--ink); border-color:var(--ink); color:var(--card)}
+  .fld{margin:.5rem 0}
+  .fld label{display:block; font-size:.5625rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mut); margin-bottom:.2rem}
+  .fld input,.fld select,.fld textarea{width:100%; font-size:16px; border:1px solid var(--line); border-radius:4px; padding:.45rem .6rem; background:var(--card); color:var(--ink)}
+  .fld input:focus,.fld select:focus,.fld textarea:focus{outline:none; border-color:var(--ink)}
+  .fld textarea{min-height:4.5rem; resize:vertical}
+  .fld2{display:grid; grid-template-columns:1fr 1fr; gap:0 .6rem}
+  .saved{font-size:.625rem; color:var(--ok); margin-left:.4rem}
 
-  .toast{
-    position:fixed; z-index:100; left:50%; bottom:1.5rem; transform:translate(-50%,140%);
-    background:var(--ink); color:var(--card); border-radius:999px;
-    padding:.6rem 1.1rem; font-size:.6875rem; letter-spacing:.06em;
-    transition:transform .26s var(--spring);
-  }
+  /* --- Modals --------------------------------------------------------------- */
+
+  .modal{position:fixed; inset:0; z-index:95; display:none; place-items:center; padding:1rem; background:rgba(0,0,0,.45)}
+  .modal.on{display:grid}
+  .mbox{width:min(44rem,100%); max-height:92vh; overflow:auto; background:var(--card); border-radius:8px; box-shadow:var(--shadow-lg); padding:1.2rem 1.3rem}
+  .mbox h2{margin:0 0 .2rem; font-size:1.05rem; letter-spacing:-.02em}
+  .mbox .sub{font-size:.75rem; color:var(--mut); margin:0 0 .8rem}
+  .mbox .macts{display:flex; gap:.5rem; justify-content:flex-end; margin-top:1rem; flex-wrap:wrap; align-items:center}
+  .mbox .macts .sp{flex:1}
+  .mbox .res{margin-top:.8rem; font-size:.75rem}
+  .mbox .res li{margin:.2rem 0}
+  .mbox .cand{display:grid; grid-template-columns:auto 1fr auto; gap:.6rem; align-items:start; padding:.55rem .6rem; border:1px solid var(--line); border-radius:6px; margin:.35rem 0; font-size:.75rem}
+  .mbox .cand .nm{font-weight:600}
+  .mbox .cand .src a{color:var(--mut); font-size:.625rem}
+  .mbox .cand.dup{opacity:.5}
+  .maptbl{width:100%; min-width:0; margin:.4rem 0}
+  .maptbl td{padding:.3rem .4rem; font-size:.75rem; white-space:normal}
+  .maptbl select{font-size:.75rem; padding:.2rem .3rem; border:1px solid var(--line); border-radius:4px}
+  .preview{font-family:var(--mono); font-size:.625rem; background:var(--panel); border-radius:4px; padding:.5rem .6rem; overflow:auto; max-height:9rem; white-space:pre}
+
+  .toast{position:fixed; z-index:100; left:50%; bottom:1.5rem; transform:translate(-50%,140%); background:var(--ink); color:var(--card); border-radius:999px; padding:.6rem 1.1rem; font-size:.6875rem; letter-spacing:.06em; transition:transform .26s var(--spring); max-width:90vw; text-align:center}
   .toast.on{transform:translate(-50%,0)}
 
   @media (max-width:760px){
     .row{grid-template-columns:1fr; gap:.5rem}
     .row .rt{justify-self:start}
     .htitle{display:none}
+    .fld2{grid-template-columns:1fr}
   }
   @media (prefers-reduced-motion:reduce){
     *{animation-duration:.01ms !important; transition-duration:.01ms !important}
@@ -353,9 +288,16 @@
     <div class="brand">Frontpage<i>Labs</i></div>
     <div class="htitle"><b>Growth Command</b><small>Internal</small></div>
     <div class="badge" id="liveBadge"><span class="dot"></span><span id="liveLabel">Live</span></div>
+    <div class="badge dim" id="storeBadge" title="Where prospects are stored">store</div>
+    <div class="badge dim" id="draftBadge" title="AI drafting">drafting</div>
     <div class="hmeta">
       <span class="upd">updated <b id="updated">—</b></span>
-      <button class="iconbtn" id="refreshBtn" title="Refresh now">↻</button>
+      <button class="iconbtn hi" id="addBtn" title="Add a prospect (a)">＋ Add</button>
+      <button class="iconbtn" id="importBtn" title="Import a CSV">Import</button>
+      <button class="iconbtn" id="researchBtn" title="Find businesses (paid, per search)" hidden>Research</button>
+      <a class="iconbtn" href="/bookmarklet" title="Add from any page with one tap">Bookmarklet</a>
+      <button class="iconbtn" id="settingsBtn" title="Daily caps">⚙ Caps</button>
+      <button class="iconbtn" id="refreshBtn" title="Refresh from the store">↻</button>
       <span class="whoami"><span class="av" id="avatar">·</span></span>
       <button class="iconbtn" id="logoutBtn">Sign out</button>
     </div>
@@ -366,37 +308,65 @@
   <div class="deck" id="deck"></div>
 
   <div class="tabs" role="tablist">
-    <button class="tab" role="tab" aria-selected="true"  data-tab="pipeline">Pipeline <span class="n" id="n-pipeline">0</span></button>
-    <button class="tab" role="tab" aria-selected="false" data-tab="outreach">Outreach <span class="n" id="n-outreach">0</span></button>
+    <button class="tab" role="tab" aria-selected="true"  data-tab="today">Today <span class="n" id="n-today">0</span></button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="pipeline">Pipeline <span class="n" id="n-pipeline">0</span></button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="attention">Attention <span class="n" id="n-attention">0</span></button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="inbound">Inbound <span class="n" id="n-inbound">·</span></button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="activity">Activity <span class="n" id="n-activity">0</span></button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="reporting">Reporting</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="templates">Templates</button>
     <button class="tab" role="tab" aria-selected="false" data-tab="clients">Clients <span class="n" id="n-clients">0</span></button>
     <button class="tab" role="tab" aria-selected="false" data-tab="campaigns">Campaigns <span class="n" id="n-campaigns">0</span></button>
-    <button class="tab" role="tab" aria-selected="false" data-tab="attention">Attention <span class="n" id="n-attention">0</span></button>
-    <button class="tab" role="tab" aria-selected="false" data-tab="activity">Activity <span class="n" id="n-activity">0</span></button>
     <button class="tab" role="tab" aria-selected="false" data-tab="site">Site <span class="n" id="n-site">0</span></button>
   </div>
 
+  <!-- Today --------------------------------------------------------------- -->
+  <section class="panel on" id="panel-today" role="tabpanel">
+    <div class="prog" id="prog"></div>
+    <div class="subbar" id="todayBar"></div>
+    <div id="todayBody"></div>
+  </section>
+
   <!-- Pipeline ------------------------------------------------------------ -->
-  <section class="panel on" id="panel-pipeline" role="tabpanel">
+  <section class="panel" id="panel-pipeline" role="tabpanel">
     <div class="tools">
       <div class="search">
         <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="q" type="text" placeholder="Search company, contact, or industry…" autocomplete="off" spellcheck="false">
+        <input id="q" type="text" placeholder="Search company, contact, city, or industry…" autocomplete="off" spellcheck="false">
       </div>
       <div class="menuwrap" id="stageWrap">
-        <button class="mbtn" id="stageBtn" aria-haspopup="true" aria-expanded="false">Stage<span class="cur" id="stageCur">· All</span><span>▾</span></button>
+        <button class="mbtn" id="stageBtn" aria-haspopup="true" aria-expanded="false">Stage<span class="cur" id="stageCur">· Open</span><span>▾</span></button>
         <div class="menu" id="stageMenu" role="menu"></div>
       </div>
+      <a class="mbtn" id="exportLink" href="/api/prospects/export.csv" title="Download every prospect as a CSV">Export CSV</a>
     </div>
     <div class="rows" id="pipelineRows"></div>
   </section>
 
-  <!-- Outreach ------------------------------------------------------------ -->
-  <section class="panel" id="panel-outreach" role="tabpanel">
+  <!-- Attention ------------------------------------------------------------ -->
+  <section class="panel" id="panel-attention" role="tabpanel">
+    <div id="attentionBody"></div>
+  </section>
+
+  <!-- Inbound -------------------------------------------------------------- -->
+  <section class="panel" id="panel-inbound" role="tabpanel">
+    <div id="inboundBody"><div class="empty">Loading the site's leads…</div></div>
+  </section>
+
+  <!-- Activity -------------------------------------------------------------- -->
+  <section class="panel" id="panel-activity" role="tabpanel">
+    <div class="feed" id="activityFeed"></div>
+  </section>
+
+  <!-- Reporting ------------------------------------------------------------- -->
+  <section class="panel" id="panel-reporting" role="tabpanel">
+    <div id="reportBody"><div class="empty">Loading…</div></div>
+  </section>
+
+  <!-- Templates ------------------------------------------------------------ -->
+  <section class="panel" id="panel-templates" role="tabpanel">
     <div class="chtabs" id="chTabs"></div>
     <div class="chbox" id="chBox"></div>
-
-    <div class="grouphd" id="followHd">Follow-up queue</div>
-    <div class="rows" id="outreachRows"></div>
   </section>
 
   <!-- Clients -------------------------------------------------------------- -->
@@ -408,27 +378,12 @@
   <section class="panel" id="panel-campaigns" role="tabpanel">
     <div class="tablewrap">
       <table>
-        <thead>
-          <tr>
-            <th>Client</th><th>Channel</th><th>Status</th>
-            <th class="num">Spend</th><th class="num">Leads</th>
-            <th class="num">CPL</th><th class="num">Conv.</th><th class="num">ROAS</th>
-          </tr>
-        </thead>
+        <thead><tr><th>Client</th><th>Channel</th><th>Status</th><th class="num">Spend</th><th class="num">Leads</th><th class="num">CPL</th><th class="num">Conv.</th><th class="num">ROAS</th></tr></thead>
         <tbody id="campaignBody"></tbody>
         <tfoot id="campaignFoot"></tfoot>
       </table>
     </div>
-  </section>
-
-  <!-- Attention ------------------------------------------------------------ -->
-  <section class="panel" id="panel-attention" role="tabpanel">
-    <div id="attentionBody"></div>
-  </section>
-
-  <!-- Activity -------------------------------------------------------------- -->
-  <section class="panel" id="panel-activity" role="tabpanel">
-    <div class="feed" id="activityFeed"></div>
+    <p class="hint">Clients and campaigns are still the sample rows from <code>data/sample-data.json</code>; only prospects and touches are live.</p>
   </section>
 
   <!-- Site ------------------------------------------------------------------ -->
@@ -458,6 +413,7 @@
   <div class="dbd" id="dBody"></div>
 </aside>
 
+<div class="modal" id="modal"><div class="mbox" id="mbox"></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -467,32 +423,40 @@
 
 const STAGES = ['New', 'Contacted', 'Call Booked', 'Proposal', 'Won', 'Lost'];
 const OPEN_STAGES = ['New', 'Contacted', 'Call Booked', 'Proposal'];
+const CHANNELS = ['Email', 'LinkedIn', 'Instagram', 'Call'];
+const CH_KEYS = ['email', 'linkedin', 'instagram', 'call'];
+const INDUSTRIES = ['Real Estate Brokerage', 'Developer', 'Property Management', 'Service Business', 'E-commerce', 'Other'];
+const SERVICES = ['Unknown', 'Website', 'Website + Ads', 'Landing Page Offer', 'SEO', 'Ads', 'Branding'];
 
 let DATA = null;
-let stageFilter = 'All';
+let stageFilter = 'Open';
 let query = '';
-let activeChannel = 0;
+let activeChannel = 0;      // templates tab
+let todayFilter = 'all';
+let activeRow = 0;          // keyboard cursor on Today
+let revealed = {};          // channel → true when "show more" was tapped
+let siteFilter = 'all';
+let batchJob = null;
+let currentTab = 'today';
+let inboundLoaded = false, reportLoaded = false;
+let editing = null;         // prospect id open in the drawer
 
 const $ = (sel) => document.querySelector(sel);
 const el = (id) => document.getElementById(id);
 
 /* --- Formatting ---------------------------------------------------------- */
 
-const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
-const moneyShort = (n) =>
-  n >= 1000 ? '$' + (n / 1000).toFixed(n >= 10000 ? 0 : 1).replace(/\.0$/, '') + 'k' : '$' + Math.round(n);
-
-const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) =>
-  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-
+const money = (n) => '$' + Math.round(n || 0).toLocaleString('en-US');
+const moneyShort = (n) => (n >= 1000 ? '$' + (n / 1000).toFixed(n >= 10000 ? 0 : 1).replace(/\.0$/, '') + 'k' : '$' + Math.round(n || 0));
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const DAY = 86400000;
-const todayISO = () => new Date().toISOString().slice(0, 10);
+// The server's Chicago date, so the client and the queue never disagree on "today".
+const todayISO = () => (DATA && DATA.today && DATA.today.date) || new Date().toISOString().slice(0, 10);
 
 function daysFrom(dateStr) {
   if (!dateStr) return null;
-  return Math.round((new Date(dateStr + 'T00:00:00') - new Date(todayISO() + 'T00:00:00')) / DAY);
+  return Math.round((new Date(dateStr.slice(0, 10) + 'T00:00:00') - new Date(todayISO() + 'T00:00:00')) / DAY);
 }
-
 function relDay(dateStr) {
   const d = daysFrom(dateStr);
   if (d === null) return '—';
@@ -501,7 +465,6 @@ function relDay(dateStr) {
   if (d === -1) return 'yesterday';
   return d < 0 ? `${-d} days ago` : `in ${d} days`;
 }
-
 function relTime(iso) {
   const mins = Math.round((Date.now() - new Date(iso)) / 60000);
   if (mins < 60) return `${Math.max(mins, 0)}m ago`;
@@ -513,20 +476,91 @@ function relTime(iso) {
 /* --- Derived ------------------------------------------------------------- */
 
 const isOpen = (p) => OPEN_STAGES.includes(p.stage);
-const isOverdue = (p) => isOpen(p) && daysFrom(p.nextStepDue) < 0;
-const isStale = (p) => isOpen(p) && daysFrom(p.lastTouch) <= -7;
-
-const stageClass = (stage) =>
-  stage === 'Won' ? 'ok' : stage === 'Lost' ? 'bad' : stage === 'Proposal' ? 'cyan' : '';
-
+const isOverdue = (p) => isOpen(p) && p.seqStatus === 'Active' && p.due && p.overdueDays > 0;
+const isStale = (p) => isOpen(p) && p.lastTouch && daysFrom(p.lastTouch) <= -7 && p.seqStatus !== 'Active';
+const stageClass = (stage) => (stage === 'Won' ? 'ok' : stage === 'Lost' ? 'bad' : stage === 'Proposal' ? 'cyan' : '');
 const healthClass = (h) => (h === 'Good' ? 'ok' : h === 'At Risk' ? 'bad' : 'warn');
+const chLabel = (k) => ({ email: 'Email', linkedin: 'LinkedIn', instagram: 'Instagram', call: 'Call' }[k] || k);
+const draftKey = (p) => `${p.channelKey}:${p.stepKey}`;
+const draftOf = (p) => (p.drafts && p.drafts[draftKey(p)]) || null;
+const touchesOf = (id) => (DATA.recentTouches || []).filter((t) => t.prospectId === id);
 
 function toast(msg) {
   const t = el('toast');
   t.textContent = msg;
   t.classList.add('on');
   clearTimeout(toast._t);
-  toast._t = setTimeout(() => t.classList.remove('on'), 2000);
+  toast._t = setTimeout(() => t.classList.remove('on'), 2200);
+}
+
+async function api(path, body, method) {
+  const opts = body !== undefined ? { method: method || 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) } : { method: method || 'GET' };
+  const res = await fetch(path, opts);
+  if (res.status === 401) { location.href = '/login'; throw new Error('Signed out'); }
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || data.ok === false) {
+    const err = new Error(data.error || `Request failed (${res.status})`);
+    err.status = res.status; err.data = data;
+    throw err;
+  }
+  return data;
+}
+
+// Replace one prospect in DATA (and its queue rows) after a write, so the
+// screen updates without waiting on a full reload.
+function absorb(prospect, touch) {
+  if (!DATA) return;
+  const i = DATA.prospects.findIndex((p) => p.id === prospect.id);
+  if (i >= 0) DATA.prospects[i] = prospect; else DATA.prospects.unshift(prospect);
+  for (const ch of CH_KEYS) {
+    const list = DATA.today.queue[ch] || [];
+    const j = list.findIndex((p) => p.id === prospect.id);
+    if (j >= 0) list[j] = prospect;
+    const ol = DATA.today.overflowList[ch] || [];
+    const k = ol.findIndex((p) => p.id === prospect.id);
+    if (k >= 0) ol[k] = prospect;
+  }
+  if (touch) DATA.recentTouches.unshift(touch);
+}
+
+/* --- Links ----------------------------------------------------------------- */
+
+const gmailHref = (email, subject, body) =>
+  'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(email) + '&su=' + encodeURIComponent(subject || '') + '&body=' + encodeURIComponent(body || '');
+const telHref = (phone) => 'tel:' + String(phone || '').replace(/[^\d+]/g, '');
+
+function openHref(p, subject, body) {
+  switch (p.channelKey) {
+    case 'email': return p.email ? gmailHref(p.email, subject, body) : '';
+    case 'linkedin': return p.linkedinUrl || '';
+    case 'instagram': return p.instagramUrl || '';
+    case 'call': return p.phone ? telHref(p.phone) : '';
+  }
+  return '';
+}
+const openLabel = (p) => ({ email: 'Open in Gmail', linkedin: 'Open profile', instagram: 'Open profile', call: 'Call' }[p.channelKey] || 'Open');
+
+/* --- Template fallback (when drafting is off or a row has no draft yet) --- */
+
+const TPL_MAP = {
+  'email:first': ['Cold Email', 0], 'email:follow-up': ['Cold Email', 1], 'email:breakup': ['Cold Email', 2],
+  'linkedin:connect': ['LinkedIn DM', 0], 'linkedin:message': ['LinkedIn DM', 1],
+  'instagram:dm': ['Instagram DM', 0], 'instagram:dm-follow-up': ['Instagram DM', 1],
+  'call:call': ['Call Script', 0], 'call:call-2': ['Call Script', 0],
+};
+function templateFor(p) {
+  const hit = TPL_MAP[draftKey(p)];
+  if (!hit) return { subject: '', body: '' };
+  const t = (DATA.templates || []).find((x) => x.channel === hit[0]);
+  const blk = t && t.blocks[hit[1]];
+  if (!blk) return { subject: '', body: '' };
+  const fill = (s) => s.replace(/\{\{firstName\}\}/g, p.firstName || 'there').replace(/\{\{company\}\}/g, p.name)
+    .replace(/\{\{industry\}\}/g, (p.industry || 'local').toLowerCase()).replace(/\{\{city\}\}/g, p.city || 'Chicago').replace(/\{\{clientValue\}\}/g, money(p.value || 5000));
+  let body = fill(blk.body);
+  let subject = '';
+  const m = body.match(/^Subject:\s*(.*)\n+/);
+  if (m) { subject = m[1]; body = body.slice(m[0].length); }
+  return { subject, body };
 }
 
 /* ==========================================================================
@@ -534,39 +568,34 @@ function toast(msg) {
    ========================================================================== */
 
 function renderDeck() {
-  const { prospects, clients } = DATA;
+  const { prospects, clients, today, caps } = DATA;
   const open = prospects.filter(isOpen);
-  const pipelineValue = open.reduce((s, p) => s + p.value, 0);
+  const pipelineValue = open.reduce((s, p) => s + (p.value || 0), 0);
   const proposals = prospects.filter((p) => p.stage === 'Proposal');
   const mrr = clients.reduce((s, c) => s + c.mrr, 0);
-  // Must match the Attention tab's total exactly, or the two disagree on screen.
   const needsAttention = attentionItems().total;
-
   const won = prospects.filter((p) => p.stage === 'Won').length;
   const closed = won + prospects.filter((p) => p.stage === 'Lost').length;
   const winRate = closed ? Math.round((won / closed) * 100) : 0;
-
-  // Placeholder trend until a real time series exists.
-  const spark = [2, 3, 2, 5, 4, 6, 5, 8];
-  const peak = Math.max(...spark);
+  const newSent = Object.values(today.sentToday.new).reduce((s, n) => s + n, 0);
+  const pct = caps.total ? Math.min(100, Math.round((newSent / caps.total) * 100)) : 0;
+  const replies = prospects.filter((p) => p.seqStatus === 'Replied' && isOpen(p)).length;
 
   el('deck').innerHTML = `
+    <div class="tile hot">
+      <div class="k">Today's outreach</div>
+      <div class="v">${newSent}<small> / ${caps.total} new</small></div>
+      <div class="s">${today.sentToday.followUps} follow-up${today.sentToday.followUps === 1 ? '' : 's'} sent · ${today.followUpsDue} due</div>
+      <div class="bar"><i class="${pct >= 100 ? 'full' : ''}" style="width:${pct}%"></i></div>
+    </div>
     <div class="tile">
       <div class="k">Open pipeline</div>
       <div class="v">${moneyShort(pipelineValue)}</div>
-      <div class="s">${open.length} active ${open.length === 1 ? 'deal' : 'deals'}</div>
-      <div class="spark">${spark
-        .map((v, i) => `<i class="${i === spark.length - 1 ? 'hot' : ''}" style="height:${(v / peak) * 100}%"></i>`)
-        .join('')}</div>
-    </div>
-    <div class="tile">
-      <div class="k">Monthly recurring</div>
-      <div class="v">${moneyShort(mrr)}</div>
-      <div class="s">${clients.length} active ${clients.length === 1 ? 'client' : 'clients'}</div>
+      <div class="s">${open.length} active ${open.length === 1 ? 'deal' : 'deals'} · ${replies} awaiting your reply</div>
     </div>
     <div class="tile">
       <div class="k">Proposals out</div>
-      <div class="v">${proposals.length}<small> / ${moneyShort(proposals.reduce((s, p) => s + p.value, 0))}</small></div>
+      <div class="v">${proposals.length}<small> / ${moneyShort(proposals.reduce((s, p) => s + (p.value || 0), 0))}</small></div>
       <div class="s">awaiting a decision</div>
     </div>
     <div class="tile">
@@ -574,11 +603,202 @@ function renderDeck() {
       <div class="v">${winRate}<small>%</small></div>
       <div class="s">${won} won of ${closed} closed</div>
     </div>
+    <div class="tile">
+      <div class="k">Monthly recurring</div>
+      <div class="v">${moneyShort(mrr)}</div>
+      <div class="s">${clients.length} clients (sample)</div>
+    </div>
     <div class="tile${needsAttention ? ' alert' : ''}">
       <div class="k">Needs attention</div>
       <div class="v">${needsAttention}</div>
-      <div class="s">${needsAttention ? 'overdue, quiet, or at-risk' : 'everything current'}</div>
+      <div class="s">${needsAttention ? 'overdue, replied, quiet, or at-risk' : 'everything current'}</div>
     </div>`;
+}
+
+/* ==========================================================================
+   Today
+   ========================================================================== */
+
+function todayRows() {
+  const q = DATA.today.queue;
+  const chans = todayFilter === 'all' ? CH_KEYS : [todayFilter];
+  const rows = [];
+  for (const ch of chans) {
+    rows.push(...(q[ch] || []));
+    if (revealed[ch]) rows.push(...(DATA.today.overflowList[ch] || []).map((p) => ({ ...p, _extra: true })));
+  }
+  return rows;
+}
+
+function renderToday() {
+  const t = DATA.today, caps = DATA.caps;
+  const total = CH_KEYS.reduce((s, ch) => s + (t.queue[ch] || []).length, 0);
+  el('n-today').textContent = total;
+
+  el('prog').innerHTML = CH_KEYS.map((ch) => {
+    const sent = t.sentToday.new[ch] || 0, cap = caps[ch] || 0;
+    const pct = cap ? Math.min(100, Math.round((sent / cap) * 100)) : 0;
+    return `<div class="p"><div class="k"><span>${chLabel(ch)}</span><b>${sent} / ${cap}</b></div><div class="bar"><i class="${pct >= 100 ? 'full' : ''}" style="width:${pct}%"></i></div></div>`;
+  }).join('');
+
+  const counts = { all: total };
+  for (const ch of CH_KEYS) counts[ch] = (t.queue[ch] || []).length;
+  const drafterOn = DATA.backend.drafter;
+  const missing = todayRows().filter((p) => !draftOf(p)).length;
+  el('todayBar').innerHTML =
+    ['all', ...CH_KEYS].map((k, i) => `<button class="chtab" data-tf="${k}" aria-pressed="${todayFilter === k}">${k === 'all' ? 'All' : chLabel(k)} <span class="n">${counts[k]}</span><span class="n" style="opacity:.55">${i ? i : ''}</span></button>`).join('')
+    + '<span class="sp"></span>'
+    + (drafterOn
+      ? `<button class="mbtn ink" id="batchBtn" ${missing && !batchJob ? '' : 'disabled'}>${batchJob ? `Drafting ${batchJob.done} / ${batchJob.total}…` : `Draft ${missing} missing`}</button>`
+      : `<span class="hint">Drafting is off (no API key). Rows show fill-in templates.</span>`)
+    + `<span class="hint" style="margin-left:.4rem" title="Today's drafting spend from the log">${DATA.backend.spend && DATA.backend.spend.drafts ? `$${DATA.backend.spend.cost.toFixed(2)} on ${DATA.backend.spend.drafts} drafts today` : ''}</span>`;
+
+  const rows = todayRows();
+  if (activeRow >= rows.length) activeRow = Math.max(0, rows.length - 1);
+
+  if (!rows.length) {
+    const anyOverflow = CH_KEYS.some((ch) => t.overflow[ch] > 0);
+    el('todayBody').innerHTML = `<div class="empty"><b>${anyOverflow ? 'Caps reached for today.' : 'Nothing due.'}</b>${
+      anyOverflow ? CH_KEYS.filter((ch) => t.overflow[ch] > 0).map((ch) => `<button class="lnk" data-reveal="${ch}" style="text-decoration:underline">Show ${t.overflow[ch]} more on ${chLabel(ch)}</button>`).join(' · ')
+        : 'Add prospects with ＋ Add, Import, or the bookmarklet, and they show up here when the caps allow.'}</div>`;
+    return;
+  }
+
+  const groups = todayFilter === 'all' ? CH_KEYS : [todayFilter];
+  let html = '';
+  let idx = 0;
+  for (const ch of groups) {
+    const list = rows.filter((p) => p.channelKey === ch);
+    if (!list.length && !(t.overflow[ch] > 0)) continue;
+    const over = t.overflow[ch] || 0;
+    html += `<div class="grouphd"><span>${chLabel(ch)} · ${list.length}${over && !revealed[ch] ? ` <span style="color:var(--faint)">(+${over} waiting on the cap)</span>` : ''}</span>${
+      over && !revealed[ch] ? `<button class="lnk" data-reveal="${ch}">Show ${over} more</button>` : ''}</div><div class="rows">`;
+    for (const p of list) { html += todayRow(p, idx); idx += 1; }
+    html += '</div>';
+  }
+  el('todayBody').innerHTML = html;
+  scrollActiveIntoView();
+}
+
+function todayRow(p, idx) {
+  const d = draftOf(p);
+  const tpl = d ? null : templateFor(p);
+  const subject = d ? d.subject : tpl.subject;
+  const body = d ? d.draft : tpl.body;
+  const href = openHref(p, subject, body);
+  const chips = [
+    `<span class="chip ink">${esc(p.channel)}</span>`,
+    `<span class="chip">${esc(p.stepLabel)}</span>`,
+    p.isFollowUp ? (p.overdueDays > 0 ? `<span class="chip bad">overdue ${p.overdueDays}d</span>` : '<span class="chip warn">due today</span>') : '<span class="chip cyan">new</span>',
+    p._extra ? '<span class="chip warn">over cap</span>' : '',
+    p.source && p.source !== 'Manual' ? `<span class="chip">${esc(p.source)}</span>` : '',
+    d && d.warnings && d.warnings.length ? `<span class="chip warn" title="${esc(d.warnings.join(' · '))}">read once</span>` : '',
+  ].filter(Boolean).join('');
+  return `<div class="trow${idx === activeRow ? ' active' : ''}" data-tid="${esc(p.id)}" data-idx="${idx}">
+    <div class="thd">
+      <div>
+        <div class="nm"><button data-prospect="${esc(p.id)}">${esc(p.name)}</button></div>
+        <div class="sb">${esc(p.contact || 'no contact name')} · ${esc(p.industry)}${p.city ? ' · ' + esc(p.city) : ''}${p.website ? ` · <a href="${esc(p.website)}" target="_blank" rel="noopener">site ↗</a>` : ''}</div>
+      </div>
+      <div class="chips">${chips}</div>
+    </div>
+    ${p.stepGate ? `<div class="gate">${esc(p.stepGate)}</div>` : ''}
+    ${d ? `<div class="obs"><b>Observation.</b> ${esc(d.observation)}${d.whyThisAngle ? ` <span style="color:var(--faint)">(${esc(d.whyThisAngle)})</span>` : ''}</div>`
+        : `<div class="obs">${DATA.backend.drafter ? 'No draft yet. Press <b>Draft</b> (d) or draft the whole day above.' : 'Fill-in template. Personalize it before sending.'}</div>`}
+    ${p.channelKey === 'email' ? `<input class="subj" id="subj-${esc(p.id)}" value="${esc(subject)}" placeholder="Subject">` : ''}
+    <textarea class="ta${d ? '' : ' nodraft'}" id="ta-${esc(p.id)}" rows="${Math.min(14, Math.max(4, String(body).split('\n').length + 1))}">${esc(body)}</textarea>
+    ${d && d.warnings && d.warnings.length ? `<div class="warnline">${esc(d.warnings.join(' · '))}</div>` : ''}
+    <div class="tacts">
+      ${DATA.backend.drafter ? `<button class="abtn" data-act="draft" data-id="${esc(p.id)}">${d ? 'Redraft' : 'Draft'} <span class="kbd">d</span></button>` : ''}
+      <button class="abtn" data-act="copy" data-id="${esc(p.id)}">Copy <span class="kbd">c</span></button>
+      ${href ? `<a class="abtn" data-act="open" data-id="${esc(p.id)}" href="${esc(href)}" target="_blank" rel="noopener">${openLabel(p)} <span class="kbd">o</span></a>` : '<span class="chip bad">no way to reach</span>'}
+      <button class="abtn pri" data-act="sent" data-id="${esc(p.id)}">Sent ✓ <span class="kbd">s</span></button>
+      <span class="sp"></span>
+      <button class="abtn" data-act="snooze" data-id="${esc(p.id)}" data-days="3">Snooze 3d <span class="kbd">z</span></button>
+      <button class="abtn" data-act="snooze" data-id="${esc(p.id)}" data-days="7">7d</button>
+      <button class="abtn ok" data-act="replied" data-id="${esc(p.id)}">Replied <span class="kbd">r</span></button>
+      <button class="abtn danger" data-act="nope" data-id="${esc(p.id)}">Not interested <span class="kbd">x</span></button>
+    </div>
+  </div>`;
+}
+
+function scrollActiveIntoView() {
+  const a = $('.trow.active');
+  if (a) a.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
+
+function setActiveRow(i) {
+  const rows = document.querySelectorAll('.trow');
+  if (!rows.length) return;
+  activeRow = Math.max(0, Math.min(rows.length - 1, i));
+  rows.forEach((r) => r.classList.toggle('active', Number(r.dataset.idx) === activeRow));
+  scrollActiveIntoView();
+}
+const activeId = () => { const r = $('.trow.active'); return r ? r.dataset.tid : null; };
+
+async function actOn(act, id, extra = {}) {
+  const p = DATA.prospects.find((x) => x.id === id);
+  if (!p) return;
+  const ta = el('ta-' + id), sj = el('subj-' + id);
+  const body = ta ? ta.value : '';
+  const subject = sj ? sj.value : '';
+  try {
+    if (act === 'copy') {
+      await navigator.clipboard.writeText(p.channelKey === 'email' && subject ? `Subject: ${subject}\n\n${body}` : body);
+      toast('Copied. Paste it where it goes.');
+    } else if (act === 'draft') {
+      const btn = $(`[data-act="draft"][data-id="${CSS.escape(id)}"]`);
+      if (btn) { btn.disabled = true; btn.textContent = 'Drafting…'; }
+      const r = await api('/api/draft', { id, force: !!draftOf(p) });
+      absorb(r.prospect);
+      renderToday();
+      toast(r.cached ? 'Showing the cached draft' : `Drafted · about $${(r.draft.cost || 0).toFixed(2)}`);
+    } else if (act === 'sent') {
+      if (!body.trim()) { toast('Nothing to log: the message is empty'); return; }
+      const r = await api('/api/touches', { id, channel: p.channel, step: p.stepKey, subject, body });
+      DATA.today.sentToday = r.sentToday;
+      await load({ quiet: true });
+      toast(`Logged ${p.stepLabel} to ${p.name}`);
+    } else if (act === 'snooze') {
+      const r = await api('/api/prospects/snooze', { id, days: extra.days || 3 });
+      await load({ quiet: true });
+      toast(`Snoozed ${p.name} to ${relDay(r.prospect.nextTouch)}`);
+    } else if (act === 'replied') {
+      await api('/api/prospects/replied', { id });
+      await load({ quiet: true });
+      toast(`${p.name} marked as replied. They are off the sequence.`);
+    } else if (act === 'nope') {
+      if (!confirm(`Mark ${p.name} as not interested? They move to Lost.`)) return;
+      await api('/api/prospects/not-interested', { id });
+      await load({ quiet: true });
+      toast(`${p.name} closed as not interested`);
+    }
+  } catch (e) {
+    toast(e.message);
+    renderToday();
+  }
+}
+
+async function runBatch() {
+  try {
+    const r = await api('/api/drafts/batch', {});
+    if (!r.total) { toast('Everything on Today already has a draft'); return; }
+    batchJob = { id: r.job, done: 0, total: r.total };
+    renderToday();
+    const poll = async () => {
+      const s = await api(`/api/drafts/batch?job=${r.job}`);
+      batchJob = s.running ? { id: r.job, done: s.done, total: s.total } : null;
+      if (!s.running) {
+        await load({ quiet: true });
+        toast(`Drafted ${s.total - s.failed.length} of ${s.total}${s.failed.length ? `, ${s.failed.length} failed` : ''} · about $${(s.cost || 0).toFixed(2)}`);
+        if (s.failed.length) console.warn('batch failures', s.failed);
+      } else {
+        renderToday();
+        setTimeout(poll, 2500);
+      }
+    };
+    setTimeout(poll, 2500);
+  } catch (e) { batchJob = null; toast(e.message); renderToday(); }
 }
 
 /* ==========================================================================
@@ -586,46 +806,43 @@ function renderDeck() {
    ========================================================================== */
 
 function stageCounts() {
-  const counts = { All: DATA.prospects.length };
+  const counts = { Open: DATA.prospects.filter(isOpen).length, All: DATA.prospects.length };
   for (const s of STAGES) counts[s] = DATA.prospects.filter((p) => p.stage === s).length;
   return counts;
 }
 
 function renderStageMenu() {
   const counts = stageCounts();
-  el('stageMenu').innerHTML = ['All', ...STAGES]
-    .map(
-      (s) => `<button class="mi" role="menuitemradio" data-stage="${s}" aria-pressed="${s === stageFilter}">
-        <span>${s === 'All' ? 'All stages' : esc(s)}</span><span class="n">${counts[s] || 0}</span>
-      </button>`,
-    )
+  el('stageMenu').innerHTML = ['Open', 'All', ...STAGES]
+    .map((s) => `<button class="mi" role="menuitemradio" data-stage="${s}" aria-pressed="${s === stageFilter}"><span>${s === 'All' ? 'All stages' : s === 'Open' ? 'Open deals' : esc(s)}</span><span class="n">${counts[s] || 0}</span></button>`)
     .join('');
 }
 
 function filteredProspects() {
   const q = query.trim().toLowerCase();
   return DATA.prospects.filter((p) => {
-    if (stageFilter !== 'All' && p.stage !== stageFilter) return false;
+    if (stageFilter === 'Open' && !isOpen(p)) return false;
+    if (stageFilter !== 'All' && stageFilter !== 'Open' && p.stage !== stageFilter) return false;
     if (!q) return true;
-    return [p.name, p.contact, p.industry, p.service, p.source].join(' ').toLowerCase().includes(q);
-  });
+    return [p.name, p.contact, p.industry, p.service, p.source, p.city, p.email].join(' ').toLowerCase().includes(q);
+  }).sort((a, b) => (a.nextTouch || '9999') < (b.nextTouch || '9999') ? -1 : 1);
 }
 
 function prospectRow(p) {
   const flags = [];
-  if (isOverdue(p)) flags.push('<span class="chip bad">Overdue</span>');
+  if (p.seqStatus === 'Replied' && isOpen(p)) flags.push('<span class="chip ok">Replied</span>');
+  else if (isOverdue(p)) flags.push(`<span class="chip bad">Overdue ${p.overdueDays}d</span>`);
   else if (isStale(p)) flags.push('<span class="chip warn">Quiet</span>');
-
-  return `<button class="row" data-prospect="${p.id}">
+  return `<button class="row" data-prospect="${esc(p.id)}">
     <div>
       <div class="nm">${esc(p.name)}</div>
-      <div class="sb">${esc(p.contact)} · ${esc(p.service)}</div>
+      <div class="sb">${esc(p.contact || 'no contact')} · ${esc(p.industry)} · ${esc(p.channel)}${p.stepLabel ? ' · ' + esc(p.stepLabel) : ''}</div>
     </div>
-    <div class="mid">${esc(p.nextStep)}<br><span style="color:var(--faint)">due ${relDay(p.nextStepDue)}</span></div>
+    <div class="mid">${esc(p.nextStep || '—')}<br><span style="color:var(--faint)">${p.nextTouch ? 'due ' + relDay(p.nextTouch) : ''}${p.touches ? ` · ${p.touches} sent` : ''}</span></div>
     <div class="rt">
       ${flags.join('')}
       <span class="chip ${stageClass(p.stage)}">${esc(p.stage)}</span>
-      <span class="amt">${moneyShort(p.value)}</span>
+      ${p.value ? `<span class="amt">${moneyShort(p.value)}</span>` : ''}
     </div>
   </button>`;
 }
@@ -633,187 +850,145 @@ function prospectRow(p) {
 function renderPipeline() {
   const list = filteredProspects();
   el('n-pipeline').textContent = DATA.prospects.filter(isOpen).length;
-  el('pipelineRows').innerHTML = list.length
-    ? list.map(prospectRow).join('')
-    : '<div class="empty">Nothing matches that filter.</div>';
-}
-
-/* ==========================================================================
-   Outreach
-   ========================================================================== */
-
-function renderChannels() {
-  const { templates } = DATA;
-  el('chTabs').innerHTML = templates
-    .map(
-      (t, i) =>
-        `<button class="chtab" data-ch="${i}" aria-pressed="${i === activeChannel}">${esc(t.channel)}</button>`,
-    )
-    .join('');
-
-  const active = templates[activeChannel];
-  el('chBox').innerHTML = active.blocks
-    .map(
-      (b, i) => `<div class="blk">
-        <div class="blkhd">
-          <b>${esc(b.label)}</b>
-          <button class="copy" data-copy="ch-${activeChannel}-${i}">Copy</button>
-        </div>
-        <textarea class="ta" id="ch-${activeChannel}-${i}" rows="${Math.min(
-          16,
-          Math.max(4, b.body.split('\n').length + 1),
-        )}">${esc(b.body)}</textarea>
-      </div>`,
-    )
-    .join('') +
-    `<p class="hint">Placeholders like <code>{{firstName}}</code>, <code>{{company}}</code> and <code>{{industry}}</code> are swapped in by hand for now. Edits here are scratch only — they reset on reload.</p>`;
-}
-
-function renderFollowQueue() {
-  // Everything open, soonest-due first — overdue naturally floats to the top.
-  const queue = DATA.prospects
-    .filter(isOpen)
-    .sort((a, b) => new Date(a.nextStepDue) - new Date(b.nextStepDue));
-
-  el('n-outreach').textContent = queue.filter((p) => isOverdue(p) || isStale(p)).length;
-  el('followHd').textContent = `Follow-up queue · ${queue.length} open`;
-  el('outreachRows').innerHTML = queue.length
-    ? queue.map(prospectRow).join('')
-    : '<div class="empty">Queue is clear.</div>';
-}
-
-/* ==========================================================================
-   Clients
-   ========================================================================== */
-
-function renderClients() {
-  const { clients } = DATA;
-  el('n-clients').textContent = clients.length;
-  el('clientRows').innerHTML = clients
-    .map(
-      (c) => `<button class="row" data-client="${c.id}">
-        <div>
-          <div class="nm">${esc(c.name)}</div>
-          <div class="sb">${c.services.map(esc).join(' · ')}</div>
-        </div>
-        <div class="mid">${esc(c.nextDeliverable)}<br><span style="color:var(--faint)">due ${relDay(
-          c.nextDeliverableDue,
-        )}</span></div>
-        <div class="rt">
-          <span class="chip ${healthClass(c.health)}">${esc(c.health)}</span>
-          <span class="amt">${money(c.mrr)}<span style="color:var(--faint);font-weight:500">/mo</span></span>
-        </div>
-      </button>`,
-    )
-    .join('');
-}
-
-/* ==========================================================================
-   Campaigns
-   ========================================================================== */
-
-function renderCampaigns() {
-  const { campaigns } = DATA;
-  el('n-campaigns').textContent = campaigns.filter((c) => c.status === 'Live').length;
-
-  el('campaignBody').innerHTML = campaigns
-    .map(
-      (c) => `<tr>
-        <td>${esc(c.client)}</td>
-        <td>${esc(c.channel)}</td>
-        <td><span class="chip ${c.status === 'Live' ? 'ok' : 'warn'}">${esc(c.status)}</span></td>
-        <td class="num">${money(c.spend)}</td>
-        <td class="num">${c.leads}</td>
-        <td class="num">${c.leads ? money(c.spend / c.leads) : '—'}</td>
-        <td class="num">${c.conversions}</td>
-        <td class="num">${c.spend ? (c.revenue / c.spend).toFixed(1) + '×' : '—'}</td>
-      </tr>`,
-    )
-    .join('');
-
-  const tot = campaigns.reduce(
-    (a, c) => ({
-      spend: a.spend + c.spend,
-      leads: a.leads + c.leads,
-      conversions: a.conversions + c.conversions,
-      revenue: a.revenue + c.revenue,
-    }),
-    { spend: 0, leads: 0, conversions: 0, revenue: 0 },
-  );
-
-  el('campaignFoot').innerHTML = `<tr>
-    <td colspan="3">All campaigns</td>
-    <td class="num">${money(tot.spend)}</td>
-    <td class="num">${tot.leads}</td>
-    <td class="num">${tot.leads ? money(tot.spend / tot.leads) : '—'}</td>
-    <td class="num">${tot.conversions}</td>
-    <td class="num">${tot.spend ? (tot.revenue / tot.spend).toFixed(1) + '×' : '—'}</td>
-  </tr>`;
+  el('pipelineRows').innerHTML = list.length ? list.map(prospectRow).join('')
+    : `<div class="empty"><b>No prospects here yet.</b>Use ＋ Add, Import a CSV, or the bookmarklet.</div>`;
 }
 
 /* ==========================================================================
    Attention
    ========================================================================== */
 
-// Single source of truth for "needs attention" — the stat tile and the tab
-// badge both read this, so they can never drift apart.
 function attentionItems() {
-  const overdue = DATA.prospects.filter(isOverdue);
-  const quiet = DATA.prospects.filter((p) => !isOverdue(p) && isStale(p));
+  const replied = DATA.prospects.filter((p) => p.seqStatus === 'Replied' && isOpen(p));
+  const overdue = DATA.prospects.filter((p) => isOverdue(p) && p.seqStatus !== 'Replied');
+  const quiet = DATA.prospects.filter((p) => !isOverdue(p) && isStale(p) && p.seqStatus !== 'Replied');
+  const finished = DATA.prospects.filter((p) => p.seqStatus === 'Finished' && isOpen(p));
   const atRisk = DATA.clients.filter((c) => c.health !== 'Good');
-  return { overdue, quiet, atRisk, total: overdue.length + quiet.length + atRisk.length };
+  return { replied, overdue, quiet, finished, atRisk, total: replied.length + overdue.length + quiet.length + finished.length + atRisk.length };
 }
 
 function renderAttention() {
-  const { overdue, quiet, atRisk, total } = attentionItems();
-
+  const { replied, overdue, quiet, finished, atRisk, total } = attentionItems();
   el('n-attention').textContent = total;
-
-  if (!total) {
-    el('attentionBody').innerHTML = '<div class="empty">Nothing needs chasing. Everything is current.</div>';
-    return;
-  }
-
-  const section = (title, items, render) =>
-    items.length
-      ? `<div class="grouphd">${title} · ${items.length}</div><div class="rows">${items.map(render).join('')}</div>`
-      : '';
-
+  if (!total) { el('attentionBody').innerHTML = '<div class="empty">Nothing needs chasing. Everything is current.</div>'; return; }
+  const section = (title, items, render) => (items.length ? `<div class="grouphd">${title} · ${items.length}</div><div class="rows">${items.map(render).join('')}</div>` : '');
   el('attentionBody').innerHTML =
+    section('Replied, waiting on you', replied, prospectRow) +
     section('Overdue follow-ups', overdue, prospectRow) +
-    section('Gone quiet — no touch in 7+ days', quiet, prospectRow) +
-    section(
-      'Client accounts to watch',
-      atRisk,
-      (c) => `<button class="row" data-client="${c.id}">
-        <div><div class="nm">${esc(c.name)}</div><div class="sb">${esc(c.notes)}</div></div>
-        <div class="mid">${esc(c.nextDeliverable)}</div>
-        <div class="rt"><span class="chip ${healthClass(c.health)}">${esc(c.health)}</span></div>
-      </button>`,
-    );
+    section('Sequence finished, still open', finished, prospectRow) +
+    section('Gone quiet, no touch in 7+ days', quiet, prospectRow) +
+    section('Client accounts to watch', atRisk, (c) => `<button class="row" data-client="${c.id}"><div><div class="nm">${esc(c.name)}</div><div class="sb">${esc(c.notes)}</div></div><div class="mid">${esc(c.nextDeliverable)}</div><div class="rt"><span class="chip ${healthClass(c.health)}">${esc(c.health)}</span></div></button>`);
+}
+
+/* ==========================================================================
+   Inbound (the site's Leads table)
+   ========================================================================== */
+
+async function renderInbound(force) {
+  if (inboundLoaded && !force) return;
+  el('inboundBody').innerHTML = '<div class="empty">Loading the site\'s leads…</div>';
+  try {
+    const r = await api('/api/leads');
+    inboundLoaded = true;
+    el('n-inbound').textContent = r.leads.filter((l) => !l.promoted).length;
+    if (!r.leads.length) { el('inboundBody').innerHTML = `<div class="empty"><b>No inbound leads in the last 45 days.</b>${esc(r.reason || 'Forms on the site land in the Leads table and show here.')}</div>`; return; }
+    el('inboundBody').innerHTML = `<div class="grouphd">From the site's forms, newest first</div><div class="rows">` + r.leads.map((l) => `<div class="row" style="cursor:default">
+      <div><div class="nm">${esc(l.business || l.name || l.email)}</div><div class="sb">${esc(l.name)} · ${esc(l.email)}${l.phone ? ' · ' + esc(l.phone) : ''}</div></div>
+      <div class="mid">${esc(l.source)}${l.page ? ' · ' + esc(l.page) : ''}<br><span style="color:var(--faint)">${esc([l.frustration, l.goal, l.message].filter(Boolean).join(' | ').slice(0, 140))}</span></div>
+      <div class="rt">${l.promoted ? `<button class="chip ok" data-prospect="${esc(l.promoted.id)}">On the board</button>` : `<button class="abtn pri" data-promote="${esc(l.id)}">Promote to prospect</button>`}</div>
+    </div>`).join('') + '</div>';
+    el('inboundBody')._leads = r.leads;
+  } catch (e) {
+    el('inboundBody').innerHTML = `<div class="empty">${esc(e.message)}</div>`;
+  }
 }
 
 /* ==========================================================================
    Activity
    ========================================================================== */
 
-const EVENT_ICON = {
-  lead: '✦', outreach: '→', stage: '↗', proposal: '◆', won: '★', lost: '·',
-};
-
+const KIND_ICON = { Sent: '→', Reply: '↩', 'Call Booked': '☎', 'Not Interested': '·', Snoozed: '⏸', 'Stage Change': '↗', Note: '✎' };
 function renderActivity() {
-  const { activity } = DATA;
-  const today = activity.filter((a) => new Date(a.at).toDateString() === new Date().toDateString());
-  el('n-activity').textContent = today.length || activity.length;
+  const list = (DATA.recentTouches || []).slice(0, 150);
+  const today = list.filter((t) => String(t.at).slice(0, 10) === todayISO());
+  el('n-activity').textContent = today.length;
+  el('activityFeed').innerHTML = list.length ? list.map((t) => `<div class="ev">
+    <div class="ic">${KIND_ICON[t.kind] || '·'}</div>
+    <div><div class="tx"><button data-prospect="${esc(t.prospectId)}" style="font-weight:600;text-decoration:underline;text-decoration-color:var(--line)">${esc(t.company || 'Prospect')}</button> · ${esc(t.kind)}${t.step ? ' · ' + esc(t.step) : ''} on ${esc(t.channel)}${t.staff ? ' · ' + esc(t.staff) : ''}</div>
+    ${t.body ? `<div class="bd">${esc(t.subject ? 'Subject: ' + t.subject + '\n' : '')}${esc(t.body)}</div>` : ''}
+    <div class="tm">${relTime(t.at)}</div></div>
+  </div>`).join('') : '<div class="empty">No touches logged yet. Every Sent, Reply, and stage change lands here.</div>';
+}
 
-  el('activityFeed').innerHTML = activity
-    .map(
-      (a) => `<div class="ev">
-        <div class="ic">${EVENT_ICON[a.kind] || '·'}</div>
-        <div><div class="tx">${esc(a.text)}</div><div class="tm">${relTime(a.at)}</div></div>
-      </div>`,
-    )
-    .join('');
+/* ==========================================================================
+   Reporting
+   ========================================================================== */
+
+async function renderReport(force) {
+  if (reportLoaded && !force) return;
+  el('reportBody').innerHTML = '<div class="empty">Counting…</div>';
+  try {
+    const r = await api('/api/report?weeks=8');
+    reportLoaded = true;
+    const cell = (o) => `<td class="num">${o.sent}</td><td class="num">${o.replies}</td><td class="num">${o.sent ? o.replyRate + '%' : '<span class="lo">—</span>'}</td><td class="num">${o.calls}</td>`;
+    const caps = DATA.caps;
+    el('reportBody').innerHTML = `<div class="tablewrap"><table>
+      <thead><tr><th>Week of</th>${CH_KEYS.map((c) => `<th colspan="4">${chLabel(c)}</th>`).join('')}<th colspan="4">All channels</th></tr>
+      <tr><th></th>${[...CH_KEYS, 'total'].map(() => '<th class="num">Sent</th><th class="num">Replies</th><th class="num">Rate</th><th class="num">Calls</th>').join('')}</tr></thead>
+      <tbody>${r.weeks.map((w) => `<tr><td>${esc(w.monday)}</td>${CH_KEYS.map((c) => cell(w[c])).join('')}${cell(w.total)}</tr>`).join('')}</tbody>
+      <tfoot><tr><td>Last ${r.weeks.length} weeks</td>${CH_KEYS.map((c) => cell(r.totals[c])).join('')}${cell(r.totals.total)}</tr></tfoot>
+    </table></div>
+    <p class="hint">Reply rate is replies over sends in the same week. At the current caps you are on pace for about ${caps.total * 5} new first touches a week and ${caps.total * 21} a month, plus follow-ups.</p>`;
+  } catch (e) {
+    el('reportBody').innerHTML = `<div class="empty">${esc(e.message)}</div>`;
+  }
+}
+
+/* ==========================================================================
+   Templates, Clients, Campaigns, Site (unchanged in spirit)
+   ========================================================================== */
+
+function renderChannels() {
+  const { templates } = DATA;
+  el('chTabs').innerHTML = templates.map((t, i) => `<button class="chtab" data-ch="${i}" aria-pressed="${i === activeChannel}">${esc(t.channel)}</button>`).join('');
+  const active = templates[activeChannel];
+  if (!active) { el('chBox').innerHTML = '<div class="empty">No templates.</div>'; return; }
+  el('chBox').innerHTML = active.blocks.map((b, i) => `<div class="blk">
+    <div class="blkhd"><b>${esc(b.label)}</b><button class="copy" data-copy="ch-${activeChannel}-${i}">Copy</button></div>
+    <textarea class="ta" id="ch-${activeChannel}-${i}" rows="${Math.min(16, Math.max(4, b.body.split('\n').length + 1))}">${esc(b.body)}</textarea>
+  </div>`).join('') + `<p class="hint">These are the fallbacks the Today tab fills in when a row has no AI draft. Placeholders: <code>{{firstName}}</code>, <code>{{company}}</code>, <code>{{industry}}</code>, <code>{{city}}</code>. Edit them in <code>data/sample-data.json</code>.</p>`;
+}
+
+function renderClients() {
+  const { clients } = DATA;
+  el('n-clients').textContent = clients.length;
+  el('clientRows').innerHTML = clients.map((c) => `<button class="row" data-client="${c.id}">
+    <div><div class="nm">${esc(c.name)}</div><div class="sb">${c.services.map(esc).join(' · ')}</div></div>
+    <div class="mid">${esc(c.nextDeliverable)}<br><span style="color:var(--faint)">due ${relDay(c.nextDeliverableDue)}</span></div>
+    <div class="rt"><span class="chip ${healthClass(c.health)}">${esc(c.health)}</span><span class="amt">${money(c.mrr)}<span style="color:var(--faint);font-weight:500">/mo</span></span></div>
+  </button>`).join('');
+}
+
+function renderCampaigns() {
+  const { campaigns } = DATA;
+  el('n-campaigns').textContent = campaigns.filter((c) => c.status === 'Live').length;
+  el('campaignBody').innerHTML = campaigns.map((c) => `<tr>
+    <td>${esc(c.client)}</td><td>${esc(c.channel)}</td><td><span class="chip ${c.status === 'Live' ? 'ok' : 'warn'}">${esc(c.status)}</span></td>
+    <td class="num">${money(c.spend)}</td><td class="num">${c.leads}</td><td class="num">${c.leads ? money(c.spend / c.leads) : '—'}</td>
+    <td class="num">${c.conversions}</td><td class="num">${c.spend ? (c.revenue / c.spend).toFixed(1) + '×' : '—'}</td></tr>`).join('');
+  const tot = campaigns.reduce((a, c) => ({ spend: a.spend + c.spend, leads: a.leads + c.leads, conversions: a.conversions + c.conversions, revenue: a.revenue + c.revenue }), { spend: 0, leads: 0, conversions: 0, revenue: 0 });
+  el('campaignFoot').innerHTML = `<tr><td colspan="3">All campaigns</td><td class="num">${money(tot.spend)}</td><td class="num">${tot.leads}</td><td class="num">${tot.leads ? money(tot.spend / tot.leads) : '—'}</td><td class="num">${tot.conversions}</td><td class="num">${tot.spend ? (tot.revenue / tot.spend).toFixed(1) + '×' : '—'}</td></tr>`;
+}
+
+const SEV_CHIP = { fix: 'bad', polish: 'warn', idea: 'cyan' };
+function renderSite() {
+  const items = DATA.siteAudit || [];
+  const open = items.filter((i) => i.status === 'open');
+  el('n-site').textContent = open.length;
+  const keep = (i) => (siteFilter === 'open' ? i.status === 'open' : siteFilter === 'phone' ? i.viewport !== 'desktop' : siteFilter === 'desktop' ? i.viewport !== 'phone' : true);
+  const row = (i) => `<div class="row site"><div><div class="nm">${esc(i.title)}</div><div class="sb">${esc(i.detail)}</div></div><div class="mid">${esc(i.page)}<br>${esc(i.viewport)}</div><div class="rt"><span class="chip ${SEV_CHIP[i.severity] || ''}">${esc(i.severity)}</span>${i.status === 'done' ? '<span class="chip ok">done</span>' : ''}</div></div>`;
+  const section = (title, list) => (list.length ? `<div class="grouphd">${title} · ${list.length}</div><div class="rows">${list.map(row).join('')}</div>` : '');
+  el('siteBody').innerHTML = section('Suggested next: fix / polish / idea', open.filter(keep)) + section('Done in this pass', items.filter((i) => i.status === 'done').filter(keep)) || '<div class="empty">No site notes yet.</div>';
 }
 
 /* ==========================================================================
@@ -828,136 +1003,292 @@ function openDrawer(title, sub, body) {
   el('drawer').setAttribute('aria-hidden', 'false');
   el('scrim').classList.add('on');
 }
-
 function closeDrawer() {
   el('drawer').classList.remove('on');
   el('drawer').setAttribute('aria-hidden', 'true');
   el('scrim').classList.remove('on');
+  editing = null;
 }
+
+const opt = (list, cur) => list.map((o) => `<option${o === cur ? ' selected' : ''}>${esc(o)}</option>`).join('');
 
 function showProspect(id) {
   const p = DATA.prospects.find((x) => x.id === id);
   if (!p) return;
-
-  openDrawer(
-    p.name,
-    `${p.contact} · ${p.industry}`,
-    `<dl class="kv">
-      <dt>Stage</dt><dd><span class="chip ${stageClass(p.stage)}">${esc(p.stage)}</span></dd>
-      <dt>Value</dt><dd>${money(p.value)}</dd>
-      <dt>Service</dt><dd>${esc(p.service)}</dd>
-      <dt>Source</dt><dd>${esc(p.source)}</dd>
-      <dt>Owner</dt><dd>${esc(p.owner)}</dd>
-      <dt>Touches</dt><dd>${p.touches}</dd>
-      <dt>Last touch</dt><dd>${esc(p.lastTouch)} (${relDay(p.lastTouch)})</dd>
-      <dt>Next step</dt><dd>${esc(p.nextStep)} — due ${relDay(p.nextStepDue)}</dd>
+  editing = id;
+  const hist = touchesOf(id);
+  const drafts = Object.entries(p.drafts || {});
+  openDrawer(p.name, `${p.contact || 'no contact'} · ${p.industry}${p.city ? ' · ' + p.city : ''}`, `
+    <div class="fld2">
+      <div class="fld"><label>Stage</label><select data-edit="stage">${opt(STAGES, p.stage)}</select></div>
+      <div class="fld"><label>Channel (switch restarts the sequence)</label><select data-edit="channel">${opt(CHANNELS, p.channel)}</select></div>
+    </div>
+    <dl class="kv">
+      <dt>Sequence</dt><dd>${esc(p.seqStatus)}${p.stepLabel ? ' · next: ' + esc(p.stepLabel) : ''} · ${p.stepSent} sent on ${esc(p.channel)}</dd>
+      <dt>Source</dt><dd>${esc(p.source)}${p.owner ? ' · ' + esc(p.owner) : ''}</dd>
+      <dt>Last touch</dt><dd>${p.lastTouch ? esc(p.lastTouch) + ' (' + relDay(p.lastTouch) + ')' : 'never'}</dd>
     </dl>
+    <div class="dact">
+      <button class="abtn ok" data-dact="replied">Replied</button>
+      <button class="abtn" data-dact="snooze">Snooze 3d</button>
+      <button class="abtn danger" data-dact="nope">Not interested</button>
+      ${p.seqStatus !== 'Active' && isOpen(p) ? '<button class="abtn" data-dact="reactivate">Back on the sequence</button>' : ''}
+      ${p.recordUrl ? `<a class="abtn" href="${esc(p.recordUrl)}" target="_blank" rel="noopener">Open in Airtable ↗</a>` : ''}
+    </div>
+
+    <div class="dsec">
+      <h3>Next step</h3>
+      <div class="fld"><label>What happens next</label><input data-edit="nextStep" value="${esc(p.nextStep)}"></div>
+      <div class="fld2">
+        <div class="fld"><label>Due</label><input type="date" data-edit="nextTouch" value="${esc(p.nextTouch)}"></div>
+        <div class="fld"><label>Value</label><input inputmode="numeric" data-edit="value" value="${p.value || ''}"></div>
+      </div>
+      <div class="fld"><label>Likely fit</label><select data-edit="service">${opt(SERVICES, p.service)}</select></div>
+    </div>
 
     <div class="dsec">
       <h3>Contact</h3>
-      <dl class="kv">
-        <dt>Email</dt><dd><a href="mailto:${esc(p.email)}">${esc(p.email)}</a></dd>
-        <dt>Phone</dt><dd><a href="tel:${esc(p.phone.replace(/[^\d+]/g, ''))}">${esc(p.phone)}</a></dd>
-      </dl>
+      <div class="fld"><label>Contact name</label><input data-edit="contact" value="${esc(p.contact)}"></div>
+      <div class="fld2">
+        <div class="fld"><label>Email</label><input type="email" data-edit="email" value="${esc(p.email)}"></div>
+        <div class="fld"><label>Phone</label><input data-edit="phone" value="${esc(p.phone)}"></div>
+      </div>
+      <div class="fld"><label>Website</label><input data-edit="website" value="${esc(p.website)}"></div>
+      <div class="fld2">
+        <div class="fld"><label>LinkedIn</label><input data-edit="linkedinUrl" value="${esc(p.linkedinUrl)}"></div>
+        <div class="fld"><label>Instagram</label><input data-edit="instagramUrl" value="${esc(p.instagramUrl)}"></div>
+      </div>
+      <div class="fld2">
+        <div class="fld"><label>Industry</label><select data-edit="industry">${opt(INDUSTRIES, p.industry)}</select></div>
+        <div class="fld"><label>City</label><input data-edit="city" value="${esc(p.city)}"></div>
+      </div>
       <div class="dact">
-        <a class="abtn" href="mailto:${esc(p.email)}">Email</a>
-        <a class="abtn" href="tel:${esc(p.phone.replace(/[^\d+]/g, ''))}">Call</a>
-        <button class="abtn" data-copy-text="${esc(p.email)}">Copy address</button>
+        ${p.email ? `<a class="abtn" href="${gmailHref(p.email, '', '')}" target="_blank" rel="noopener">Gmail</a>` : ''}
+        ${p.phone ? `<a class="abtn" href="${telHref(p.phone)}">Call</a>` : ''}
+        ${p.linkedinUrl ? `<a class="abtn" href="${esc(p.linkedinUrl)}" target="_blank" rel="noopener">LinkedIn ↗</a>` : ''}
+        ${p.instagramUrl ? `<a class="abtn" href="${esc(p.instagramUrl)}" target="_blank" rel="noopener">Instagram ↗</a>` : ''}
+        ${p.website ? `<a class="abtn" href="${esc(p.website)}" target="_blank" rel="noopener">Site ↗</a>` : ''}
       </div>
     </div>
 
     <div class="dsec">
-      <h3>Notes</h3>
-      <div class="note">${esc(p.notes)}</div>
+      <h3>Notes <span class="saved" id="notesSaved"></span></h3>
+      <div class="fld"><textarea data-edit="notes" placeholder="Anything worth remembering">${esc(p.notes)}</textarea></div>
+      <div class="fld"><label>Add a dated note to the log</label><input id="noteLine" placeholder="Type and press Enter"></div>
     </div>
 
     <div class="dsec">
-      <h3>Wireframe only</h3>
-      <div class="note">Stage changes, logged touches and notes are read-only until a CRM is connected behind <code>/api/data</code>.</div>
-    </div>`,
-  );
+      <h3>History · ${hist.length} in the last 14 days</h3>
+      ${hist.length ? `<div class="feed">${hist.map((t) => `<div class="ev"><div class="ic">${KIND_ICON[t.kind] || '·'}</div><div><div class="tx">${esc(t.kind)}${t.step ? ' · ' + esc(t.step) : ''} on ${esc(t.channel)}</div>${t.body ? `<div class="bd">${esc(t.subject ? 'Subject: ' + t.subject + '\n' : '')}${esc(t.body)}</div>` : ''}<div class="tm">${relTime(t.at)}</div></div></div>`).join('')}</div>` : '<div class="note">Nothing logged in the last two weeks.</div>'}
+    </div>
+
+    ${drafts.length ? `<div class="dsec"><h3>Cached drafts</h3>${drafts.map(([k, d]) => `<div class="note" style="margin-bottom:.5rem"><b>${esc(k)}</b>${d.subject ? '\nSubject: ' + esc(d.subject) : ''}\n${esc(d.draft)}</div>`).join('')}</div>` : ''}
+  `);
+}
+
+// Debounced field saves from the drawer. Stage and channel go through their
+// own transitions on the server; everything else is a plain patch.
+let saveTimer = null;
+async function saveEdit(id, key, value) {
+  try {
+    if (key === 'stage' || key === 'channel') {
+      const r = await api('/api/prospects/update', { id, patch: { [key]: value } });
+      absorb(r.prospect, r.touch);
+      await load({ quiet: true });
+      toast(key === 'stage' ? `Stage → ${value}` : `Now on ${value}, starting from the first step`);
+      if (editing === id) showProspect(id);
+      return;
+    }
+    const r = await api('/api/prospects/update', { id, patch: { [key]: value } });
+    absorb(r.prospect);
+    const s = el('notesSaved'); if (s) { s.textContent = 'saved'; setTimeout(() => { if (s) s.textContent = ''; }, 1200); }
+    renderDeck(); renderPipeline(); renderToday();
+  } catch (e) { toast(e.message); }
 }
 
 function showClient(id) {
   const c = DATA.clients.find((x) => x.id === id);
   if (!c) return;
-
   const work = DATA.campaigns.filter((x) => x.client === c.name);
   const spend = work.reduce((s, x) => s + x.spend, 0);
   const revenue = work.reduce((s, x) => s + x.revenue, 0);
-
-  openDrawer(
-    c.name,
-    `${c.contact} · client since ${c.since}`,
-    `<dl class="kv">
+  openDrawer(c.name, `${c.contact} · client since ${c.since}`, `<dl class="kv">
       <dt>Health</dt><dd><span class="chip ${healthClass(c.health)}">${esc(c.health)}</span></dd>
       <dt>Retainer</dt><dd>${money(c.mrr)} / month</dd>
       <dt>Services</dt><dd>${c.services.map(esc).join(', ')}</dd>
-      <dt>Next up</dt><dd>${esc(c.nextDeliverable)} — due ${relDay(c.nextDeliverableDue)}</dd>
+      <dt>Next up</dt><dd>${esc(c.nextDeliverable)}, due ${relDay(c.nextDeliverableDue)}</dd>
     </dl>
-
-    <div class="dsec">
-      <h3>Campaigns</h3>
-      ${
-        work.length
-          ? `<dl class="kv">
-              <dt>Running</dt><dd>${work.length} (${work.filter((w) => w.status === 'Live').length} live)</dd>
-              <dt>Spend</dt><dd>${money(spend)}</dd>
-              <dt>Return</dt><dd>${spend ? (revenue / spend).toFixed(1) + '× ROAS' : '—'}</dd>
-            </dl>`
-          : '<div class="note">No campaigns running for this client.</div>'
-      }
-    </div>
-
-    <div class="dsec">
-      <h3>Contact</h3>
-      <dl class="kv"><dt>Email</dt><dd><a href="mailto:${esc(c.email)}">${esc(c.email)}</a></dd></dl>
-      <div class="dact"><a class="abtn" href="mailto:${esc(c.email)}">Email</a></div>
-    </div>
-
-    <div class="dsec">
-      <h3>Notes</h3>
-      <div class="note">${esc(c.notes)}</div>
-    </div>`,
-  );
+    <div class="dsec"><h3>Campaigns</h3>${work.length ? `<dl class="kv"><dt>Running</dt><dd>${work.length} (${work.filter((w) => w.status === 'Live').length} live)</dd><dt>Spend</dt><dd>${money(spend)}</dd><dt>Return</dt><dd>${spend ? (revenue / spend).toFixed(1) + '× ROAS' : '—'}</dd></dl>` : '<div class="note">No campaigns running for this client.</div>'}</div>
+    <div class="dsec"><h3>Contact</h3><dl class="kv"><dt>Email</dt><dd><a href="mailto:${esc(c.email)}">${esc(c.email)}</a></dd></dl></div>
+    <div class="dsec"><h3>Notes</h3><div class="note">${esc(c.notes)}</div></div>`);
 }
 
 /* ==========================================================================
-   Site QA — dashboard/data/site-audit.json
+   Modals: add, import, research, settings
    ========================================================================== */
 
-const SEV_CHIP = { fix: 'bad', polish: 'warn', idea: 'cyan' };
-let siteFilter = 'all';
+function openModal(html) { el('mbox').innerHTML = html; el('modal').classList.add('on'); }
+function closeModal() { el('modal').classList.remove('on'); el('mbox').innerHTML = ''; }
 
-function renderSite() {
-  const items = DATA.siteAudit || [];
-  const open = items.filter((i) => i.status === 'open');
-  el('n-site').textContent = open.length;
+function prospectForm(p = {}) {
+  return `<div class="fld"><label>Company</label><input id="a-name" value="${esc(p.name || '')}" autofocus></div>
+    <div class="fld"><label>Contact name</label><input id="a-contact" value="${esc(p.contact || '')}"></div>
+    <div class="fld2"><div class="fld"><label>Email</label><input id="a-email" type="email" value="${esc(p.email || '')}"></div><div class="fld"><label>Phone</label><input id="a-phone" value="${esc(p.phone || '')}"></div></div>
+    <div class="fld"><label>Website</label><input id="a-website" value="${esc(p.website || '')}" placeholder="theirsite.com"></div>
+    <div class="fld2"><div class="fld"><label>LinkedIn URL</label><input id="a-linkedin" value="${esc(p.linkedinUrl || '')}"></div><div class="fld"><label>Instagram (handle or URL)</label><input id="a-instagram" value="${esc(p.instagramUrl || '')}"></div></div>
+    <div class="fld2"><div class="fld"><label>Industry</label><select id="a-industry">${opt(INDUSTRIES, p.industry || 'Other')}</select></div><div class="fld"><label>City</label><input id="a-city" value="${esc(p.city || '')}"></div></div>
+    <div class="fld2"><div class="fld"><label>Start on</label><select id="a-channel"><option value="">Pick from contact info</option>${opt(CHANNELS, p.channel || '')}</select></div><div class="fld"><label>Likely fit</label><select id="a-service">${opt(SERVICES, p.service || 'Unknown')}</select></div></div>
+    <div class="fld2"><div class="fld"><label>Estimated value</label><input id="a-value" inputmode="numeric" value="${p.value || ''}"></div><div class="fld"><label>Source</label><select id="a-source">${opt(['Manual', 'Inbound', 'Research', 'CSV', 'Bookmarklet'], p.source || 'Manual')}</select></div></div>
+    <div class="fld"><label>Notes</label><textarea id="a-notes">${esc(p.notes || '')}</textarea></div>`;
+}
+const fv = (id) => (el(id) ? el(id).value : '');
+function readProspectForm() {
+  return { name: fv('a-name'), contact: fv('a-contact'), email: fv('a-email'), phone: fv('a-phone'), website: fv('a-website'), linkedinUrl: fv('a-linkedin'), instagramUrl: fv('a-instagram'),
+    industry: fv('a-industry'), city: fv('a-city'), channel: fv('a-channel'), service: fv('a-service'), value: fv('a-value'), source: fv('a-source'), notes: fv('a-notes') };
+}
 
-  const keep = (i) => {
-    if (siteFilter === 'open') return i.status === 'open';
-    if (siteFilter === 'phone') return i.viewport !== 'desktop';
-    if (siteFilter === 'desktop') return i.viewport !== 'phone';
-    return true;
+function openAdd(prefill = {}) {
+  openModal(`<h2>Add a prospect</h2><p class="sub">Whatever you have. The channel is picked from the contact info unless you choose one.</p>${prospectForm(prefill)}
+    <div class="macts"><span class="sp"></span><button class="abtn" data-m="close">Cancel</button><button class="abtn pri" id="a-save">Add to the board</button></div>`);
+  el('a-save').onclick = async () => {
+    const btn = el('a-save'); btn.disabled = true; btn.textContent = 'Saving…';
+    try {
+      const r = await api('/api/prospects', readProspectForm());
+      absorb(r.prospect);
+      closeModal();
+      await load({ quiet: true });
+      toast(`Added ${r.prospect.name} · starts on ${r.prospect.channel}`);
+    } catch (e) {
+      btn.disabled = false; btn.textContent = 'Add to the board';
+      if (e.status === 409) { toast(e.message); closeModal(); showProspect(e.data.existing.id); } else toast(e.message);
+    }
   };
+}
 
-  const row = (i) => `<div class="row site">
-    <div><div class="nm">${esc(i.title)}</div><div class="sb">${esc(i.detail)}</div></div>
-    <div class="mid">${esc(i.page)}<br>${esc(i.viewport)}</div>
-    <div class="rt"><span class="chip ${SEV_CHIP[i.severity] || ''}">${esc(i.severity)}</span>${i.status === 'done' ? '<span class="chip ok">done</span>' : ''}</div>
-  </div>`;
+// ── CSV import ──────────────────────────────────────────────────────────────
+function parseCsv(text) {
+  const rows = []; let row = [], cell = '', q = false;
+  const s = String(text).replace(/^﻿/, '');
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (q) {
+      if (c === '"') { if (s[i + 1] === '"') { cell += '"'; i++; } else q = false; }
+      else cell += c;
+    } else if (c === '"') q = true;
+    else if (c === ',' || c === '\t') { row.push(cell); cell = ''; }
+    else if (c === '\n' || c === '\r') { if (c === '\r' && s[i + 1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
+    else cell += c;
+  }
+  if (cell.length || row.length) { row.push(cell); rows.push(row); }
+  return rows.filter((r) => r.some((x) => String(x).trim()));
+}
+const FIELDS = [['', 'skip'], ['name', 'Company'], ['contact', 'Contact'], ['firstName', 'First name'], ['lastName', 'Last name'], ['email', 'Email'], ['phone', 'Phone'], ['website', 'Website'],
+  ['linkedinUrl', 'LinkedIn URL'], ['instagramUrl', 'Instagram'], ['industry', 'Industry'], ['city', 'City'], ['service', 'Service fit'], ['value', 'Value'], ['channel', 'Channel'], ['notes', 'Notes']];
+function guessField(h) {
+  const t = String(h).toLowerCase().trim();
+  if (/^(first ?name|first)$/.test(t)) return 'firstName';
+  if (/^(last ?name|surname|last)$/.test(t)) return 'lastName';
+  if (/(company|business|organi[sz]ation|account|^name$|^org)/.test(t)) return 'name';
+  if (/(contact|full ?name|person|owner|decision)/.test(t)) return 'contact';
+  if (/e-?mail/.test(t)) return 'email';
+  if (/(phone|tel|mobile|cell)/.test(t)) return 'phone';
+  if (/linkedin/.test(t)) return 'linkedinUrl';
+  if (/(instagram|^ig$|handle)/.test(t)) return 'instagramUrl';
+  if (/(web|site|url|domain)/.test(t)) return 'website';
+  if (/(industry|category|type|vertical|niche)/.test(t)) return 'industry';
+  if (/(city|town|location|area)/.test(t)) return 'city';
+  if (/(value|deal|budget|revenue)/.test(t)) return 'value';
+  if (/(service|fit|offer)/.test(t)) return 'service';
+  if (/channel/.test(t)) return 'channel';
+  if (/(note|comment|description|remark)/.test(t)) return 'notes';
+  return '';
+}
+function openImport() {
+  openModal(`<h2>Import prospects</h2><p class="sub">Paste a CSV (or tab separated) with a header row, or pick a file. Columns are matched by name; fix any the guess got wrong. Duplicates against the board are skipped, never merged.</p>
+    <div class="fld"><input type="file" id="i-file" accept=".csv,.tsv,text/csv,text/plain"></div>
+    <div class="fld"><textarea id="i-text" placeholder="Company,Contact,Email,Website,City&#10;Arbor Property Partners,Lena Sandoval,lena@arborpp.com,arborpp.com,Naperville" style="min-height:7rem;font-family:var(--mono);font-size:.75rem"></textarea></div>
+    <div id="i-map"></div>
+    <div class="macts"><span id="i-count" class="hint"></span><span class="sp"></span><button class="abtn" data-m="close">Cancel</button><button class="abtn" id="i-parse">Preview</button><button class="abtn pri" id="i-go" disabled>Import</button></div>
+    <div class="res" id="i-res"></div>`);
+  let parsed = null;
+  el('i-file').onchange = async (e) => { const f = e.target.files[0]; if (f) { el('i-text').value = await f.text(); preview(); } };
+  el('i-parse').onclick = preview;
+  function preview() {
+    const rows = parseCsv(el('i-text').value);
+    if (rows.length < 2) { el('i-map').innerHTML = '<p class="hint">Need a header row and at least one data row.</p>'; return; }
+    parsed = { head: rows[0], body: rows.slice(1) };
+    el('i-map').innerHTML = `<table class="maptbl"><tbody>${parsed.head.map((h, i) => `<tr><td><b>${esc(h)}</b></td><td><select data-col="${i}">${FIELDS.map(([k, l]) => `<option value="${k}"${guessField(h) === k ? ' selected' : ''}>${l}</option>`).join('')}</select></td><td class="lo" style="color:var(--faint)">${esc(parsed.body.slice(0, 3).map((r) => r[i]).filter(Boolean).join(' · ').slice(0, 60))}</td></tr>`).join('')}</tbody></table>`;
+    el('i-count').textContent = `${parsed.body.length} rows`;
+    el('i-go').disabled = false;
+  }
+  el('i-go').onclick = async () => {
+    if (!parsed) return;
+    const map = [...el('i-map').querySelectorAll('select')].map((s) => s.value);
+    const rows = parsed.body.map((r) => {
+      const o = {};
+      map.forEach((k, i) => { if (k && r[i] !== undefined) o[k] = r[i]; });
+      if (o.firstName || o.lastName) o.contact = o.contact || `${o.firstName || ''} ${o.lastName || ''}`.trim();
+      return o;
+    });
+    el('i-go').disabled = true; el('i-go').textContent = 'Importing…';
+    try {
+      const r = await api('/api/prospects/import', { rows, source: 'CSV' });
+      el('i-res').innerHTML = `<p><b>Added ${r.added}.</b> ${r.skipped.length ? `Skipped ${r.skipped.length}:` : ''}</p><ul>${r.skipped.map((s) => `<li>Row ${s.row}${s.name ? ' (' + esc(s.name) + ')' : ''}: ${esc(s.reason)}</li>`).join('')}</ul>`;
+      el('i-go').textContent = 'Done';
+      await load({ quiet: true });
+    } catch (e) { el('i-go').disabled = false; el('i-go').textContent = 'Import'; toast(e.message); }
+  };
+}
 
-  const section = (title, list) =>
-    list.length
-      ? `<div class="grouphd">${title} · ${list.length}</div><div class="rows">${list.map(row).join('')}</div>`
-      : '';
+// ── Research (gated, paid) ───────────────────────────────────────────────────
+function openResearch() {
+  openModal(`<h2>Find businesses</h2><p class="sub">Claude runs up to eight web searches for public business info and lists what it found with sources. Nothing is added until you tick it. Each search costs roughly 5 to 15 cents.</p>
+    <div class="fld2"><div class="fld"><label>Looking for</label><input id="r-q" placeholder="property managers in Naperville" autofocus></div><div class="fld"><label>How many</label><input id="r-n" inputmode="numeric" value="10"></div></div>
+    <div class="macts"><span class="sp"></span><button class="abtn" data-m="close">Cancel</button><button class="abtn pri" id="r-go">Search</button></div>
+    <div id="r-res" class="res"></div>`);
+  el('r-go').onclick = async () => {
+    const btn = el('r-go'); btn.disabled = true; btn.textContent = 'Searching (20 to 60 seconds)…';
+    try {
+      const r = await api('/api/research', { query: fv('r-q'), count: Number(fv('r-n')) || 10 });
+      const cands = r.candidates;
+      el('r-res').innerHTML = `<p><b>${cands.length} found</b> · ${r.searches} searches · about $${r.cost.toFixed(2)}${r.noMore ? ' · the model thinks the area is exhausted' : ''}</p>
+        ${cands.map((c, i) => `<label class="cand${c.duplicateOf ? ' dup' : ''}"><input type="checkbox" data-ci="${i}" ${c.duplicateOf ? 'disabled' : 'checked'}><div><div class="nm">${esc(c.name)}${c.duplicateOf ? ` <span class="chip">already on the board as ${esc(c.duplicateOf.name)}</span>` : ''}</div><div>${esc([c.contact, c.city, c.industry, c.phone, c.email].filter(Boolean).join(' · '))}</div>${c.website ? `<div><a href="${esc(c.website)}" target="_blank" rel="noopener">${esc(c.website)}</a></div>` : ''}${c.notes ? `<div style="color:var(--mut)">${esc(c.notes)}</div>` : ''}<div class="src">${(c.sources || []).map((s) => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title || s.url).slice(0, 60)}</a>`).join(' · ')}</div></div></label>`).join('')}
+        <div class="macts"><span class="sp"></span><button class="abtn pri" id="r-add">Add selected</button></div>`;
+      el('r-add').onclick = async () => {
+        const picks = [...el('r-res').querySelectorAll('input[data-ci]:checked')].map((x) => cands[Number(x.dataset.ci)]);
+        if (!picks.length) return toast('Nothing ticked');
+        el('r-add').disabled = true;
+        const a = await api('/api/prospects/import', { rows: picks.map((c) => ({ ...c, notes: c.notes + (c.sources && c.sources.length ? '\nSources: ' + c.sources.map((s) => s.url).join(' ') : '') })), source: 'Research' });
+        toast(`Added ${a.added}${a.skipped.length ? `, skipped ${a.skipped.length}` : ''}`);
+        closeModal();
+        await load({ quiet: true });
+      };
+    } catch (e) { toast(e.message); }
+    btn.disabled = false; btn.textContent = 'Search again';
+  };
+}
 
-  const shownOpen = open.filter(keep);
-  const shownDone = items.filter((i) => i.status === 'done').filter(keep);
-  el('siteBody').innerHTML =
-    section('Suggested next — fix / polish / idea', shownOpen) +
-    section('Done in this pass', shownDone) ||
-    '<div class="empty">No site notes yet.</div>';
+// ── Settings (caps) ──────────────────────────────────────────────────────────
+function openSettings() {
+  const c = DATA.caps;
+  openModal(`<h2>Daily caps</h2><p class="sub">New first touches per day, per channel and in total. Follow-ups never count against these. Raising them raises the day's drafting cost in step (about 2 cents a draft).</p>
+    <div class="fld2">
+      <div class="fld"><label>Total new per day</label><input id="c-total" inputmode="numeric" value="${c.total}"></div>
+      <div class="fld"><label>Email</label><input id="c-email" inputmode="numeric" value="${c.email}"></div>
+      <div class="fld"><label>LinkedIn</label><input id="c-linkedin" inputmode="numeric" value="${c.linkedin}"></div>
+      <div class="fld"><label>Instagram</label><input id="c-instagram" inputmode="numeric" value="${c.instagram}"></div>
+      <div class="fld"><label>Call</label><input id="c-call" inputmode="numeric" value="${c.call}"></div>
+    </div>
+    <p class="hint">Safe ceilings without paid sending tools: roughly 35 email a day from one Gmail account, 20 LinkedIn (about 100 connection requests a week), 25 Instagram.</p>
+    <div class="macts"><span class="sp"></span><button class="abtn" data-m="close">Cancel</button><button class="abtn pri" id="c-save">Save</button></div>`);
+  el('c-save').onclick = async () => {
+    try {
+      await api('/api/settings', { caps: { total: fv('c-total'), email: fv('c-email'), linkedin: fv('c-linkedin'), instagram: fv('c-instagram'), call: fv('c-call') } });
+      closeModal();
+      await load({ quiet: true });
+      toast('Caps saved');
+    } catch (e) { toast(e.message); }
+  };
 }
 
 /* ==========================================================================
@@ -966,130 +1297,197 @@ function renderSite() {
 
 function renderAll() {
   renderDeck();
+  renderToday();
   renderStageMenu();
   renderPipeline();
-  renderChannels();
-  renderFollowQueue();
-  renderClients();
-  renderCampaigns();
   renderAttention();
   renderActivity();
+  renderChannels();
+  renderClients();
+  renderCampaigns();
   renderSite();
-
-  el('updated').textContent = new Date().toLocaleTimeString('en-US', {
-    hour: 'numeric', minute: '2-digit',
-  });
+  if (currentTab === 'inbound') renderInbound(true);
+  if (currentTab === 'reporting') renderReport(true);
+  el('updated').textContent = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
 }
 
-async function load() {
+async function load({ quiet = false, refresh = false } = {}) {
   try {
-    const res = await fetch('/api/data');
+    const res = await fetch('/api/data' + (refresh ? '?refresh=1' : ''));
     if (res.status === 401) { location.href = '/login'; return; }
     const data = await res.json();
     if (!data.ok) throw new Error(data.error || 'Load failed');
-
     DATA = data;
     el('avatar').textContent = (data.staff || '?').trim().charAt(0).toUpperCase();
     el('liveBadge').classList.remove('off');
     el('liveLabel').textContent = 'Live';
+    el('storeBadge').textContent = data.backend.store === 'airtable' ? 'Airtable' : 'Local file';
+    el('storeBadge').classList.toggle('dim', data.backend.store !== 'airtable');
+    el('draftBadge').textContent = data.backend.drafter ? `Drafting · ${data.backend.model}` : 'Drafting off';
+    el('draftBadge').classList.toggle('dim', !data.backend.drafter);
+    el('researchBtn').hidden = !data.backend.research;
+    reportLoaded = false;
     renderAll();
   } catch (err) {
     el('liveBadge').classList.add('off');
     el('liveLabel').textContent = 'Offline';
-    console.error(err);
+    if (!quiet) console.error(err);
   }
 }
-
-/* --- Events -------------------------------------------------------------- */
 
 document.querySelectorAll('.tab').forEach((tab) => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach((t) => t.setAttribute('aria-selected', String(t === tab)));
     document.querySelectorAll('.panel').forEach((p) => p.classList.remove('on'));
-    el('panel-' + tab.dataset.tab).classList.add('on');
+    currentTab = tab.dataset.tab;
+    el('panel-' + currentTab).classList.add('on');
+    if (currentTab === 'inbound') renderInbound();
+    if (currentTab === 'reporting') renderReport();
   });
 });
 
 el('q').addEventListener('input', (e) => { query = e.target.value; renderPipeline(); });
 
 el('siteFilters').addEventListener('click', (e) => {
-  const b = e.target.closest('[data-sev]');
-  if (!b) return;
+  const b = e.target.closest('[data-sev]'); if (!b) return;
   siteFilter = b.dataset.sev;
   el('siteFilters').querySelectorAll('[data-sev]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
   renderSite();
 });
 
-el('stageBtn').addEventListener('click', (e) => {
-  e.stopPropagation();
-  const menu = el('stageMenu');
-  const open = menu.classList.toggle('on');
-  el('stageBtn').setAttribute('aria-expanded', String(open));
-});
-
+el('stageBtn').addEventListener('click', (e) => { e.stopPropagation(); const open = el('stageMenu').classList.toggle('on'); el('stageBtn').setAttribute('aria-expanded', String(open)); });
 el('stageMenu').addEventListener('click', (e) => {
-  const item = e.target.closest('.mi');
-  if (!item) return;
+  const item = e.target.closest('.mi'); if (!item) return;
   stageFilter = item.dataset.stage;
   el('stageCur').textContent = '· ' + stageFilter;
   el('stageMenu').classList.remove('on');
-  el('stageBtn').setAttribute('aria-expanded', 'false');
-  renderStageMenu();
-  renderPipeline();
+  renderStageMenu(); renderPipeline();
 });
+document.addEventListener('click', () => { el('stageMenu').classList.remove('on'); el('stageBtn').setAttribute('aria-expanded', 'false'); });
 
-document.addEventListener('click', () => {
-  el('stageMenu').classList.remove('on');
-  el('stageBtn').setAttribute('aria-expanded', 'false');
+el('chTabs').addEventListener('click', (e) => { const tab = e.target.closest('.chtab'); if (!tab) return; activeChannel = Number(tab.dataset.ch); renderChannels(); });
+
+// Today: channel filter, reveal, batch, row actions, row focus.
+el('todayBar').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-tf]');
+  if (b) { todayFilter = b.dataset.tf; activeRow = 0; renderToday(); return; }
+  if (e.target.closest('#batchBtn')) runBatch();
 });
-
-el('chTabs').addEventListener('click', (e) => {
-  const tab = e.target.closest('.chtab');
-  if (!tab) return;
-  activeChannel = Number(tab.dataset.ch);
-  renderChannels();
-});
-
-// Copy buttons: either a textarea's contents or a literal string.
-document.addEventListener('click', async (e) => {
-  const btn = e.target.closest('[data-copy], [data-copy-text]');
-  if (!btn) return;
-
-  const text = btn.dataset.copyText ?? el(btn.dataset.copy)?.value ?? '';
-  try {
-    await navigator.clipboard.writeText(text);
-    if (btn.classList.contains('copy')) {
-      btn.classList.add('done');
-      btn.textContent = 'Copied';
-      setTimeout(() => { btn.classList.remove('done'); btn.textContent = 'Copy'; }, 1400);
-    } else {
-      toast('Copied to clipboard');
+el('todayBody').addEventListener('click', (e) => {
+  const rv = e.target.closest('[data-reveal]');
+  if (rv) { revealed[rv.dataset.reveal] = true; renderToday(); return; }
+  const act = e.target.closest('[data-act]');
+  if (act) {
+    const row = act.closest('.trow'); if (row) setActiveRow(Number(row.dataset.idx));
+    if (act.dataset.act === 'open') {
+      // Let the link open. For email the compose window carries the exact text,
+      // so it is logged as sent after a beat (CAF pattern). DMs need a paste, so
+      // those wait for the Sent button.
+      const p = DATA.prospects.find((x) => x.id === act.dataset.id);
+      if (p && p.channelKey === 'email') setTimeout(() => actOn('sent', act.dataset.id), 350);
+      return;
     }
-  } catch {
-    toast('Copy failed — select and copy manually');
+    e.preventDefault();
+    actOn(act.dataset.act, act.dataset.id, { days: Number(act.dataset.days) || 3 });
+    return;
   }
+  const row = e.target.closest('.trow');
+  if (row && !e.target.closest('[data-prospect]')) setActiveRow(Number(row.dataset.idx));
 });
 
+// Copy buttons on the templates tab.
+document.addEventListener('click', async (e) => {
+  const btn = e.target.closest('[data-copy]'); if (!btn) return;
+  try {
+    await navigator.clipboard.writeText(el(btn.dataset.copy)?.value ?? '');
+    btn.classList.add('done'); btn.textContent = 'Copied';
+    setTimeout(() => { btn.classList.remove('done'); btn.textContent = 'Copy'; }, 1400);
+  } catch { toast('Copy failed. Select and copy by hand.'); }
+});
+
+// Rows and links that open the drawer, promote buttons, modal close.
 document.addEventListener('click', (e) => {
+  const promote = e.target.closest('[data-promote]');
+  if (promote) {
+    const lead = (el('inboundBody')._leads || []).find((l) => l.id === promote.dataset.promote);
+    if (lead) openAdd({ ...lead.guess, source: 'Inbound' });
+    return;
+  }
   const row = e.target.closest('[data-prospect], [data-client]');
-  if (!row) return;
-  if (row.dataset.prospect) showProspect(row.dataset.prospect);
-  else showClient(row.dataset.client);
+  if (row) { e.preventDefault(); if (row.dataset.prospect) showProspect(row.dataset.prospect); else showClient(row.dataset.client); return; }
+  if (e.target.closest('[data-m="close"]') || e.target === el('modal')) closeModal();
+});
+
+// Drawer edits and actions.
+el('dBody').addEventListener('change', (e) => {
+  const f = e.target.closest('[data-edit]'); if (!f || !editing) return;
+  const key = f.dataset.edit;
+  if (key === 'notes') return; // handled on input with a debounce
+  saveEdit(editing, key, f.value);
+});
+el('dBody').addEventListener('input', (e) => {
+  const f = e.target.closest('[data-edit="notes"]'); if (!f || !editing) return;
+  clearTimeout(saveTimer);
+  const id = editing, val = f.value;
+  saveTimer = setTimeout(() => saveEdit(id, 'notes', val), 700);
+});
+el('dBody').addEventListener('keydown', async (e) => {
+  if (e.key !== 'Enter' || e.target.id !== 'noteLine' || !editing) return;
+  const text = e.target.value.trim(); if (!text) return;
+  try { const r = await api('/api/prospects/note', { id: editing, body: text }); absorb(r.prospect, r.touch); e.target.value = ''; showProspect(editing); renderActivity(); toast('Noted'); }
+  catch (err) { toast(err.message); }
+});
+el('dBody').addEventListener('click', async (e) => {
+  const b = e.target.closest('[data-dact]'); if (!b || !editing) return;
+  const id = editing;
+  try {
+    if (b.dataset.dact === 'replied') await api('/api/prospects/replied', { id });
+    else if (b.dataset.dact === 'snooze') await api('/api/prospects/snooze', { id, days: 3 });
+    else if (b.dataset.dact === 'nope') { if (!confirm('Mark as not interested? They move to Lost.')) return; await api('/api/prospects/not-interested', { id }); }
+    else if (b.dataset.dact === 'reactivate') { const p = DATA.prospects.find((x) => x.id === id); await api('/api/prospects/switch-channel', { id, channel: p.channel }); }
+    await load({ quiet: true });
+    if (editing === id) showProspect(id);
+    toast('Done');
+  } catch (err) { toast(err.message); }
 });
 
 el('dClose').addEventListener('click', closeDrawer);
 el('scrim').addEventListener('click', closeDrawer);
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
+el('addBtn').addEventListener('click', () => openAdd());
+el('importBtn').addEventListener('click', openImport);
+el('researchBtn').addEventListener('click', openResearch);
+el('settingsBtn').addEventListener('click', openSettings);
+el('refreshBtn').addEventListener('click', async () => { await load({ refresh: true }); inboundLoaded = false; toast('Refreshed from the store'); });
+el('logoutBtn').addEventListener('click', async () => { await fetch('/api/logout', { method: 'POST' }); location.href = '/login'; });
 
-el('refreshBtn').addEventListener('click', () => { load(); toast('Refreshed'); });
-
-el('logoutBtn').addEventListener('click', async () => {
-  await fetch('/api/logout', { method: 'POST' });
-  location.href = '/login';
+// Keyboard: only when nothing is being typed into.
+document.addEventListener('keydown', (e) => {
+  const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '');
+  if (e.key === 'Escape') { if (el('modal').classList.contains('on')) closeModal(); else closeDrawer(); document.activeElement?.blur?.(); return; }
+  if (typing || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === '/') { e.preventDefault(); el('q').focus(); document.querySelector('[data-tab="pipeline"]').click(); return; }
+  if (e.key === 'a') { e.preventDefault(); openAdd(); return; }
+  if (currentTab !== 'today') return;
+  const id = activeId();
+  switch (e.key) {
+    case 'j': case 'ArrowDown': e.preventDefault(); setActiveRow(activeRow + 1); break;
+    case 'k': case 'ArrowUp': e.preventDefault(); setActiveRow(activeRow - 1); break;
+    case '1': case '2': case '3': case '4': todayFilter = CH_KEYS[Number(e.key) - 1]; activeRow = 0; renderToday(); break;
+    case '0': todayFilter = 'all'; activeRow = 0; renderToday(); break;
+    case 'd': if (id && DATA.backend.drafter) actOn('draft', id); break;
+    case 'c': if (id) actOn('copy', id); break;
+    case 'o': { const a = $(`.trow.active [data-act="open"]`); if (a) a.click(); break; }
+    case 's': if (id) actOn('sent', id); break;
+    case 'z': if (id) actOn('snooze', id, { days: 3 }); break;
+    case 'r': if (id) actOn('replied', id); break;
+    case 'x': if (id) actOn('nope', id); break;
+    case 'e': { const ta = $('.trow.active .ta'); if (ta) { e.preventDefault(); ta.focus(); } break; }
+    case 'Enter': if (id) showProspect(id); break;
+  }
 });
 
 load();
-setInterval(load, 60000);
+setInterval(() => load({ quiet: true }), 90000);
 </script>
 </body>
 </html>

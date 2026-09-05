@@ -160,3 +160,137 @@ are defined in `src/pages/get-started.astro` (`const PROMO`):
 
 **These must be created as promotion codes in Stripe or checkout will reject
 them.** Keep the two lists in sync.
+
+---
+
+# Prospects and Touches (Growth Command)
+
+The internal dashboard at `dashboard/` (run with `npm run dashboard`, never
+deployed) keeps outbound prospects and the log of every message sent in two
+more tables in the **same base** as `Leads`. Until `AIRTABLE_API_KEY` and
+`AIRTABLE_BASE_ID` are in `.env`, the dashboard stores everything in
+`dashboard/data/*.json` instead, so it works on day one either way.
+
+The record budget matters here: Airtable's free plan caps a base at 1,000
+records. At fifteen new prospects and twenty or so touches a day that is about
+a month, after which the Team plan is needed.
+
+## Prospects
+
+| Field name | Field type | Notes |
+|---|---|---|
+| `Company` | Single line text (primary) | |
+| `Contact` | Single line text | Full name; the first name is derived |
+| `Email` | Email | |
+| `Phone` | Phone number | |
+| `Website` | URL | |
+| `LinkedIn URL` | URL | |
+| `Instagram URL` | URL | |
+| `Industry` | Single select | Real Estate Brokerage, Developer, Property Management, Service Business, E-commerce, Other |
+| `City` | Single line text | |
+| `Service Fit` | Single select | Website, Website + Ads, Landing Page Offer, SEO, Ads, Branding, Unknown |
+| `Value` | Currency | Estimated deal value |
+| `Stage` | Single select | New, Contacted, Call Booked, Proposal, Won, Lost |
+| `Channel` | Single select | Email, LinkedIn, Instagram, Call. The sequence they are on now |
+| `Sequence Status` | Single select | Active, Replied, Finished, Stopped, External |
+| `Step Sent` | Number (integer) | Steps sent on the current channel |
+| `Next Touch` | Date | Drives the Today queue; snooze writes this |
+| `Last Touch` | Date | |
+| `Next Step` | Single line text | Free text shown on the pipeline |
+| `Source` | Single select | Manual, CSV, Bookmarklet, Research, Inbound |
+| `Owner` | Single line text | |
+| `Notes` | Long text | |
+| `Site Text` | Long text | Their website stripped to text, for drafting (≤ 6,000 chars) |
+| `Site Fetched` | Date | |
+| `Draft Cache` | Long text | JSON, one entry per channel and step |
+
+## Touches
+
+| Field name | Field type | Notes |
+|---|---|---|
+| `Prospect ID` | Single line text (primary) | The `rec…` id of the Prospects row |
+| `Company` | Single line text | For readability in Airtable |
+| `Channel` | Single select | Email, LinkedIn, Instagram, Call |
+| `Kind` | Single select | Sent, Reply, Call Booked, Not Interested, Snoozed, Stage Change, Note |
+| `Step` | Single line text | first, follow-up, breakup, connect, message, dm, dm-follow-up, call, call-2 |
+| `Subject` | Single line text | Email only |
+| `Body` | Long text | Exactly what went out, after any edits |
+| `Staff` | Single line text | |
+| `Sent At` | Date (include time) | Written by the dashboard |
+
+### Prompt for Airtable's Omni assistant
+
+> In this base, make two tables match this specification exactly. Create any
+> table or field that is missing, fix the type of any field that exists with
+> the wrong type, and do not rename or delete anything that already has the
+> correct name. Do not make any field required and do not add validation.
+>
+> Table `Prospects`, with these fields in this order:
+> - `Company` — single line text, the primary field
+> - `Contact` — single line text
+> - `Email` — email
+> - `Phone` — phone number
+> - `Website` — URL
+> - `LinkedIn URL` — URL
+> - `Instagram URL` — URL
+> - `Industry` — single select with options: Real Estate Brokerage, Developer,
+>   Property Management, Service Business, E-commerce, Other
+> - `City` — single line text
+> - `Service Fit` — single select with options: Website, Website + Ads, Landing
+>   Page Offer, SEO, Ads, Branding, Unknown
+> - `Value` — currency, US dollars, no decimals
+> - `Stage` — single select with options: New, Contacted, Call Booked,
+>   Proposal, Won, Lost
+> - `Channel` — single select with options: Email, LinkedIn, Instagram, Call
+> - `Sequence Status` — single select with options: Active, Replied, Finished,
+>   Stopped, External
+> - `Step Sent` — number, integer
+> - `Next Touch` — date, without time
+> - `Last Touch` — date, without time
+> - `Next Step` — single line text
+> - `Source` — single select with options: Manual, CSV, Bookmarklet, Research,
+>   Inbound
+> - `Owner` — single line text
+> - `Notes` — long text
+> - `Site Text` — long text
+> - `Site Fetched` — date, without time
+> - `Draft Cache` — long text
+>
+> Table `Touches`, with these fields in this order:
+> - `Prospect ID` — single line text, the primary field
+> - `Company` — single line text
+> - `Channel` — single select with options: Email, LinkedIn, Instagram, Call
+> - `Kind` — single select with options: Sent, Reply, Call Booked, Not
+>   Interested, Snoozed, Stage Change, Note
+> - `Step` — single line text
+> - `Subject` — single line text
+> - `Body` — long text
+> - `Staff` — single line text
+> - `Sent At` — date, with the time included
+>
+> In `Prospects`, create a grid view named `Working` filtered to records where
+> `Sequence Status` is Active, sorted by `Next Touch` with the earliest first.
+> In `Touches`, create a grid view named `Latest` sorted by `Sent At` with the
+> newest first.
+
+Then:
+
+```bash
+npm run check:airtable            # all three tables, ok / MISSING per column
+npm run dashboard                 # and open http://localhost:4787
+curl -b cookie.txt localhost:4787/api/verify   # or just watch the header badge
+```
+
+The token you already made for Leads works as long as it has access to this
+base with `data.records:read`, `data.records:write`, and `schema.bases:read`.
+Two more lines in `.env` name the tables if you called them something else:
+`AIRTABLE_PROSPECTS_TABLE` and `AIRTABLE_TOUCHES_TABLE`.
+
+## The paid email layer, later
+
+When a sending tool (Instantly, Smartlead) enters the picture, nothing in
+this schema changes. Export the prospects you want it to run with
+`/api/prospects/export.csv?channel=email&status=active&markExternal=1` from the
+dashboard's Pipeline tools. `markExternal` flips their `Sequence Status` to
+`External` so the Today queue stops offering them, and replies still get
+logged by hand as touches.

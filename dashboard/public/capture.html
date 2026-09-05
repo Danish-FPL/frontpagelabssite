@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Capture · Growth Command</title>
+<style>
+  :root{--ink:#0a0a0a;--mut:#737577;--faint:#a5a7a9;--line:#d4d6d8;--panel:#f3f4f5;--card:#fff;--bg:#fafafa;--blue:#03f6ff;--ok:#114c09;--ok-bg:#abe9a3;--bad:#751515;--bad-bg:#ffc5c5}
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:500 15px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;padding:1rem}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:1.1rem 1rem}
+  .eyebrow{font-size:.5625rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);margin:0 0 .3rem}
+  h1{margin:0 0 .6rem;font-size:1.15rem;letter-spacing:-.02em;overflow-wrap:anywhere}
+  .sub{font-size:.8125rem;color:var(--mut);margin:0 0 .8rem}
+  label{display:block;font-size:.5625rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:.55rem 0 .15rem}
+  input,select,textarea{width:100%;font:inherit;font-size:16px;border:1px solid var(--line);border-radius:4px;padding:.5rem .6rem;background:var(--card);color:var(--ink)}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ink)}
+  textarea{min-height:4rem;resize:vertical}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:0 .6rem}
+  .acts{display:grid;gap:.5rem;margin-top:1rem}
+  .btn{font:inherit;border:1px solid var(--ink);background:var(--ink);color:var(--card);border-radius:999px;padding:.8rem;font-size:.8125rem;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;display:block;touch-action:manipulation}
+  .btn.ghost{background:var(--card);color:var(--ink);border-color:var(--line)}
+  .btn[disabled]{opacity:.5;cursor:default}
+  .chip{display:inline-block;padding:.2rem .5rem;border-radius:999px;font-size:.5625rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line)}
+  .chip.ok{background:var(--ok-bg);color:var(--ok);border-color:transparent}
+  .chip.bad{background:var(--bad-bg);color:var(--bad);border-color:transparent}
+  .note{background:var(--panel);border-radius:4px;padding:.6rem .7rem;font-size:.75rem;margin-top:.8rem}
+  .big{font-size:2rem;line-height:1;margin:.2rem 0 .5rem}
+</style>
+</head>
+<body>
+<div class="card">
+  <p class="eyebrow">FrontPage Labs · Growth Command</p>
+  <div id="out"><h1>Reading the page…</h1></div>
+</div>
+<script>
+// The bookmarklet's landing pad. The captured fields ride in the #fragment,
+// which the browser never sends anywhere; this page POSTs them same-origin to
+// /api/prospects, so the PIN cookie is the only auth involved.
+(function(){
+  var out=document.getElementById('out');
+  var IND=['Real Estate Brokerage','Developer','Property Management','Service Business','E-commerce','Other'];
+  var SVC=['Unknown','Website','Website + Ads','Landing Page Offer','SEO','Ads','Branding'];
+  var CH=['Email','LinkedIn','Instagram','Call'];
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function show(h){out.innerHTML=h}
+  function opts(list,cur){return list.map(function(o){return '<option'+(o===cur?' selected':'')+'>'+esc(o)+'</option>'}).join('')}
+  function guessIndustry(s){
+    s=String(s||'').toLowerCase();
+    if(/(property manag|hoa|leasing|apartment)/.test(s))return 'Property Management';
+    if(/(develop|builder|construction|custom home)/.test(s))return 'Developer';
+    if(/(realt|broker|real estate|agent)/.test(s))return 'Real Estate Brokerage';
+    if(/(shop|store|ecommerce|e-commerce|boutique|retail)/.test(s))return 'E-commerce';
+    if(/(service|plumb|hvac|roof|clean|landscap|law|legal|dental|therap|salon|studio|repair|contractor|clinic|fitness|gym)/.test(s))return 'Service Business';
+    return 'Other';
+  }
+  function fail(msg,retry){
+    show('<h1>Hmm.</h1><p class="sub">'+esc(msg)+'</p><div class="acts">'
+      +(retry?'<button class="btn" id="retry" type="button">Try again</button>':'')
+      +'<a class="btn ghost" href="/login" target="_blank" rel="noopener">Open the dashboard sign-in ↗</a>'
+      +'<button class="btn ghost" id="closer" type="button">Close</button></div>');
+    var r=document.getElementById('retry'); if(r)r.onclick=render;
+    document.getElementById('closer').onclick=function(){window.close()};
+  }
+  var p;
+  try{p=JSON.parse(decodeURIComponent(location.hash.slice(1)))}catch(e){p=null}
+  if(!p||!p.u){fail('Nothing to capture. This page only does something when the bookmarklet opens it from a profile or a business site. Grab the bookmarklet at /bookmarklet.',false);return}
+
+  var channel=p.email?'Email':p.linkedin?'LinkedIn':p.instagram?'Instagram':p.phone?'Call':(p.kind==='linkedin'?'LinkedIn':p.kind==='instagram'?'Instagram':'Email');
+  function render(){
+    show('<h1>'+esc(p.company||p.contact||'New prospect')+'</h1>'
+      +'<p class="sub">From '+esc(p.kind||'the page')+' · check the fields, then save.</p>'
+      +'<label>Company</label><input id="f-name" value="'+esc(p.company||'')+'">'
+      +'<label>Contact</label><input id="f-contact" value="'+esc(p.contact||'')+'">'
+      +'<div class="grid"><div><label>Email</label><input id="f-email" type="email" value="'+esc(p.email||'')+'"></div>'
+      +'<div><label>Phone</label><input id="f-phone" value="'+esc(p.phone||'')+'"></div></div>'
+      +'<label>Website</label><input id="f-website" value="'+esc(p.website||'')+'">'
+      +'<div class="grid"><div><label>LinkedIn</label><input id="f-linkedin" value="'+esc(p.linkedin||'')+'"></div>'
+      +'<div><label>Instagram</label><input id="f-instagram" value="'+esc(p.instagram||'')+'"></div></div>'
+      +'<div class="grid"><div><label>Industry</label><select id="f-industry">'+opts(IND,guessIndustry(p.industry||p.headline||p.notes))+'</select></div>'
+      +'<div><label>City</label><input id="f-city" value="'+esc(p.city||'')+'"></div></div>'
+      +'<div class="grid"><div><label>Start on</label><select id="f-channel">'+opts(CH,channel)+'</select></div>'
+      +'<div><label>Likely fit</label><select id="f-service">'+opts(SVC,'Unknown')+'</select></div></div>'
+      +'<label>Notes</label><textarea id="f-notes">'+esc([p.headline,p.notes].filter(Boolean).join('\n'))+'</textarea>'
+      +'<div class="acts"><button class="btn" id="save" type="button">Add to the board</button>'
+      +'<button class="btn ghost" id="closer" type="button">Cancel</button></div>'
+      +'<div class="note">Source page: '+esc(p.u)+'</div>');
+    document.getElementById('closer').onclick=function(){window.close()};
+    document.getElementById('save').onclick=save;
+  }
+  var v=function(id){return (document.getElementById(id)||{}).value||''};
+  async function save(){
+    var btn=document.getElementById('save'); btn.disabled=true; btn.textContent='Saving…';
+    var body={source:'Bookmarklet',name:v('f-name'),contact:v('f-contact'),email:v('f-email'),phone:v('f-phone'),website:v('f-website'),
+      linkedinUrl:v('f-linkedin'),instagramUrl:v('f-instagram'),industry:v('f-industry'),city:v('f-city'),channel:v('f-channel'),service:v('f-service'),
+      notes:(v('f-notes')+'\nCaptured from '+p.u).trim()};
+    try{
+      var r=await fetch('/api/prospects',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});
+      if(r.status===401)return fail('Sign in to the dashboard first (any first name plus the PIN), then come back here and hit Try again.',true);
+      var j=await r.json().catch(function(){return {}});
+      if(r.status===409){
+        var ex=j.existing||{};
+        return show('<div class="big">·</div><h1>Already on the board</h1><p class="sub">'+esc(ex.name||body.name)+' is there as <span class="chip">'+esc(ex.stage||'')+'</span> on '+esc(ex.channel||'')+'.</p>'
+          +'<div class="acts"><a class="btn ghost" href="/" target="_blank" rel="noopener">Open the board ↗</a><button class="btn" id="closer" type="button">Close</button></div>'),
+          document.getElementById('closer').onclick=function(){window.close()};
+      }
+      if(!r.ok)throw new Error(j.error||('Request failed ('+r.status+')'));
+      var pr=j.prospect||{};
+      done(pr);
+    }catch(e){btn.disabled=false;btn.textContent='Add to the board';fail(e.message||'Something went wrong saving that.',true)}
+  }
+  var CLOSE_S=5;
+  function done(pr){
+    show('<div class="big">✓</div><h1>'+esc(pr.name)+'</h1><p class="sub">Added. Starts on '+esc(pr.channel)+' with '+esc(pr.stepLabel||'the first touch')+'. It will show on Today when the caps allow.</p>'
+      +'<div class="acts"><a class="btn ghost" href="/" target="_blank" rel="noopener">Open the board ↗</a>'
+      +'<button class="btn" id="closer" type="button">Done · closing in '+CLOSE_S+'</button></div>');
+    var btn=document.getElementById('closer'),left=CLOSE_S,held=false,timer=setInterval(function(){
+      if(held)return; left--; if(left<=0){clearInterval(timer);window.close();btn.textContent='Done (you can close this)'} else btn.textContent='Done · closing in '+left;
+    },1000);
+    document.body.addEventListener('pointerdown',function(){held=true;btn.textContent='Done'},{once:true});
+    btn.onclick=function(){window.close();btn.textContent='You can close this'};
+  }
+  render();
+})();
+</script>
+</body>
+</html>

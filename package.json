@@ -10,11 +10,13 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "dashboard": "node dashboard/server.mjs",
+    "dashboard": "node --env-file-if-exists=.env dashboard/server.mjs",
+    "test:dashboard": "node --test 'dashboard/lib/*.test.mjs'",
     "hero-lab": "node hero-lab/serve.mjs",
     "check:airtable": "node scripts/check-airtable.mjs"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.40.1",
     "astro": "^7.2.2"
   }
 }

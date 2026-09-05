@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Add to Growth Command · FrontPage Labs</title>
+<style>
+  :root{--ink:#0a0a0a;--mut:#737577;--faint:#a5a7a9;--line:#d4d6d8;--panel:#f3f4f5;--card:#fff;--bg:#fafafa;--blue:#03f6ff;--deep:#01194b;--ok:#114c09;--mono:ui-monospace,'SFMono-Regular',Menlo,monospace}
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:500 16px/1.55 -apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;padding:2rem 1.1rem 4rem}
+  .card{max-width:40rem;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:1.6rem 1.5rem;box-shadow:0 1px 2px rgba(0,0,0,.04),0 10px 28px -14px rgba(0,0,0,.22)}
+  .eyebrow{font-size:.5625rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);margin:0 0 .4rem}
+  h1{margin:0 0 .5rem;font-size:1.4rem;letter-spacing:-.02em}
+  h2{margin:1.6rem 0 .5rem;font-size:.6875rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+  p,li{font-size:.875rem;color:var(--ink);margin:0 0 .6rem}
+  li{margin:0 0 .35rem}
+  .drag{display:inline-block;background:var(--ink);color:var(--card);text-decoration:none;font-weight:600;border-radius:999px;padding:.8rem 1.2rem;margin:.4rem 0;cursor:grab;font-size:.875rem}
+  .drag:active{cursor:grabbing}
+  .hint{font-size:.75rem;color:var(--mut)}
+  textarea{width:100%;min-height:6rem;font:400 .6875rem/1.5 var(--mono);border:1px solid var(--line);border-radius:4px;padding:.6rem;background:var(--panel);color:var(--ink)}
+  button{font:inherit;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:.5rem .9rem;font-size:.6875rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;margin-top:.4rem}
+  button:hover{background:var(--ink);color:var(--card);border-color:var(--ink)}
+  .ok{color:var(--ok);font-size:.75rem;font-weight:600;margin-left:.5rem}
+  code{font-family:var(--mono);background:var(--panel);padding:.1rem .3rem;border-radius:3px;font-size:.8em}
+  a.back{font-size:.75rem;color:var(--mut)}
+</style>
+</head>
+<body>
+<div class="card">
+  <p class="eyebrow">FrontPage Labs · Growth Command</p>
+  <h1>Add to Growth Command</h1>
+  <p>One button in your bookmarks bar. While you are looking at a business, tap it and they land on the board with whatever the page already shows. It reads only the page on your screen, fetches nothing, and sends nothing.</p>
+  <ul>
+    <li><b>LinkedIn profile:</b> name, headline, and the company after "at".</li>
+    <li><b>Instagram profile:</b> handle, display name, bio, and the link in bio.</li>
+    <li><b>Google Maps listing:</b> business name, website, phone, address, category.</li>
+    <li><b>Any business website:</b> site name, the first email and phone on the page, and its LinkedIn or Instagram links.</li>
+  </ul>
+  <p>A small window opens with the fields prefilled so you can fix the industry or add a note before saving. If they are already on the board it says so instead of adding a second row.</p>
+
+  <h2>Laptop</h2>
+  <p>Drag this into your bookmarks bar (show it with <code>⌘⇧B</code>), then tap it on any of the pages above:</p>
+  <a class="drag" id="bm" href="#">＋ Add to Growth Command</a>
+  <p class="hint">Baked to <b id="orig"></b>. Grab it again from this page on any other machine, or on a phone that reaches the LAN address.</p>
+
+  <h2>iPhone / iPad</h2>
+  <ol>
+    <li>Copy the code below.</li>
+    <li>Bookmark any page in Safari, then edit the bookmark: rename it and replace its address with the pasted code.</li>
+    <li>On a profile or listing, open the address bar and tap the bookmark.</li>
+  </ol>
+  <textarea id="code" readonly spellcheck="false"></textarea>
+  <button id="copy" type="button">Copy the bookmarklet</button><span id="copied"></span>
+  <p style="margin-top:1.4rem"><a class="back" href="/">← Back to the board</a></p>
+</div>
+<script>
+// Runs ON the page being looked at. Reads the DOM already on screen, never
+// fetches, then hands the fields to /capture in the URL fragment (which the
+// browser never sends to any server). No comments inside CAPTURE: it ships
+// collapsed to one line as a javascript: URL.
+function CAPTURE(){
+  var D='@@ORIGIN@@';
+  var h=location.hostname, L=location.href.split('#')[0], T=(document.title||'').trim(), p;
+  function q(s){var e=document.querySelector(s);return e?(e.innerText||e.textContent||'').trim():''}
+  function meta(n){var e=document.querySelector('meta[property="'+n+'"],meta[name="'+n+'"]');return e?(e.getAttribute('content')||'').trim():''}
+  function attr(s,a){var e=document.querySelector(s);return e?(e.getAttribute(a)||''):''}
+  if(/linkedin\.com$/i.test(h)&&/^\/in\//.test(location.pathname)){
+    var t=T.replace(/^\(\d+\)\s*/,'').replace(/\s*\|\s*LinkedIn\s*$/i,'');
+    var parts=t.split(/\s[-–]\s/); var name=(parts[0]||'').trim(); var head=parts.slice(1).join(' - ');
+    var m=head.match(/\s(?:at|@)\s+([^|]+)$/i);
+    p={kind:'linkedin',u:L,contact:name,company:m?m[1].trim():'',headline:head,linkedin:L.split('?')[0]};
+  }else if(/linkedin\.com$/i.test(h)&&/^\/company\//.test(location.pathname)){
+    p={kind:'linkedin-company',u:L,company:T.replace(/\s*[|:].*$/,'').trim(),linkedin:L.split('?')[0],notes:meta('description').slice(0,300)};
+  }else if(/instagram\.com$/i.test(h)){
+    var handle=(location.pathname.split('/').filter(Boolean)[0]||'').replace(/^@/,'');
+    var nm=T.match(/^(.*?)\s*\(@/);
+    var site=''; Array.prototype.some.call(document.querySelectorAll('a[href*="l.instagram.com"]'),function(a){try{var u=new URL(a.href).searchParams.get('u');if(u){site=u;return true}}catch(e){}return false});
+    var bio=q('header section')||q('header');
+    p={kind:'instagram',u:L,company:nm?nm[1].trim():handle,instagram:handle,website:site,notes:bio.slice(0,400)};
+  }else if(/google\.[a-z.]+$/i.test(h)&&/\/maps\/place\//.test(location.pathname)){
+    var nm2=q('h1')||T.replace(/\s*-\s*Google Maps.*$/i,'');
+    var phone=attr('button[data-item-id^="phone"]','aria-label').replace(/^Phone:\s*/i,'');
+    var addr=attr('button[data-item-id="address"]','aria-label').replace(/^Address:\s*/i,'');
+    var cm=addr.match(/,\s*([^,]+),\s*[A-Z]{2}\s+\d{5}/);
+    p={kind:'maps',u:L,company:nm2,website:attr('a[data-item-id="authority"]','href'),phone:phone,city:cm?cm[1]:'',industry:q('button[jsaction*="category"]'),notes:addr};
+  }else{
+    var company=meta('og:site_name')||T.split(/\s[|\-–]\s/)[0]||h;
+    var em=attr('a[href^="mailto:"]','href').replace(/^mailto:/i,'').split('?')[0];
+    var tel=attr('a[href^="tel:"]','href').replace(/^tel:/i,'');
+    var li=attr('a[href*="linkedin.com/"]','href'), ig=attr('a[href*="instagram.com/"]','href');
+    p={kind:'site',u:L,company:company.trim(),website:location.origin,email:em,phone:tel,linkedin:li,instagram:ig,notes:meta('description').slice(0,300)};
+  }
+  var w=window.open(D+'/capture#'+encodeURIComponent(JSON.stringify(p)),'fplcapture','width=440,height=760');
+  if(!w)alert('Pop-up blocked. Allow pop-ups for this site, then tap the bookmark again.');
+}
+
+// Bake the dashboard's address in so a phone on the LAN targets the LAN IP
+// and a laptop targets localhost: whatever address served this page. encodeURI
+// leaves '#' alone, and a '#' inside a javascript: URL cuts the code off there,
+// so it (and a bare '%') are escaped by hand.
+function bake(fn){
+  var src=fn.toString().replace(/@@ORIGIN@@/g,location.origin).replace(/\s*\n\s*/g,' ');
+  return 'javascript:'+encodeURI('('+src+')()').replace(/%(?![0-9a-f]{2})/gi,'%25').replace(/#/g,'%23');
+}
+var href=bake(CAPTURE);
+var bm=document.getElementById('bm');
+bm.setAttribute('href',href);
+bm.addEventListener('click',function(e){e.preventDefault()});
+document.getElementById('code').value=href;
+document.getElementById('orig').textContent=location.origin;
+document.getElementById('copy').onclick=function(){
+  var ta=document.getElementById('code'); ta.select();
+  (navigator.clipboard?navigator.clipboard.writeText(ta.value):Promise.reject()).catch(function(){document.execCommand('copy')});
+  document.getElementById('copied').textContent='Copied';
+  document.getElementById('copied').className='ok';
+};
+</script>
+</body>
+</html>
