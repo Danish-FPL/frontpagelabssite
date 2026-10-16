@@ -1,0 +1,434 @@
+---
+import Base from '../layouts/Base.astro';
+
+// The page we send to clients after a project wraps. It is not in the nav;
+// it is reached by link, so it stays out of search.
+
+const projects = [
+  'Website',
+  'Landing page and ad',
+  'Advertising',
+  'Social channels',
+  'Strategy',
+  'Something else',
+];
+
+const creditOptions = [
+  { value: 'Full name and business', label: 'My full name and business' },
+  { value: 'First name and business', label: 'My first name and business' },
+  { value: 'Anonymous', label: 'Keep me anonymous' },
+];
+---
+
+<Base
+  title="Leave a Testimonial | FrontPageLabs"
+  description="Tell us how working with FrontPage Labs went for your business."
+  noindex
+>
+  <section class="section form-section">
+    <div class="container-fluid">
+      <div class="form-grid">
+        <div class="form-intro">
+          <h1 class="heading-small form-intro-heading">Share your<br />experience.</h1>
+
+          <p class="form-intro-text">
+            <strong>If we have worked together, a few honest sentences about it</strong> help the next
+            business owner decide whether we are the right fit. You choose how your name appears, and
+            nothing goes on the site until we have checked the wording with you.
+          </p>
+
+          <p class="form-intro-text form-intro-tip">
+            The most helpful testimonials describe where things stood before we started and what changed
+            afterward. A specific number, like the calls you get in a month now compared with before,
+            carries more weight than any adjective.
+          </p>
+        </div>
+
+        {/* Posts as JSON to /api/lead (→ Airtable, Source "Testimonial") via
+            lead-form.js. The quote lands in Message; rating, project and the
+            credit choice are appended on its last line so no new Airtable
+            columns are needed. */}
+        <form class="contact-form testimonial-form" name="testimonial">
+          <div class="field-row">
+            <div class="field">
+              <label for="name">Name:</label>
+              <input id="name" name="name" type="text" autocomplete="name" placeholder="Enter your name" required />
+            </div>
+
+            <div class="field">
+              <label for="email">Email:</label>
+              <input id="email" name="email" type="email" autocomplete="email" placeholder="Never published" required />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="business">Business:</label>
+              <input id="business" name="business" type="text" autocomplete="organization" placeholder="Business name" required />
+            </div>
+
+            <div class="field">
+              <label for="role">Your Role (Optional):</label>
+              <input id="role" name="role" type="text" autocomplete="organization-title" placeholder="Owner, director, manager" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="website">Website (Optional):</label>
+            <input id="website" name="website" type="text" inputmode="url" placeholder="yourbusiness.com" />
+          </div>
+
+          <div class="field">
+            <label for="project">What we worked on:</label>
+            <select id="project" name="project" required>
+              <option value="" disabled selected>Choose one</option>
+              {projects.map((p) => <option value={p}>{p}</option>)}
+            </select>
+          </div>
+
+          <fieldset class="field rating">
+            <legend>Overall rating:</legend>
+            <div class="stars">
+              {[1, 2, 3, 4, 5].map((n) => (
+                <>
+                  <input
+                    class="star-input"
+                    type="radio"
+                    id={`rating-${n}`}
+                    name="rating"
+                    value={String(n)}
+                    required={n === 1}
+                  />
+                  <label class="star" for={`rating-${n}`}>
+                    <span class="visually-hidden">{n} {n === 1 ? 'star' : 'stars'}</span>
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z" />
+                    </svg>
+                  </label>
+                </>
+              ))}
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label for="testimonial">Your testimonial:</label>
+            <textarea
+              id="testimonial"
+              name="message"
+              rows="6"
+              minlength="20"
+              placeholder="What was your business dealing with before we started, and what has changed since?"
+              required></textarea>
+          </div>
+
+          <fieldset class="field credit">
+            <legend>If we publish this, credit it to:</legend>
+            {creditOptions.map((opt, i) => (
+              <label class="choice">
+                <input type="radio" name="credit" value={opt.value} checked={i === 0} />
+                <span>{opt.label}</span>
+              </label>
+            ))}
+          </fieldset>
+
+          <label class="choice consent">
+            <input type="checkbox" name="consent" value="yes" required />
+            <span>
+              FrontPage Labs may use this testimonial on its website and marketing, credited the way I chose
+              above.
+            </span>
+          </label>
+
+          <p class="form-error" data-lead-error hidden>
+            That didn't send. Try again, or email build@frontpagelabs.com.
+          </p>
+          <button class="submit-button" type="submit">Send Testimonial</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { wireLeadForm } from '../scripts/lead-form.js';
+
+  wireLeadForm(
+    document.querySelector('.testimonial-form'),
+    { source: 'Testimonial', page: '/testimonial' },
+    {
+      successLabel: 'Thank you. We received it.',
+      // Fold the fields that have no Airtable column of their own into
+      // Business and Message, the way /get-started composes its extras.
+      shape: ({ role, project, rating, credit, consent, ...rest }) => ({
+        ...rest,
+        business: role ? `${role}, ${rest.business}` : rest.business,
+        message: [
+          rest.message,
+          '',
+          [
+            `Rating: ${rating} of 5`,
+            `Project: ${project}`,
+            `Credit as: ${credit}`,
+            `Permission to publish: ${consent === 'yes' ? 'yes' : 'no'}`,
+          ].join(' | '),
+        ].join('\n'),
+      }),
+    },
+  );
+</script>
+
+<style>
+  .form-section {
+    padding-top: 2.5rem;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .form-intro-heading {
+    margin: 0 0 1.5rem;
+  }
+
+  .form-intro-text {
+    margin: 0;
+    max-width: 24rem;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+  }
+
+  .form-intro-tip {
+    margin-top: 1.25rem;
+    color: var(--color-secondary);
+  }
+
+  .contact-form {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 38rem;
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .field {
+    display: grid;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  fieldset.field {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .field label,
+  .field legend {
+    padding: 0;
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+
+  .field legend {
+    margin-bottom: 0.5rem;
+  }
+
+  .field input,
+  .field textarea,
+  .field select {
+    font: inherit;
+    /* 16px on the input itself: below that, iOS Safari force-zooms the
+       viewport on focus and strands the user mid-form. */
+    font-size: 16px;
+    color: var(--color-primary);
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--color-border-muted);
+    border-radius: 0;
+    padding: 0.5rem 0;
+    resize: vertical;
+    transition: border-color 0.2s ease;
+  }
+
+  .field select {
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.25rem center;
+    background-size: 0.7rem;
+    padding-right: 1.5rem;
+  }
+
+  .field select:invalid {
+    color: var(--color-form-placeholder);
+  }
+
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: var(--color-form-placeholder);
+  }
+
+  .field input:focus,
+  .field textarea:focus,
+  .field select:focus {
+    outline: none;
+    border-bottom-color: var(--color-primary);
+  }
+
+  /* --- Star rating ----------------------------------------------------------
+     Native radios, visually replaced. Every star up to the checked (or
+     hovered) one fills, using :has() so the DOM can stay in reading order. */
+
+  .stars {
+    display: flex;
+    gap: 0.35rem;
+  }
+
+  .star-input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+  }
+
+  .star {
+    display: inline-flex;
+    cursor: pointer;
+    padding: 0.15rem;
+  }
+
+  .star svg {
+    width: 1.9rem;
+    height: 1.9rem;
+    fill: none;
+    stroke: var(--color-primary);
+    stroke-width: 1.3;
+    stroke-linejoin: round;
+    transition: fill 0.15s ease;
+  }
+
+  .stars:has(#rating-1:checked) .star:nth-of-type(-n + 1) svg,
+  .stars:has(#rating-2:checked) .star:nth-of-type(-n + 2) svg,
+  .stars:has(#rating-3:checked) .star:nth-of-type(-n + 3) svg,
+  .stars:has(#rating-4:checked) .star:nth-of-type(-n + 4) svg,
+  .stars:has(#rating-5:checked) .star:nth-of-type(-n + 5) svg {
+    fill: var(--fpl-blue);
+  }
+
+  /* Hover previews the rating, and overrides the checked fill while it does. */
+  @media (hover: hover) {
+    .stars:hover .star svg {
+      fill: none;
+    }
+
+    .stars .star:hover svg,
+    .stars .star:has(~ .star:hover) svg {
+      fill: var(--fpl-blue);
+    }
+  }
+
+  .star-input:focus-visible + .star {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* --- Choices --------------------------------------------------------------- */
+
+  .credit {
+    gap: 0.6rem;
+  }
+
+  .choice {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.4;
+    cursor: pointer;
+  }
+
+  .choice input {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    margin: 0.15rem 0 0;
+    accent-color: var(--color-primary);
+  }
+
+  .consent {
+    font-size: 0.8125rem;
+    color: var(--color-secondary);
+  }
+
+  .form-error {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: #c0392b;
+  }
+
+  .submit-button {
+    justify-self: start;
+    border: 1px solid var(--color-primary);
+    border-radius: 999px;
+    padding: 0.7rem 1.35rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  .submit-button:hover {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  @media (pointer: coarse) {
+    .choice {
+      min-height: 2.75rem;
+      align-items: center;
+    }
+
+    .choice input {
+      margin-top: 0;
+    }
+
+    .star svg {
+      width: 2.4rem;
+      height: 2.4rem;
+    }
+  }
+
+  @media (max-width: 991px) {
+    .form-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+
+  @media (max-width: 575px) {
+    .field-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

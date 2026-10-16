@@ -5,7 +5,12 @@
 // The audit questionnaire does NOT use this — its state machine posts to the
 // same endpoint itself, fire-and-forget, because its next step (the Calendly
 // booking) must never wait on the write.
-export function wireLeadForm(form, meta) {
+//
+// Options, both optional:
+//   shape(data)   rewrite the field map before it is sent, for forms whose
+//                 inputs don't map one-to-one onto Airtable columns
+//   successLabel  what the button says once the write lands
+export function wireLeadForm(form, meta, { shape, successLabel = 'Sent. We will be in touch.' } = {}) {
   if (!form) return;
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -16,8 +21,9 @@ export function wireLeadForm(form, meta) {
     button.disabled = true;
     button.textContent = 'Sending…';
 
-    const data = Object.fromEntries(new FormData(form).entries());
+    let data = Object.fromEntries(new FormData(form).entries());
     delete data['form-name']; // legacy Netlify Forms key, meaningless now
+    if (shape) data = shape(data);
 
     try {
       const res = await fetch('/api/lead', {
@@ -27,7 +33,7 @@ export function wireLeadForm(form, meta) {
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       form.reset();
-      button.textContent = 'Sent. We will be in touch.';
+      button.textContent = successLabel;
     } catch (err) {
       console.error('Lead POST failed', err);
       button.disabled = false;
